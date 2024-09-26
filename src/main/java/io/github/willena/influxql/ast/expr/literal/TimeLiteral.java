@@ -11,6 +11,10 @@ public class TimeLiteral implements Literal<Instant> {
         this.value = value;
     }
 
+    public static TimeLiteral of(Instant instant) {
+        return new TimeLiteral(instant);
+    }
+
     @Override
     public Instant getValue() {
         return value;

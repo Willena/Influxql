@@ -1,10 +1,11 @@
 package io.github.willena.influxql.ast.source;
 
+import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Source;
 
 import java.util.regex.Pattern;
 
-import static io.github.willena.influxql.ast.Utils.QuoteIdent;
+import static io.github.willena.influxql.ast.utils.Utils.QuoteIdent;
 
 public class Measurement implements Source {
     private final String database;
@@ -33,25 +34,27 @@ public class Measurement implements Source {
     @Override
     public String toString() {
         var buf = new StringBuilder();
-        if (!database.isBlank()) {
+        if (database != null && !database.isBlank()) {
             buf.append(QuoteIdent(database));
             buf.append(".");
         }
 
-        if (!retentionPolicy.isBlank()) {
+        if (retentionPolicy != null && !retentionPolicy.isBlank()) {
             buf.append(QuoteIdent(retentionPolicy));
         }
 
-        if (!database.isEmpty() || !retentionPolicy.isEmpty()) {
+        if ((database != null && !database.isBlank()) || (retentionPolicy != null && !retentionPolicy.isBlank())) {
             buf.append(".");
         }
 
-        if (!name.isEmpty() && systemIterator.isEmpty()) {
+        if ((name != null && !name.isBlank()) && (systemIterator == null || systemIterator.isBlank())) {
             buf.append(QuoteIdent(name));
-        } else if (!systemIterator.isEmpty()) {
+        } else if (systemIterator != null && !systemIterator.isBlank()) {
             buf.append(QuoteIdent(systemIterator));
         } else if (regex != null) {
-            buf.append(regex);
+            buf.append("/");
+            buf.append(regex.toString().replaceAll("/", "\\\\/"));
+            buf.append("/");
         }
 
         return buf.toString();
@@ -60,7 +63,7 @@ public class Measurement implements Source {
     /**
      * {@code Measurement} builder static inner class.
      */
-    public static final class Builder {
+    public static final class Builder implements Buildable<Measurement> {
         private String database;
         private String retentionPolicy;
         private String name;

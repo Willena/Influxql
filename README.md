@@ -36,7 +36,7 @@ decide if your request is globally valid and can target your data.
 
 ```java
 
-import io.github.willena.influxql.ast.statements.AlterRetentionPolicyStatement;
+import io.github.willena.influxql.ast.statement.AlterRetentionPolicyStatement;
 
 public static void main(String[] args) {
     AlterRetentionPolicyStatement stm = new AlterRetentionPolicyStatement.Builder()

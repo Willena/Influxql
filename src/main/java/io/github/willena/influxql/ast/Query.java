@@ -10,7 +10,7 @@ public class Query implements Node {
         this.statements = statements;
     }
 
-    public Query ofStatements(Statement... statements) {
+    public static Query ofStatements(Statement... statements) {
         return new Query(List.of(statements));
     }
 

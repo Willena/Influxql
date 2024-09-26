@@ -1,7 +1,7 @@
 package io.github.willena.influxql.ast.expr;
 
 import io.github.willena.influxql.ast.Expr;
-import io.github.willena.influxql.ast.Operator;
+import io.github.willena.influxql.ast.token.Operator;
 
 public class BinaryExpr implements Expr {
     private final Expr left;

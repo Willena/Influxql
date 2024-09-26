@@ -1,7 +1,7 @@
 package io.github.willena.influxql.ast.expr.literal;
 
 import io.github.willena.influxql.ast.Literal;
-import io.github.willena.influxql.ast.Utils;
+import io.github.willena.influxql.ast.utils.Utils;
 
 import java.util.List;
 import java.util.stream.Collectors;
