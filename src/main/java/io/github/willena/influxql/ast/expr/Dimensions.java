@@ -8,4 +8,8 @@ public class Dimensions extends StringJoiningList<Dimension> {
     public Dimensions(List<Dimension> list) {
         super(list);
     }
+
+    public Dimensions() {
+        super();
+    }
 }

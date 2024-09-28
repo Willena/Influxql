@@ -31,7 +31,7 @@ class AlterRetentionPolicyStatementTest extends GenericStatementTest<AlterRetent
                                     .withDatabase("database")
                                     .withDuration(Duration.of(1, ChronoUnit.HOURS))
                     )
-                    .withExpectedSql("ALTER RETENTION POLICY PolicyName ON \"database\" DEFAULT")
+                    .withExpectedSql("ALTER RETENTION POLICY PolicyName ON \"database\" DURATION 1h")
                     .build(),
             new GenericStatementTest.TestBody.Builder<AlterRetentionPolicyStatement>()
                     .withStatement(

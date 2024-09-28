@@ -37,7 +37,7 @@ class DeleteSeriesStatementTest extends GenericStatementTest<DeleteSeriesStateme
                     .withStatement(
                             new DeleteSeriesStatement.Builder()
                                     .withFrom(new Measurement.Builder()
-                                            .withRegex(Pattern.compile("/.*/"))
+                                            .withRegex(Pattern.compile(".*"))
                                             .build()
                                     )
                                     .withWhere(new BinaryExpr(

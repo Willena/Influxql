@@ -9,6 +9,10 @@ public class SortFields extends StringJoiningList<SortField> {
         super(list);
     }
 
+    public SortFields() {
+        super();
+    }
+
     public SortFields of(SortField... sortFields) {
         return new SortFields(List.of(sortFields));
     }

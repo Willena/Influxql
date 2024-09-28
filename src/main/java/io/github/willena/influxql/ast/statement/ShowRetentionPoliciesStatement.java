@@ -16,7 +16,7 @@ public class ShowRetentionPoliciesStatement implements Statement {
     public String toString() {
         var buf = new StringBuilder();
         buf.append("SHOW RETENTION POLICIES");
-        if (!database.isEmpty()) {
+        if (database != null && !database.isEmpty()) {
             buf.append(" ON ");
             buf.append(QuoteIdent(database));
         }

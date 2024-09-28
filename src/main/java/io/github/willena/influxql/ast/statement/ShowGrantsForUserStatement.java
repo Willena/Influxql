@@ -4,12 +4,14 @@ import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Statement;
 
 import static io.github.willena.influxql.ast.utils.Utils.QuoteIdent;
+import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 
 public class ShowGrantsForUserStatement implements Statement {
     private final String name;
 
     private ShowGrantsForUserStatement(Builder builder) {
         name = builder.name;
+        ensureDefined("name", name);
     }
 
     @Override
@@ -23,7 +25,7 @@ public class ShowGrantsForUserStatement implements Statement {
         public Builder() {
         }
 
-        public Builder withName(String name) {
+        public Builder withUsername(String name) {
             this.name = name;
             return this;
         }

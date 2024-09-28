@@ -1,0 +1,44 @@
+package io.github.willena.influxql.ast.statement;
+
+import io.github.willena.influxql.ast.expr.BinaryExpr;
+import io.github.willena.influxql.ast.expr.VarRef;
+import io.github.willena.influxql.ast.expr.literal.IntegerLiteral;
+import io.github.willena.influxql.ast.field.Field;
+import io.github.willena.influxql.ast.source.Measurement;
+import io.github.willena.influxql.ast.token.Operator;
+
+import java.util.List;
+
+class ExplainStatementTest extends GenericStatementTest<ExplainStatement> {
+    private static final List<TestBody<ExplainStatement>> TEST_BODIES = List.of(
+            new TestBody.Builder<ExplainStatement>()
+                    .withStatement(
+                            new ExplainStatement.Builder()
+                                    .withSelect(
+                                            new SelectStatement.Builder()
+                                                    .withSelect(new Field.Builder().withExpr(VarRef.of("F1")).build())
+                                                    .withFrom(new Measurement.Builder().withName("Toto").build())
+                                                    .withWhere(new BinaryExpr(VarRef.of("totoField"), IntegerLiteral.of(32), Operator.EQ))
+                                                    .build()
+                                    )
+                    )
+                    .withExpectedSql("EXPLAIN SELECT F1 FROM Toto WHERE totoField = 32")
+                    .build(),
+            new TestBody.Builder<ExplainStatement>()
+                    .withStatement(
+                            new ExplainStatement.Builder()
+                                    .withAnalyze(true)
+                                    .withVerbose(true)
+                                    .withSelect(
+                                            new SelectStatement.Builder()
+                                                    .withSelect(new Field.Builder().withExpr(VarRef.of("F1")).build())
+                                                    .withFrom(new Measurement.Builder().withName("Toto").build())
+                                                    .withWhere(new BinaryExpr(VarRef.of("totoField"), IntegerLiteral.of(32), Operator.EQ))
+                                                    .build()
+                                    )
+                    )
+                    .withExpectedSql("EXPLAIN ANALYZE VERBOSE SELECT F1 FROM Toto WHERE totoField = 32")
+                    .build()
+
+    );
+}

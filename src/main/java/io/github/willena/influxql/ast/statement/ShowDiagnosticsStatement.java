@@ -8,7 +8,6 @@ import static io.github.willena.influxql.ast.utils.Utils.QuoteString;
 public class ShowDiagnosticsStatement implements Statement {
     private final String module;
 
-
     private ShowDiagnosticsStatement(Builder builder) {
         module = builder.module;
     }
@@ -17,7 +16,7 @@ public class ShowDiagnosticsStatement implements Statement {
     public String toString() {
         var buf = new StringBuilder();
         buf.append("SHOW DIAGNOSTICS");
-        if (!module.isEmpty()) {
+        if (module != null && !module.isEmpty()) {
             buf.append(" FOR ");
             buf.append(QuoteString(module));
         }

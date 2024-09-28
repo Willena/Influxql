@@ -1,15 +1,16 @@
 package io.github.willena.influxql.ast.statement;
 
-import io.github.willena.influxql.ast.Buildable;
-import io.github.willena.influxql.ast.Expr;
-import io.github.willena.influxql.ast.Literal;
-import io.github.willena.influxql.ast.Statement;
+import io.github.willena.influxql.ast.*;
 import io.github.willena.influxql.ast.expr.literal.StringLiteral;
+import io.github.willena.influxql.ast.field.SortField;
 import io.github.willena.influxql.ast.field.SortFields;
 import io.github.willena.influxql.ast.source.Sources;
 import io.github.willena.influxql.ast.token.Operator;
 
+import java.util.List;
+
 import static io.github.willena.influxql.ast.utils.Utils.QuoteIdent;
+import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 
 public class ShowTagValuesStatement implements Statement {
     private final String database;
@@ -30,6 +31,8 @@ public class ShowTagValuesStatement implements Statement {
         sortFields = builder.sortFields;
         limit = builder.limit;
         offset = builder.offset;
+        ensureDefined("operator", operator);
+        ensureDefined("tagKeyExpr", tagKeyExpr);
     }
 
     @Override
@@ -37,7 +40,7 @@ public class ShowTagValuesStatement implements Statement {
         var buf = new StringBuilder();
         buf.append("SHOW TAG VALUES");
 
-        if (!database.isEmpty()) {
+        if (database != null && !database.isEmpty()) {
             buf.append(" ON ");
             buf.append(QuoteIdent(database));
         }
@@ -57,7 +60,7 @@ public class ShowTagValuesStatement implements Statement {
             buf.append(" WHERE ");
             buf.append(condition);
         }
-        if (!sortFields.isEmpty()) {
+        if (sortFields != null && !sortFields.isEmpty()) {
             buf.append(" ORDER BY ");
             buf.append(sortFields);
         }
@@ -110,6 +113,15 @@ public class ShowTagValuesStatement implements Statement {
             return this;
         }
 
+        public Builder withSources(Source source, Source... sources) {
+            if (this.sources == null) {
+                this.sources = new Sources();
+            }
+            this.sources.add(source);
+            this.sources.addAll(List.of(sources));
+            return this;
+        }
+
         /**
          * Sets the {@code operator} and returns a reference to this Builder enabling method chaining.
          *
@@ -151,6 +163,15 @@ public class ShowTagValuesStatement implements Statement {
          */
         public Builder withSortFields(SortFields sortFields) {
             this.sortFields = sortFields;
+            return this;
+        }
+
+        public Builder withSortFields(SortField sortField, SortField... sortFields) {
+            if (this.sortFields == null) {
+                this.sortFields = new SortFields();
+            }
+            this.sortFields.add(sortField);
+            this.sortFields.addAll(List.of(sortFields));
             return this;
         }
 

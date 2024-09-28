@@ -3,8 +3,7 @@ package io.github.willena.influxql.ast.statement;
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Statement;
 
-import static io.github.willena.influxql.ast.utils.Utils.QuoteIdent;
-import static io.github.willena.influxql.ast.utils.Utils.QuoteString;
+import static io.github.willena.influxql.ast.utils.Utils.*;
 
 public class SetPasswordUserStatement implements Statement {
     private final String password;
@@ -19,6 +18,8 @@ public class SetPasswordUserStatement implements Statement {
         password = builder.password;
         name = builder.name;
         redacted = builder.redacted;
+        ensureDefined("name", name);
+        ensureDefined("password", password);
     }
 
     @Override
@@ -48,7 +49,7 @@ public class SetPasswordUserStatement implements Statement {
             return this;
         }
 
-        public Builder withName(String name) {
+        public Builder withUsername(String name) {
             this.name = name;
             return this;
         }

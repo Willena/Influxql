@@ -2,17 +2,19 @@ package io.github.willena.influxql.ast.statement;
 
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Expr;
+import io.github.willena.influxql.ast.Source;
 import io.github.willena.influxql.ast.Statement;
+import io.github.willena.influxql.ast.field.SortField;
 import io.github.willena.influxql.ast.field.SortFields;
 import io.github.willena.influxql.ast.source.Sources;
-import io.github.willena.influxql.ast.token.Operator;
+
+import java.util.List;
 
 import static io.github.willena.influxql.ast.utils.Utils.QuoteIdent;
 
 public class ShowTagKeysStatement implements Statement {
     private final String database;
     private final Sources sources;
-    private final Operator operation;// Token OP
     private final Expr condition;
     private final SortFields sortFields;
     private final int limit;
@@ -23,7 +25,6 @@ public class ShowTagKeysStatement implements Statement {
     private ShowTagKeysStatement(Builder builder) {
         database = builder.database;
         sources = builder.sources;
-        operation = builder.operation;
         condition = builder.condition;
         sortFields = builder.sortFields;
         limit = builder.limit;
@@ -37,7 +38,7 @@ public class ShowTagKeysStatement implements Statement {
         var buf = new StringBuilder();
         buf.append("SHOW TAG KEYS");
 
-        if (!database.isEmpty()) {
+        if (database != null && !database.isEmpty()) {
             buf.append(" ON ");
             buf.append(QuoteIdent(database));
         }
@@ -49,7 +50,7 @@ public class ShowTagKeysStatement implements Statement {
             buf.append(" WHERE ");
             buf.append(condition);
         }
-        if (!sortFields.isEmpty()) {
+        if (sortFields != null && !sortFields.isEmpty()) {
             buf.append(" ORDER BY ");
             buf.append(sortFields);
         }
@@ -78,7 +79,6 @@ public class ShowTagKeysStatement implements Statement {
     public static final class Builder implements Buildable<ShowTagKeysStatement> {
         private String database;
         private Sources sources;
-        private Operator operation;
         private Expr condition;
         private SortFields sortFields;
         private int limit;
@@ -111,14 +111,12 @@ public class ShowTagKeysStatement implements Statement {
             return this;
         }
 
-        /**
-         * Sets the {@code operation} and returns a reference to this Builder enabling method chaining.
-         *
-         * @param operation the {@code operation} to set
-         * @return a reference to this Builder
-         */
-        public Builder withOperation(Operator operation) {
-            this.operation = operation;
+        public Builder withSources(Source source, Source... sources) {
+            if (this.sources == null) {
+                this.sources = new Sources();
+            }
+            this.sources.add(source);
+            this.sources.addAll(List.of(sources));
             return this;
         }
 
@@ -144,6 +142,15 @@ public class ShowTagKeysStatement implements Statement {
             return this;
         }
 
+        public Builder withSortFields(SortField sortField, SortField... sortFields) {
+            if (this.sortFields == null) {
+                this.sortFields = new SortFields();
+            }
+            this.sortFields.add(sortField);
+            this.sortFields.addAll(List.of(sortFields));
+            return this;
+        }
+
         /**
          * Sets the {@code limit} and returns a reference to this Builder enabling method chaining.
          *
@@ -163,6 +170,16 @@ public class ShowTagKeysStatement implements Statement {
          */
         public Builder withOffset(int offset) {
             this.offset = offset;
+            return this;
+        }
+
+        public Builder withSLimit(int sLimit) {
+            this.sLimit = sLimit;
+            return this;
+        }
+
+        public Builder withSOffset(int sOffset) {
+            this.sOffset = sOffset;
             return this;
         }
 

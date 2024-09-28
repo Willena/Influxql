@@ -16,6 +16,7 @@ public class DropSubscriptionStatement implements Statement {
         name = builder.name;
         database = builder.database;
         retentionPolicy = builder.retentionPolicy;
+
         ensureDefined("name", name);
         ensureDefined("database", database);
         ensureDefined("retentionPolicy", retentionPolicy);

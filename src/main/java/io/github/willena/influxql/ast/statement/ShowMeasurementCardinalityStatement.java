@@ -2,9 +2,13 @@ package io.github.willena.influxql.ast.statement;
 
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Expr;
+import io.github.willena.influxql.ast.Source;
 import io.github.willena.influxql.ast.Statement;
+import io.github.willena.influxql.ast.expr.Dimension;
 import io.github.willena.influxql.ast.expr.Dimensions;
 import io.github.willena.influxql.ast.source.Sources;
+
+import java.util.List;
 
 import static io.github.willena.influxql.ast.utils.Utils.QuoteIdent;
 
@@ -37,7 +41,7 @@ public class ShowMeasurementCardinalityStatement implements Statement {
         }
         buf.append(" CARDINALITY");
 
-        if (!database.isEmpty()) {
+        if (database != null && !database.isEmpty()) {
             buf.append(" ON ");
             buf.append(QuoteIdent(database));
         }
@@ -50,7 +54,7 @@ public class ShowMeasurementCardinalityStatement implements Statement {
             buf.append(" WHERE ");
             buf.append(condition);
         }
-        if (!dimensions.isEmpty()) {
+        if (dimensions != null && !dimensions.isEmpty()) {
             buf.append(" GROUP BY ");
             buf.append(dimensions);
         }
@@ -107,8 +111,17 @@ public class ShowMeasurementCardinalityStatement implements Statement {
          * @param sources the {@code sources} to set
          * @return a reference to this Builder
          */
-        public Builder withSources(Sources sources) {
+        public Builder withFrom(Sources sources) {
             this.sources = sources;
+            return this;
+        }
+
+        public Builder withFrom(Source source, Source... sources) {
+            if (this.sources == null) {
+                this.sources = new Sources();
+            }
+            this.sources.add(source);
+            this.sources.addAll(List.of(sources));
             return this;
         }
 
@@ -118,7 +131,7 @@ public class ShowMeasurementCardinalityStatement implements Statement {
          * @param condition the {@code condition} to set
          * @return a reference to this Builder
          */
-        public Builder withCondition(Expr condition) {
+        public Builder withWhere(Expr condition) {
             this.condition = condition;
             return this;
         }
@@ -129,8 +142,17 @@ public class ShowMeasurementCardinalityStatement implements Statement {
          * @param dimensions the {@code dimensions} to set
          * @return a reference to this Builder
          */
-        public Builder withDimensions(Dimensions dimensions) {
+        public Builder withGroupBy(Dimensions dimensions) {
             this.dimensions = dimensions;
+            return this;
+        }
+
+        public Builder withGroupBy(Dimension dimension, Dimension... dimensions) {
+            if (this.dimensions == null) {
+                this.dimensions = new Dimensions();
+            }
+            this.dimensions.add(dimension);
+            this.dimensions.addAll(List.of(dimensions));
             return this;
         }
 

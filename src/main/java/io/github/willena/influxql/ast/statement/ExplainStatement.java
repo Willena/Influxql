@@ -48,7 +48,7 @@ public class ExplainStatement implements Statement {
          * @param statement the {@code statement} to set
          * @return a reference to this Builder
          */
-        public Builder withStatement(SelectStatement statement) {
+        public Builder withSelect(SelectStatement statement) {
             this.statement = statement;
             return this;
         }

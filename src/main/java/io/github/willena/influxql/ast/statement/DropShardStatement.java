@@ -12,7 +12,6 @@ public class DropShardStatement implements Statement {
     private DropShardStatement(Builder builder) {
         id = builder.id;
         ensureDefined("id", id);
-
     }
 
     @Override
@@ -26,7 +25,7 @@ public class DropShardStatement implements Statement {
         public Builder() {
         }
 
-        public Builder withId(Long id) {
+        public Builder withShardId(Long id) {
             this.id = id;
             return this;
         }

@@ -16,7 +16,7 @@ public class ShowStatsStatement implements Statement {
     public String toString() {
         var buf = new StringBuilder();
         buf.append("SHOW STATS");
-        if (!module.isEmpty()) {
+        if (module != null && !module.isEmpty()) {
             buf.append(" FOR ");
             buf.append(QuoteString(module));
         }

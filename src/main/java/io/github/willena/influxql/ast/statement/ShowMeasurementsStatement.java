@@ -2,17 +2,17 @@ package io.github.willena.influxql.ast.statement;
 
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Expr;
-import io.github.willena.influxql.ast.Source;
 import io.github.willena.influxql.ast.Statement;
+import io.github.willena.influxql.ast.field.SortField;
 import io.github.willena.influxql.ast.field.SortFields;
 import io.github.willena.influxql.ast.source.Measurement;
+
+import java.util.List;
 
 public class ShowMeasurementsStatement implements Statement {
     private final String database;
     private final String retentionPolicy;
-    private final boolean wildcardDatabase;
-    private final boolean wildcardRetentionPolicy;
-    private final Source source;
+    private final Measurement source;
     private final Expr condition;
     private final SortFields sortFields;
     private final int limit;
@@ -21,8 +21,6 @@ public class ShowMeasurementsStatement implements Statement {
     private ShowMeasurementsStatement(Builder builder) {
         database = builder.database;
         retentionPolicy = builder.retentionPolicy;
-        wildcardDatabase = builder.wildcardDatabase;
-        wildcardRetentionPolicy = builder.wildcardRetentionPolicy;
         source = builder.source;
         condition = builder.condition;
         sortFields = builder.sortFields;
@@ -35,23 +33,20 @@ public class ShowMeasurementsStatement implements Statement {
         var buf = new StringBuilder();
         buf.append("SHOW MEASUREMENTS");
 
-        if (!database.isEmpty() || wildcardDatabase) {
+        if (database != null && !database.isEmpty()) {
             buf.append(" ON ");
-            if (wildcardDatabase) {
-                buf.append("*");
-            } else {
-                buf.append(database);
-            }
-            if (wildcardRetentionPolicy) {
+            buf.append(database);
+
+            if ("*" .equals(retentionPolicy)) {
                 buf.append(".*");
-            } else if (!retentionPolicy.isEmpty()) {
+            } else if (retentionPolicy != null && !retentionPolicy.isEmpty()) {
                 buf.append(".");
                 buf.append(retentionPolicy);
             }
         }
         if (source != null) {
             buf.append(" WITH MEASUREMENT ");
-            boolean isRegex = ((Measurement) source).getRegex() != null;
+            boolean isRegex = source.getRegex() != null;
             if (isRegex) {
                 buf.append("=~ ");
             } else {
@@ -64,7 +59,7 @@ public class ShowMeasurementsStatement implements Statement {
             buf.append(condition);
         }
 
-        if (!sortFields.isEmpty()) {
+        if (sortFields != null && !sortFields.isEmpty()) {
             buf.append(" ORDER BY ");
             buf.append(sortFields);
         }
@@ -87,7 +82,7 @@ public class ShowMeasurementsStatement implements Statement {
         private String retentionPolicy;
         private boolean wildcardDatabase;
         private boolean wildcardRetentionPolicy;
-        private Source source;
+        private Measurement source;
         private Expr condition;
         private SortFields sortFields;
         private int limit;
@@ -119,34 +114,12 @@ public class ShowMeasurementsStatement implements Statement {
         }
 
         /**
-         * Sets the {@code wildcardDatabase} and returns a reference to this Builder enabling method chaining.
-         *
-         * @param wildcardDatabase the {@code wildcardDatabase} to set
-         * @return a reference to this Builder
-         */
-        public Builder withWildcardDatabase(boolean wildcardDatabase) {
-            this.wildcardDatabase = wildcardDatabase;
-            return this;
-        }
-
-        /**
-         * Sets the {@code wildcardRetentionPolicy} and returns a reference to this Builder enabling method chaining.
-         *
-         * @param wildcardRetentionPolicy the {@code wildcardRetentionPolicy} to set
-         * @return a reference to this Builder
-         */
-        public Builder withWildcardRetentionPolicy(boolean wildcardRetentionPolicy) {
-            this.wildcardRetentionPolicy = wildcardRetentionPolicy;
-            return this;
-        }
-
-        /**
          * Sets the {@code source} and returns a reference to this Builder enabling method chaining.
          *
          * @param source the {@code source} to set
          * @return a reference to this Builder
          */
-        public Builder withSource(Source source) {
+        public Builder withFrom(Measurement source) {
             this.source = source;
             return this;
         }
@@ -157,7 +130,7 @@ public class ShowMeasurementsStatement implements Statement {
          * @param condition the {@code condition} to set
          * @return a reference to this Builder
          */
-        public Builder withCondition(Expr condition) {
+        public Builder withWhere(Expr condition) {
             this.condition = condition;
             return this;
         }
@@ -170,6 +143,15 @@ public class ShowMeasurementsStatement implements Statement {
          */
         public Builder withSortFields(SortFields sortFields) {
             this.sortFields = sortFields;
+            return this;
+        }
+
+        public Builder withSortFields(SortField sortField, SortField... sortFields) {
+            if (this.sortFields == null) {
+                this.sortFields = new SortFields();
+            }
+            this.sortFields.add(sortField);
+            this.sortFields.addAll(List.of(sortFields));
             return this;
         }
 
