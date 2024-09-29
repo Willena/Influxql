@@ -4,8 +4,8 @@ import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Statement;
 import io.github.willena.influxql.ast.token.Privilege;
 
-import static io.github.willena.influxql.ast.utils.Utils.QuoteIdent;
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
+import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
 public class RevokeStatement implements Statement {
     private final Privilege privilege;
@@ -27,9 +27,9 @@ public class RevokeStatement implements Statement {
         return "REVOKE " +
                 privilege.toString() +
                 " ON " +
-                QuoteIdent(database) +
+                quoteIdentifier(database) +
                 " FROM " +
-                QuoteIdent(username);
+                quoteIdentifier(username);
     }
 
     public static final class Builder implements Buildable<RevokeStatement> {

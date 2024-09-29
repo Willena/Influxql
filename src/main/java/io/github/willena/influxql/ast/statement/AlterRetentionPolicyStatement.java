@@ -38,9 +38,9 @@ public class AlterRetentionPolicyStatement implements Statement {
     public String toString() {
         var buf = new StringBuilder();
         buf.append("ALTER RETENTION POLICY ");
-        buf.append(QuoteIdent(name));
+        buf.append(quoteIdentifier(name));
         buf.append(" ON ");
-        buf.append(QuoteIdent(database));
+        buf.append(quoteIdentifier(database));
 
         if (duration != null) {
             buf.append(" DURATION ");

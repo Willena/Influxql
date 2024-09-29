@@ -9,8 +9,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static io.github.willena.influxql.ast.utils.Utils.QuoteIdent;
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
+import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
 public class CreateSubscriptionStatement implements Statement {
     private final String name;
@@ -36,15 +36,15 @@ public class CreateSubscriptionStatement implements Statement {
     @Override
     public String toString() {
         return "CREATE SUBSCRIPTION " +
-                QuoteIdent(name) +
+                quoteIdentifier(name) +
                 " ON " +
-                QuoteIdent(database) +
+                quoteIdentifier(database) +
                 "." +
-                QuoteIdent(retentionPolicy) +
+                quoteIdentifier(retentionPolicy) +
                 " DESTINATIONS " +
                 mode +
                 " " +
-                destinations.stream().map(Utils::QuoteString).collect(Collectors.joining(", "));
+                destinations.stream().map(Utils::quoteString).collect(Collectors.joining(", "));
     }
 
     /**

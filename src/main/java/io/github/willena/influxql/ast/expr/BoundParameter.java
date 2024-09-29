@@ -2,7 +2,7 @@ package io.github.willena.influxql.ast.expr;
 
 import io.github.willena.influxql.ast.Expr;
 
-import static io.github.willena.influxql.ast.utils.Utils.QuoteIdent;
+import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
 public class BoundParameter implements Expr {
     private final String name;
@@ -13,6 +13,6 @@ public class BoundParameter implements Expr {
 
     @Override
     public String toString() {
-        return "$" + QuoteIdent(name);
+        return "$" + quoteIdentifier(name);
     }
 }

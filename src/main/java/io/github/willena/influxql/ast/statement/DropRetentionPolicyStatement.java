@@ -3,8 +3,8 @@ package io.github.willena.influxql.ast.statement;
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Statement;
 
-import static io.github.willena.influxql.ast.utils.Utils.QuoteIdent;
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
+import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
 public class DropRetentionPolicyStatement implements Statement {
 
@@ -22,9 +22,9 @@ public class DropRetentionPolicyStatement implements Statement {
     @Override
     public String toString() {
         return "DROP RETENTION POLICY " +
-                QuoteIdent(name) +
+                quoteIdentifier(name) +
                 " ON " +
-                QuoteIdent(database);
+                quoteIdentifier(database);
     }
 
     public static final class Builder implements Buildable<DropRetentionPolicyStatement> {

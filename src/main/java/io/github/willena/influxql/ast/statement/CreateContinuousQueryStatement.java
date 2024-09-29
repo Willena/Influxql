@@ -29,7 +29,7 @@ public class CreateContinuousQueryStatement implements Statement {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
-        buf.append(String.format("CREATE CONTINUOUS QUERY %s ON %s ", QuoteIdent(name), QuoteIdent(database)));
+        buf.append(String.format("CREATE CONTINUOUS QUERY %s ON %s ", quoteIdentifier(name), quoteIdentifier(database)));
         //	ResampleEvery time.Duration
         //	ResampleFor time.Duration
         // if s.ResampleEvery > 0 || s.ResampleFor > 0 {

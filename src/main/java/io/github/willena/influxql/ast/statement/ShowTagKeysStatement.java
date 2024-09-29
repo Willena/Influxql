@@ -10,7 +10,7 @@ import io.github.willena.influxql.ast.source.Sources;
 
 import java.util.List;
 
-import static io.github.willena.influxql.ast.utils.Utils.QuoteIdent;
+import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
 public class ShowTagKeysStatement implements Statement {
     private final String database;
@@ -40,7 +40,7 @@ public class ShowTagKeysStatement implements Statement {
 
         if (database != null && !database.isEmpty()) {
             buf.append(" ON ");
-            buf.append(QuoteIdent(database));
+            buf.append(quoteIdentifier(database));
         }
         if (sources != null) {
             buf.append(" FROM ");

@@ -33,9 +33,9 @@ public class CreateRetentionPolicyStatement implements Statement {
     public String toString() {
         StringBuilder buf = new StringBuilder();
         buf.append("CREATE RETENTION POLICY ");
-        buf.append(QuoteIdent(name));
+        buf.append(quoteIdentifier(name));
         buf.append(" ON ");
-        buf.append(QuoteIdent(database));
+        buf.append(quoteIdentifier(database));
         buf.append(" DURATION ");
         buf.append(formatDuration(duration));
         buf.append(" REPLICATION ");

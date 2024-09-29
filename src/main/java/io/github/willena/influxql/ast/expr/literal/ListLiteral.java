@@ -22,7 +22,7 @@ public class ListLiteral implements Literal<List<String>> {
     public String toString() {
         return "(" +
                 values.stream()
-                        .map(Utils::QuoteIdent)
+                        .map(Utils::quoteIdentifier)
                         .collect(Collectors.joining(", ")) +
                 ")";
     }

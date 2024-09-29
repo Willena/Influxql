@@ -12,14 +12,6 @@ public final class Utils {
     private Utils() {
     }
 
-    public static String escapeIdentifierChar(String ident) {
-        // 	// Quote Ident replacer.
-        //	qiReplacer = strings.NewReplacer("\n", `\n`, `\`, `\\`, `"`, `\"`)
-        return ident.replaceAll("\n", "\\\\n")
-                .replaceAll("\\\\", "\\\\\\\\")
-                .replaceAll("\"", "\\\\\"");
-
-    }
 
     public static String escapeString(String s) {
         return s.replaceAll("\n", "\\\\n")
@@ -28,7 +20,7 @@ public final class Utils {
     }
 
     // QuoteString returns a quoted string.
-    public static String QuoteString(String s) {
+    public static String quoteString(String s) {
         return "'" + escapeString(s) + "'";
     }
 
@@ -71,7 +63,7 @@ public final class Utils {
 
 
     // QuoteIdent returns a quoted identifier from multiple bare identifiers.
-    public static String QuoteIdent(String... segments) {
+    public static String quoteIdentifier(String... segments) {
         StringBuilder buf = new StringBuilder();
 
         for (int i = 0; i < segments.length; i++) {
@@ -98,8 +90,21 @@ public final class Utils {
         return buf.toString();
     }
 
+
+    public static void ensureDefined(String name, String value) {
+        if (value == null || value.isBlank()) {
+            throw new IllegalArgumentException(name + " must be defined");
+        }
+    }
+
+    public static void ensureDefined(String name, Object value) {
+        if (value == null) {
+            throw new IllegalArgumentException(name + " must be defined");
+        }
+    }
+
     // IdentNeedsQuotes returns true if the ident string given would require quotes.
-    public static boolean identNeedsQuotes(String ident) {
+    private static boolean identNeedsQuotes(String ident) {
         // check if this identifier is a keyword
         if (Keywords.hasValue(ident)) {
             return true;
@@ -114,15 +119,12 @@ public final class Utils {
         return false;
     }
 
-    public static void ensureDefined(String name, String value) {
-        if (value == null || value.isBlank()) {
-            throw new IllegalArgumentException(name + " must be defined");
-        }
-    }
+    private static String escapeIdentifierChar(String ident) {
+        // 	// Quote Ident replacer.
+        //	qiReplacer = strings.NewReplacer("\n", `\n`, `\`, `\\`, `"`, `\"`)
+        return ident.replaceAll("\n", "\\\\n")
+                .replaceAll("\\\\", "\\\\\\\\")
+                .replaceAll("\"", "\\\\\"");
 
-    public static void ensureDefined(String name, Object value) {
-        if (value == null) {
-            throw new IllegalArgumentException(name + " must be defined");
-        }
     }
 }

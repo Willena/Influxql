@@ -9,8 +9,8 @@ import io.github.willena.influxql.ast.token.Operator;
 
 import java.util.List;
 
-import static io.github.willena.influxql.ast.utils.Utils.QuoteIdent;
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
+import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
 public class ShowTagValuesStatement implements Statement {
     private final String database;
@@ -42,7 +42,7 @@ public class ShowTagValuesStatement implements Statement {
 
         if (database != null && !database.isEmpty()) {
             buf.append(" ON ");
-            buf.append(QuoteIdent(database));
+            buf.append(quoteIdentifier(database));
         }
         if (sources != null) {
             buf.append(" FROM ");
@@ -52,7 +52,7 @@ public class ShowTagValuesStatement implements Statement {
         buf.append(operator);
         buf.append(" ");
         if (tagKeyExpr instanceof StringLiteral) {
-            buf.append(QuoteIdent(((StringLiteral) tagKeyExpr).getValue()));
+            buf.append(quoteIdentifier(((StringLiteral) tagKeyExpr).getValue()));
         } else {
             buf.append(tagKeyExpr);
         }

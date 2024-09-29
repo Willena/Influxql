@@ -3,8 +3,8 @@ package io.github.willena.influxql.ast.statement;
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Statement;
 
-import static io.github.willena.influxql.ast.utils.Utils.QuoteIdent;
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
+import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
 public class DropSubscriptionStatement implements Statement {
     private final String name;
@@ -24,7 +24,7 @@ public class DropSubscriptionStatement implements Statement {
 
     @Override
     public String toString() {
-        return "DROP SUBSCRIPTION " + QuoteIdent(name) + " ON " + QuoteIdent(database) + "." + QuoteIdent(retentionPolicy);
+        return "DROP SUBSCRIPTION " + quoteIdentifier(name) + " ON " + quoteIdentifier(database) + "." + quoteIdentifier(retentionPolicy);
     }
 
     public static final class Builder implements Buildable<DropSubscriptionStatement> {

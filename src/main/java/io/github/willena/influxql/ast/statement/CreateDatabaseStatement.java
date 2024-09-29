@@ -23,7 +23,7 @@ public class CreateDatabaseStatement implements Statement {
     public String toString() {
         StringBuilder buf = new StringBuilder();
         buf.append("CREATE DATABASE ");
-        buf.append(QuoteIdent(name));
+        buf.append(quoteIdentifier(name));
         if (retentionPolicy != null) {
             buf.append(" WITH");
             if (retentionPolicy.getRetentionPolicyDuration() != null) {
@@ -40,7 +40,7 @@ public class CreateDatabaseStatement implements Statement {
             }
             if (retentionPolicy.getRetentionPolicyName() != null && !retentionPolicy.getRetentionPolicyName().isBlank()) {
                 buf.append(" NAME ");
-                buf.append(QuoteIdent(retentionPolicy.getRetentionPolicyName()));
+                buf.append(quoteIdentifier(retentionPolicy.getRetentionPolicyName()));
             }
         }
         return buf.toString();

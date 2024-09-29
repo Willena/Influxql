@@ -5,7 +5,7 @@ import io.github.willena.influxql.ast.Source;
 
 import java.util.regex.Pattern;
 
-import static io.github.willena.influxql.ast.utils.Utils.QuoteIdent;
+import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
 public class Measurement implements Source {
     private final String database;
@@ -35,12 +35,12 @@ public class Measurement implements Source {
     public String toString() {
         var buf = new StringBuilder();
         if (database != null && !database.isBlank()) {
-            buf.append(QuoteIdent(database));
+            buf.append(quoteIdentifier(database));
             buf.append(".");
         }
 
         if (retentionPolicy != null && !retentionPolicy.isBlank()) {
-            buf.append(QuoteIdent(retentionPolicy));
+            buf.append(quoteIdentifier(retentionPolicy));
         }
 
         if ((database != null && !database.isBlank()) || (retentionPolicy != null && !retentionPolicy.isBlank())) {
@@ -48,9 +48,9 @@ public class Measurement implements Source {
         }
 
         if ((name != null && !name.isBlank()) && (systemIterator == null || systemIterator.isBlank())) {
-            buf.append(QuoteIdent(name));
+            buf.append(quoteIdentifier(name));
         } else if (systemIterator != null && !systemIterator.isBlank()) {
-            buf.append(QuoteIdent(systemIterator));
+            buf.append(quoteIdentifier(systemIterator));
         } else if (regex != null) {
             buf.append("/");
             buf.append(regex.toString().replaceAll("/", "\\\\/"));

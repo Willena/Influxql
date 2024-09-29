@@ -3,8 +3,8 @@ package io.github.willena.influxql.ast.statement;
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Statement;
 
-import static io.github.willena.influxql.ast.utils.Utils.QuoteIdent;
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
+import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
 public class KillQueryStatement implements Statement {
     private final Long queryId;
@@ -23,7 +23,7 @@ public class KillQueryStatement implements Statement {
         buf.append(queryId);
         if (host != null && !host.isBlank()) {
             buf.append(" ON ");
-            buf.append(QuoteIdent(host));
+            buf.append(quoteIdentifier(host));
         }
         return buf.toString();
     }

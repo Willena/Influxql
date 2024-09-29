@@ -3,8 +3,8 @@ package io.github.willena.influxql.ast.statement;
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Statement;
 
-import static io.github.willena.influxql.ast.utils.Utils.QuoteIdent;
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
+import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
 public class DropMeasurementStatement implements Statement {
     private final String name;
@@ -18,7 +18,7 @@ public class DropMeasurementStatement implements Statement {
 
     @Override
     public String toString() {
-        return "DROP MEASUREMENT " + QuoteIdent(name);
+        return "DROP MEASUREMENT " + quoteIdentifier(name);
     }
 
     public static final class Builder implements Buildable<DropMeasurementStatement> {

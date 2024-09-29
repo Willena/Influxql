@@ -3,7 +3,7 @@ package io.github.willena.influxql.ast.field;
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Expr;
 
-import static io.github.willena.influxql.ast.utils.Utils.QuoteIdent;
+import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
 public class Field {
     private final Expr expr;
@@ -21,7 +21,7 @@ public class Field {
         if (alias == null || alias.isBlank()) {
             return str;
         }
-        return String.format("%s AS %s", str, QuoteIdent(alias));
+        return String.format("%s AS %s", str, quoteIdentifier(alias));
     }
 
     /**

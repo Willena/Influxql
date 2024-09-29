@@ -26,12 +26,12 @@ public class SetPasswordUserStatement implements Statement {
     public String toString() {
         var buf = new StringBuilder();
         buf.append("SET PASSWORD FOR ");
-        buf.append(QuoteIdent(name));
+        buf.append(quoteIdentifier(name));
         buf.append(" = ");
         if (redacted) {
             buf.append("[REDACTED]");
         } else {
-            buf.append(QuoteString(password));
+            buf.append(quoteString(password));
         }
         return buf.toString();
     }

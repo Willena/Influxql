@@ -3,7 +3,7 @@ package io.github.willena.influxql.ast.statement;
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Statement;
 
-import static io.github.willena.influxql.ast.utils.Utils.QuoteString;
+import static io.github.willena.influxql.ast.utils.Utils.quoteString;
 
 public class ShowStatsStatement implements Statement {
     private final String module;
@@ -18,7 +18,7 @@ public class ShowStatsStatement implements Statement {
         buf.append("SHOW STATS");
         if (module != null && !module.isEmpty()) {
             buf.append(" FOR ");
-            buf.append(QuoteString(module));
+            buf.append(quoteString(module));
         }
         return buf.toString();
     }

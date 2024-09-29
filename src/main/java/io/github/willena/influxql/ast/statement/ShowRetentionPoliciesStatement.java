@@ -3,7 +3,7 @@ package io.github.willena.influxql.ast.statement;
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Statement;
 
-import static io.github.willena.influxql.ast.utils.Utils.QuoteIdent;
+import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
 public class ShowRetentionPoliciesStatement implements Statement {
     private final String database;
@@ -18,7 +18,7 @@ public class ShowRetentionPoliciesStatement implements Statement {
         buf.append("SHOW RETENTION POLICIES");
         if (database != null && !database.isEmpty()) {
             buf.append(" ON ");
-            buf.append(QuoteIdent(database));
+            buf.append(quoteIdentifier(database));
         }
         return buf.toString();
     }

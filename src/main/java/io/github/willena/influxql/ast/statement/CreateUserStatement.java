@@ -23,9 +23,9 @@ public class CreateUserStatement implements Statement {
     public String toString() {
         var buf = new StringBuilder();
         buf.append("CREATE USER ");
-        buf.append(QuoteIdent(name));
+        buf.append(quoteIdentifier(name));
         buf.append(" WITH PASSWORD ");
-        buf.append(QuoteString(password));
+        buf.append(quoteString(password));
         if (admin) {
             buf.append(" WITH ALL PRIVILEGES");
         }

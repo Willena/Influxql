@@ -2,7 +2,7 @@ package io.github.willena.influxql.ast.expr;
 
 import io.github.willena.influxql.ast.Expr;
 
-import static io.github.willena.influxql.ast.utils.Utils.QuoteIdent;
+import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
 public class VarRef implements Expr {
     private final String value;
@@ -28,7 +28,7 @@ public class VarRef implements Expr {
     @Override
     public String toString() {
         var buf = new StringBuilder();
-        buf.append(QuoteIdent(value));
+        buf.append(quoteIdentifier(value));
         if (type != null && type != DataType.Unknown) {
             buf.append("::");
             buf.append(type);
