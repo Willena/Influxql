@@ -1,6 +1,6 @@
 package io.github.willena.influxql.ast.statement;
 
-import io.github.willena.influxql.ast.expr.BinaryExpr;
+import io.github.willena.influxql.ast.expr.BinaryExpression;
 import io.github.willena.influxql.ast.expr.VarRef;
 import io.github.willena.influxql.ast.expr.literal.StringLiteral;
 import io.github.willena.influxql.ast.field.SortField;
@@ -24,7 +24,7 @@ class ShowMeasurementsStatementTest extends GenericStatementTest<ShowMeasurement
                                     .withFrom(new Measurement.Builder().withName("name").build())
                                     .withDatabase("db")
                                     .withSortFields(new SortField.Builder().withName("name").build())
-                                    .withWhere(new BinaryExpr(VarRef.of("field"), StringLiteral.of("ok"), Operator.EQ))
+                                    .withWhere(new BinaryExpression(VarRef.of("field"), StringLiteral.of("ok"), Operator.EQ))
                                     .withRetentionPolicy("policy")
                                     .withLimit(1)
                                     .withOffset(10)
@@ -37,7 +37,7 @@ class ShowMeasurementsStatementTest extends GenericStatementTest<ShowMeasurement
                                     .withFrom(new Measurement.Builder().withRegex(Pattern.compile(".*")).build())
                                     .withDatabase("db")
                                     .withSortFields(new SortField.Builder().withName("name").build())
-                                    .withWhere(new BinaryExpr(VarRef.of("field"), StringLiteral.of("ok"), Operator.EQ))
+                                    .withWhere(new BinaryExpression(VarRef.of("field"), StringLiteral.of("ok"), Operator.EQ))
                                     .withRetentionPolicy("*")
                                     .withLimit(1)
                                     .withOffset(10)

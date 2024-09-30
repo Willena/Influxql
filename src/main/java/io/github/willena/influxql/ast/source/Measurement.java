@@ -22,7 +22,6 @@ public class Measurement implements Source {
         systemIterator = builder.systemIterator;
     }
 
-
     public String getName() {
         return name;
     }

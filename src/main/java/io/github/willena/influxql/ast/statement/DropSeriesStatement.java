@@ -1,7 +1,7 @@
 package io.github.willena.influxql.ast.statement;
 
 import io.github.willena.influxql.ast.Buildable;
-import io.github.willena.influxql.ast.Expr;
+import io.github.willena.influxql.ast.Expression;
 import io.github.willena.influxql.ast.Source;
 import io.github.willena.influxql.ast.Statement;
 import io.github.willena.influxql.ast.source.Sources;
@@ -10,7 +10,7 @@ import java.util.List;
 
 public class DropSeriesStatement implements Statement {
     private final Sources sources;
-    private final Expr condition;
+    private final Expression condition;
 
     private DropSeriesStatement(Builder builder) {
         sources = builder.sources;
@@ -39,7 +39,7 @@ public class DropSeriesStatement implements Statement {
      */
     public static final class Builder implements Buildable<DropSeriesStatement> {
         private Sources sources;
-        private Expr condition;
+        private Expression condition;
 
         public Builder() {
         }
@@ -70,7 +70,7 @@ public class DropSeriesStatement implements Statement {
          * @param condition the {@code condition} to set
          * @return a reference to this Builder
          */
-        public Builder withWhere(Expr condition) {
+        public Builder withWhere(Expression condition) {
             this.condition = condition;
             return this;
         }

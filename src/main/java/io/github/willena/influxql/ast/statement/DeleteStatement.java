@@ -1,7 +1,7 @@
 package io.github.willena.influxql.ast.statement;
 
 import io.github.willena.influxql.ast.Buildable;
-import io.github.willena.influxql.ast.Expr;
+import io.github.willena.influxql.ast.Expression;
 import io.github.willena.influxql.ast.Source;
 import io.github.willena.influxql.ast.Statement;
 
@@ -9,7 +9,7 @@ import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 
 public class DeleteStatement implements Statement {
     private final Source source;
-    private final Expr condition;
+    private final Expression condition;
 
     private DeleteStatement(Builder builder) {
         source = builder.source;
@@ -35,7 +35,7 @@ public class DeleteStatement implements Statement {
      */
     public static final class Builder implements Buildable<DeleteStatement> {
         private Source source;
-        private Expr condition;
+        private Expression condition;
 
         public Builder() {
         }
@@ -57,7 +57,7 @@ public class DeleteStatement implements Statement {
          * @param condition the {@code condition} to set
          * @return a reference to this Builder
          */
-        public Builder withWhere(Expr condition) {
+        public Builder withWhere(Expression condition) {
             this.condition = condition;
             return this;
         }

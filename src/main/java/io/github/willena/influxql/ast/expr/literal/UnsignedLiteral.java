@@ -3,9 +3,6 @@ package io.github.willena.influxql.ast.expr.literal;
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 
 public class UnsignedLiteral extends IntegerLiteral {
-    public UnsignedLiteral(Integer value) {
-        super(value);
-    }
 
     public UnsignedLiteral(Long value) {
         super(value);

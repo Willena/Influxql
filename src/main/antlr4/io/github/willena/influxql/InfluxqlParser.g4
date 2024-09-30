@@ -251,10 +251,10 @@ alias            : AS IDENTIFIER;
 back_ref         : ( policy_name '.:MEASUREMENT' ) |
                     ( db_name '.' ( policy_name )? '.:MEASUREMENT' );
 db_name          : IDENTIFIER;
-dimension        : expr;
+dimension        : expression;
 dimensions       : dimension ( COMMA dimension )*;
 field_key        : IDENTIFIER;
-field            : expr ( alias )?;
+field            : expression ( alias )?;
 fields           : field ( COMMA field )*;
 fill_option      : 'null' | 'none' | 'previous' | 'linear' | INTERGER_LITERAL | FLOAT_LITERAL;
 host             : STRING_LITERAL;
@@ -287,8 +287,8 @@ user_name        : IDENTIFIER;
 var_ref          : measurement;
 binary_op        : PLUS | MINUS | STAR | DIV | MOD | AMP | PIPE | OR_EX | AND |
                     OR | ASSIGN | NOT_EQ1 | NOT_EQ2 | LT | LT_EQ | GT | GT_EQ;
-expr             : unary_expr ( binary_op unary_expr )*;
-unary_expr       : OPEN_PAR expr CLOSE_PAR | var_ref | TIME_LITERAL | STRING_LITERAL | INTERGER_LITERAL |
+expression             : unary_expr ( binary_op unary_expr )*;
+unary_expr       : OPEN_PAR expression CLOSE_PAR | var_ref | TIME_LITERAL | STRING_LITERAL | INTERGER_LITERAL |
                     FLOAT_LITERAL | BOOL_LITERAL | DURATION_LITERAL | REGULAR_EXPRESSION_LITERAL;
 from_clause     : FROM measurements;
 group_by_clause : GROUP BY dimensions 'fill(' fill_option ')';
@@ -301,6 +301,6 @@ timezone_clause : 'tz(' STRING_LITERAL ')';
 on_clause       : ON db_name;
 order_by_clause : ORDER BY sort_fields;
 to_clause       : TO user_name;
-where_clause    : WHERE expr;
+where_clause    : WHERE expression;
 with_measurement_clause : WITH MEASUREMENT ( EQ measurement | REG_MATCH REGULAR_EXPRESSION_LITERAL );
 with_tag_clause : WITH KEY ( ASSIGN tag_key | NOT_EQ1 tag_key | REG_MATCH REGULAR_EXPRESSION_LITERAL | IN OPEN_PAR tag_keys CLOSE_PAR );

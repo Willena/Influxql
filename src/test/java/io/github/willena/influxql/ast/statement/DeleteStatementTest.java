@@ -1,6 +1,6 @@
 package io.github.willena.influxql.ast.statement;
 
-import io.github.willena.influxql.ast.expr.BinaryExpr;
+import io.github.willena.influxql.ast.expr.BinaryExpression;
 import io.github.willena.influxql.ast.expr.VarRef;
 import io.github.willena.influxql.ast.expr.literal.TimeLiteral;
 import io.github.willena.influxql.ast.source.Measurement;
@@ -24,7 +24,7 @@ class DeleteStatementTest extends GenericStatementTest<DeleteStatement> {
                     .withStatement(
                             new DeleteStatement.Builder()
                                     .withFrom(new Measurement.Builder().withName("cpu").build())
-                                    .withWhere(new BinaryExpr(
+                                    .withWhere(new BinaryExpression(
                                             VarRef.of("time"),
                                             TimeLiteral.of(ZonedDateTime.of(2000, 1, 1, 0, 0, 0, 0, ZoneId.of("UTC")).toInstant()),
                                             Operator.LT
@@ -36,7 +36,7 @@ class DeleteStatementTest extends GenericStatementTest<DeleteStatement> {
                     .withStatement(
                             new DeleteStatement.Builder()
                                     .withFrom(new Measurement.Builder().withRegex(Pattern.compile(".*")).build())
-                                    .withWhere(new BinaryExpr(
+                                    .withWhere(new BinaryExpression(
                                             VarRef.of("time"),
                                             TimeLiteral.of(ZonedDateTime.of(2000, 1, 1, 0, 0, 0, 0, ZoneId.of("UTC")).toInstant()),
                                             Operator.LT

@@ -4,6 +4,7 @@ import io.github.willena.influxql.ast.Literal;
 
 import java.time.Duration;
 
+import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 import static io.github.willena.influxql.ast.utils.Utils.formatDuration;
 
 public class DurationLiteral implements Literal<Duration> {
@@ -11,6 +12,11 @@ public class DurationLiteral implements Literal<Duration> {
 
     public DurationLiteral(final Duration value) {
         this.value = value;
+        ensureDefined("value", value);
+    }
+
+    public static DurationLiteral of(Duration value) {
+        return new DurationLiteral(value);
     }
 
     @Override

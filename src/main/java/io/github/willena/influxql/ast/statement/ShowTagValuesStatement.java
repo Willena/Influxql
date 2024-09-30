@@ -17,7 +17,7 @@ public class ShowTagValuesStatement implements Statement {
     private final Sources sources;
     private final Operator operator;
     private final Literal<?> tagKeyExpr;
-    private final Expr condition;
+    private final Expression condition;
     private final SortFields sortFields;
     private final int limit;
     private final int offset;
@@ -83,7 +83,7 @@ public class ShowTagValuesStatement implements Statement {
         private Sources sources;
         private Operator operator;
         private Literal<?> tagKeyExpr;
-        private Expr condition;
+        private Expression condition;
         private SortFields sortFields;
         private int limit;
         private int offset;
@@ -150,7 +150,7 @@ public class ShowTagValuesStatement implements Statement {
          * @param condition the {@code condition} to set
          * @return a reference to this Builder
          */
-        public Builder withCondition(Expr condition) {
+        public Builder withCondition(Expression condition) {
             this.condition = condition;
             return this;
         }

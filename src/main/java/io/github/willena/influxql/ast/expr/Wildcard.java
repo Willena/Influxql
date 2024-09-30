@@ -1,8 +1,8 @@
 package io.github.willena.influxql.ast.expr;
 
-import io.github.willena.influxql.ast.Expr;
+import io.github.willena.influxql.ast.Expression;
 
-public class Wildcard implements Expr {
+public class Wildcard implements Expression {
     public Wildcard() {
     }
 

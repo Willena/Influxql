@@ -1,6 +1,6 @@
 package io.github.willena.influxql.ast.statement;
 
-import io.github.willena.influxql.ast.expr.BinaryExpr;
+import io.github.willena.influxql.ast.expr.BinaryExpression;
 import io.github.willena.influxql.ast.expr.VarRef;
 import io.github.willena.influxql.ast.expr.literal.IntegerLiteral;
 import io.github.willena.influxql.ast.field.Field;
@@ -18,7 +18,7 @@ class ExplainStatementTest extends GenericStatementTest<ExplainStatement> {
                                             new SelectStatement.Builder()
                                                     .withSelect(new Field.Builder().withExpr(VarRef.of("F1")).build())
                                                     .withFrom(new Measurement.Builder().withName("Toto").build())
-                                                    .withWhere(new BinaryExpr(VarRef.of("totoField"), IntegerLiteral.of(32), Operator.EQ))
+                                                    .withWhere(new BinaryExpression(VarRef.of("totoField"), IntegerLiteral.of(32), Operator.EQ))
                                                     .build()
                                     )
                     )
@@ -33,7 +33,7 @@ class ExplainStatementTest extends GenericStatementTest<ExplainStatement> {
                                             new SelectStatement.Builder()
                                                     .withSelect(new Field.Builder().withExpr(VarRef.of("F1")).build())
                                                     .withFrom(new Measurement.Builder().withName("Toto").build())
-                                                    .withWhere(new BinaryExpr(VarRef.of("totoField"), IntegerLiteral.of(32), Operator.EQ))
+                                                    .withWhere(new BinaryExpression(VarRef.of("totoField"), IntegerLiteral.of(32), Operator.EQ))
                                                     .build()
                                     )
                     )

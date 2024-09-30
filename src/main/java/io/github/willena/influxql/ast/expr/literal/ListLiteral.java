@@ -1,16 +1,27 @@
 package io.github.willena.influxql.ast.expr.literal;
 
 import io.github.willena.influxql.ast.Literal;
+import io.github.willena.influxql.ast.utils.StringJoiningList;
 import io.github.willena.influxql.ast.utils.Utils;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 
 public class ListLiteral implements Literal<List<String>> {
     private final List<String> values;
 
     public ListLiteral(final List<String> values) {
-        this.values = values;
+        this.values = new StringJoiningList<>(values, Utils::quoteIdentifier);
+        ensureDefined("values", values);
+    }
+
+    public static ListLiteral of(final List<String> values) {
+        return new ListLiteral(values);
+    }
+
+    public static ListLiteral of(String... values) {
+        return of(List.of(values));
     }
 
     @Override
@@ -20,10 +31,6 @@ public class ListLiteral implements Literal<List<String>> {
 
     @Override
     public String toString() {
-        return "(" +
-                values.stream()
-                        .map(Utils::quoteIdentifier)
-                        .collect(Collectors.joining(", ")) +
-                ")";
+        return "(" + values.toString() + ")";
     }
 }

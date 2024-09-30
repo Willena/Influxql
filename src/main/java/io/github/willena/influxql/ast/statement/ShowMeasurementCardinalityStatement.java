@@ -1,7 +1,7 @@
 package io.github.willena.influxql.ast.statement;
 
 import io.github.willena.influxql.ast.Buildable;
-import io.github.willena.influxql.ast.Expr;
+import io.github.willena.influxql.ast.Expression;
 import io.github.willena.influxql.ast.Source;
 import io.github.willena.influxql.ast.Statement;
 import io.github.willena.influxql.ast.expr.Dimension;
@@ -16,7 +16,7 @@ public class ShowMeasurementCardinalityStatement implements Statement {
     private final boolean exact;
     private final String database;
     private final Sources sources;
-    private final Expr condition;
+    private final Expression condition;
     private final Dimensions dimensions;
     private final int limit;
     private final int offset;
@@ -75,7 +75,7 @@ public class ShowMeasurementCardinalityStatement implements Statement {
         private boolean exact;
         private String database;
         private Sources sources;
-        private Expr condition;
+        private Expression condition;
         private Dimensions dimensions;
         private int limit;
         private int offset;
@@ -131,7 +131,7 @@ public class ShowMeasurementCardinalityStatement implements Statement {
          * @param condition the {@code condition} to set
          * @return a reference to this Builder
          */
-        public Builder withWhere(Expr condition) {
+        public Builder withWhere(Expression condition) {
             this.condition = condition;
             return this;
         }

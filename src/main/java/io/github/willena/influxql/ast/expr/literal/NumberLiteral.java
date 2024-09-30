@@ -2,11 +2,19 @@ package io.github.willena.influxql.ast.expr.literal;
 
 import io.github.willena.influxql.ast.Literal;
 
+import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
+
 public class NumberLiteral implements Literal<Double> {
     private final Double value;
 
     public NumberLiteral(Double value) {
         this.value = value;
+        ensureDefined("value", value);
+    }
+
+    public static NumberLiteral of(Number value) {
+        ensureDefined("value", value);
+        return new NumberLiteral(value.doubleValue());
     }
 
     @Override
@@ -21,7 +29,7 @@ public class NumberLiteral implements Literal<Double> {
         }
 
         if (value.isInfinite()) {
-            return value > 0 ? "+Inf" : "-Inf";
+            return value == Double.POSITIVE_INFINITY ? "+Inf" : "-Inf";
         }
 
         return value.toString();

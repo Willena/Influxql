@@ -1,6 +1,6 @@
 package io.github.willena.influxql.ast.statement;
 
-import io.github.willena.influxql.ast.expr.BinaryExpr;
+import io.github.willena.influxql.ast.expr.BinaryExpression;
 import io.github.willena.influxql.ast.expr.Dimension;
 import io.github.willena.influxql.ast.expr.VarRef;
 import io.github.willena.influxql.ast.expr.literal.StringLiteral;
@@ -23,7 +23,7 @@ class ShowSeriesCardinalityStatementTest extends GenericStatementTest<ShowSeries
                                     .withExact(true)
                                     .withSources(new Measurement.Builder().withName("name").build())
                                     .withDatabase("db")
-                                    .withCondition(new BinaryExpr(VarRef.of("e"), StringLiteral.of("20"), Operator.EQ))
+                                    .withCondition(new BinaryExpression(VarRef.of("e"), StringLiteral.of("20"), Operator.EQ))
                                     .withDimensions(new Dimension(VarRef.of("dimension")))
                                     .withLimit(1)
                                     .withOffset(10)

@@ -1,6 +1,6 @@
 package io.github.willena.influxql.ast.statement;
 
-import io.github.willena.influxql.ast.expr.BinaryExpr;
+import io.github.willena.influxql.ast.expr.BinaryExpression;
 import io.github.willena.influxql.ast.expr.VarRef;
 import io.github.willena.influxql.ast.expr.literal.StringLiteral;
 import io.github.willena.influxql.ast.source.Measurement;
@@ -40,7 +40,7 @@ class DeleteSeriesStatementTest extends GenericStatementTest<DeleteSeriesStateme
                                             .withRegex(Pattern.compile(".*"))
                                             .build()
                                     )
-                                    .withWhere(new BinaryExpr(
+                                    .withWhere(new BinaryExpression(
                                             VarRef.of("cpu"),
                                             StringLiteral.of("cpu2"),
                                             Operator.EQ
@@ -52,7 +52,7 @@ class DeleteSeriesStatementTest extends GenericStatementTest<DeleteSeriesStateme
             new TestBody.Builder<DeleteSeriesStatement>()
                     .withStatement(
                             new DeleteSeriesStatement.Builder()
-                                    .withWhere(new BinaryExpr(
+                                    .withWhere(new BinaryExpression(
                                             VarRef.of("cpu"),
                                             StringLiteral.of("cpu2"),
                                             Operator.EQ

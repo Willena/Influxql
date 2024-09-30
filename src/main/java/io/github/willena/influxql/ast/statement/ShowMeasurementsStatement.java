@@ -1,7 +1,7 @@
 package io.github.willena.influxql.ast.statement;
 
 import io.github.willena.influxql.ast.Buildable;
-import io.github.willena.influxql.ast.Expr;
+import io.github.willena.influxql.ast.Expression;
 import io.github.willena.influxql.ast.Statement;
 import io.github.willena.influxql.ast.field.SortField;
 import io.github.willena.influxql.ast.field.SortFields;
@@ -13,7 +13,7 @@ public class ShowMeasurementsStatement implements Statement {
     private final String database;
     private final String retentionPolicy;
     private final Measurement source;
-    private final Expr condition;
+    private final Expression condition;
     private final SortFields sortFields;
     private final int limit;
     private final int offset;
@@ -83,7 +83,7 @@ public class ShowMeasurementsStatement implements Statement {
         private boolean wildcardDatabase;
         private boolean wildcardRetentionPolicy;
         private Measurement source;
-        private Expr condition;
+        private Expression condition;
         private SortFields sortFields;
         private int limit;
         private int offset;
@@ -130,7 +130,7 @@ public class ShowMeasurementsStatement implements Statement {
          * @param condition the {@code condition} to set
          * @return a reference to this Builder
          */
-        public Builder withWhere(Expr condition) {
+        public Builder withWhere(Expression condition) {
             this.condition = condition;
             return this;
         }

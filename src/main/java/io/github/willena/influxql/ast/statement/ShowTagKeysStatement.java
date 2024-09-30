@@ -1,7 +1,7 @@
 package io.github.willena.influxql.ast.statement;
 
 import io.github.willena.influxql.ast.Buildable;
-import io.github.willena.influxql.ast.Expr;
+import io.github.willena.influxql.ast.Expression;
 import io.github.willena.influxql.ast.Source;
 import io.github.willena.influxql.ast.Statement;
 import io.github.willena.influxql.ast.field.SortField;
@@ -15,7 +15,7 @@ import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 public class ShowTagKeysStatement implements Statement {
     private final String database;
     private final Sources sources;
-    private final Expr condition;
+    private final Expression condition;
     private final SortFields sortFields;
     private final int limit;
     private final int offset;
@@ -79,7 +79,7 @@ public class ShowTagKeysStatement implements Statement {
     public static final class Builder implements Buildable<ShowTagKeysStatement> {
         private String database;
         private Sources sources;
-        private Expr condition;
+        private Expression condition;
         private SortFields sortFields;
         private int limit;
         private int offset;
@@ -126,7 +126,7 @@ public class ShowTagKeysStatement implements Statement {
          * @param condition the {@code condition} to set
          * @return a reference to this Builder
          */
-        public Builder withCondition(Expr condition) {
+        public Builder withCondition(Expression condition) {
             this.condition = condition;
             return this;
         }

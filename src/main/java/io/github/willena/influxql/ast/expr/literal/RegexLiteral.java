@@ -4,15 +4,22 @@ import io.github.willena.influxql.ast.Literal;
 
 import java.util.regex.Pattern;
 
+import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
+
 public class RegexLiteral implements Literal<Pattern> {
     private final Pattern pattern;
 
-    public RegexLiteral(String regex) {
-        this(Pattern.compile(regex));
-    }
-
     public RegexLiteral(Pattern pattern) {
         this.pattern = pattern;
+        ensureDefined("pattern", pattern);
+    }
+
+    public static RegexLiteral of(String regex) {
+        return of(Pattern.compile(regex));
+    }
+
+    private static RegexLiteral of(Pattern compile) {
+        return new RegexLiteral(compile);
     }
 
     @Override
@@ -22,10 +29,6 @@ public class RegexLiteral implements Literal<Pattern> {
 
     @Override
     public String toString() {
-        if (pattern == null) {
-            return "";
-        }
-
         return "/" +
                 pattern.toString().replaceAll("/", "\\\\/") +
                 "/";

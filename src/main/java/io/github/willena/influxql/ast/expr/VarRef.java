@@ -1,10 +1,10 @@
 package io.github.willena.influxql.ast.expr;
 
-import io.github.willena.influxql.ast.Expr;
+import io.github.willena.influxql.ast.Expression;
 
 import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
-public class VarRef implements Expr {
+public class VarRef implements Expression {
     private final String value;
     private final DataType type;
 

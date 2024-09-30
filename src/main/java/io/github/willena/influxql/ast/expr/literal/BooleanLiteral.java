@@ -10,6 +10,10 @@ public class BooleanLiteral implements Literal<Boolean> {
         this.value = value;
     }
 
+    public static BooleanLiteral of(boolean value) {
+        return new BooleanLiteral(value);
+    }
+
     @Override
     public Boolean getValue() {
         return value;

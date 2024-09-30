@@ -1,6 +1,6 @@
 package io.github.willena.influxql.ast.statement;
 
-import io.github.willena.influxql.ast.expr.BinaryExpr;
+import io.github.willena.influxql.ast.expr.BinaryExpression;
 import io.github.willena.influxql.ast.expr.VarRef;
 import io.github.willena.influxql.ast.expr.literal.StringLiteral;
 import io.github.willena.influxql.ast.field.SortField;
@@ -32,7 +32,7 @@ class ShowTagValuesStatementTest extends GenericStatementTest<ShowTagValuesState
                                     .withSources(new Measurement.Builder().withName("name").build())
                                     .withSortFields(new SortField.Builder().withAscending(false).withName("field").build())
                                     .withDatabase("db")
-                                    .withCondition(new BinaryExpr(VarRef.of("kkk"), StringLiteral.of("jkj"), Operator.NEQ))
+                                    .withCondition(new BinaryExpression(VarRef.of("kkk"), StringLiteral.of("jkj"), Operator.NEQ))
                                     .withLimit(1)
                                     .withOffset(10)
                                     .withOperator(Operator.EQ)

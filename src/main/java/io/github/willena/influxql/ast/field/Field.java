@@ -1,22 +1,22 @@
 package io.github.willena.influxql.ast.field;
 
 import io.github.willena.influxql.ast.Buildable;
-import io.github.willena.influxql.ast.Expr;
+import io.github.willena.influxql.ast.Expression;
 
 import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
 public class Field {
-    private final Expr expr;
+    private final Expression expression;
     private final String alias;
 
     private Field(Builder builder) {
-        expr = builder.expr;
+        expression = builder.expression;
         alias = builder.alias;
     }
 
     @Override
     public String toString() {
-        String str = expr.toString();
+        String str = expression.toString();
 
         if (alias == null || alias.isBlank()) {
             return str;
@@ -28,7 +28,7 @@ public class Field {
      * {@code Field} builder static inner class.
      */
     public static final class Builder implements Buildable<Field> {
-        private Expr expr;
+        private Expression expression;
         private String alias;
 
         public Builder() {
@@ -37,11 +37,11 @@ public class Field {
         /**
          * Sets the {@code expr} and returns a reference to this Builder enabling method chaining.
          *
-         * @param expr the {@code expr} to set
+         * @param expression the {@code expr} to set
          * @return a reference to this Builder
          */
-        public Builder withExpr(Expr expr) {
-            this.expr = expr;
+        public Builder withExpr(Expression expression) {
+            this.expression = expression;
             return this;
         }
 
