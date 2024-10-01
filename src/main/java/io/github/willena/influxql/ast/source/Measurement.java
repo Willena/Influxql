@@ -48,6 +48,10 @@ public class Measurement implements Source {
         return new Builder().withRegex(pattern).build();
     }
 
+    public static Measurement measurements(String pattern) {
+        return new Builder().withRegex(Pattern.compile(pattern)).build();
+    }
+
     @Override
     public String toString() {
         var buf = new StringBuilder();

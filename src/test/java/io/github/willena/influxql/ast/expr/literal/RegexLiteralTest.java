@@ -12,6 +12,7 @@ class RegexLiteralTest {
     void testRegexLiteral() {
         assertEquals(Pattern.compile(".*").toString(), RegexLiteral.of(".*").getValue().toString());
         assertEquals("/.*/", RegexLiteral.of(".*").toString());
+        assertEquals("/.*/", RegexLiteral.of(Pattern.compile(".*")).toString());
         assertThrows(IllegalArgumentException.class, () -> new RegexLiteral(null));
     }
 }

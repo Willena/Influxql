@@ -34,20 +34,24 @@ public class Field {
     }
 
     public static Field field(String name, DataType type) {
-        return new Builder().withExpr(VarRef.of(name, type)).build();
+        return of(VarRef.of(name, type));
     }
 
     public static Field wildcard() {
-        return new Builder().withExpr(Wildcard.wildcard()).build();
+        return of(Wildcard.wildcard());
     }
 
 
     public static Field wildcardFields() {
-        return new Builder().withExpr(Wildcard.wildcardFields()).build();
+        return of(Wildcard.wildcardFields());
     }
 
     public static Field wildcardTags() {
-        return new Builder().withExpr(Wildcard.wildcardTags()).build();
+        return of(Wildcard.wildcardTags());
+    }
+
+    public static Field of(Expression expression) {
+        return new Builder().withExpr(expression).build();
     }
 
     /**

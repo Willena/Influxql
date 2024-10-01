@@ -3,6 +3,8 @@ package io.github.willena.influxql.ast.source;
 import io.github.willena.influxql.ast.Source;
 import io.github.willena.influxql.ast.statement.SelectStatement;
 
+import java.util.function.Function;
+
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 
 public class SubQuery implements Source {
@@ -15,6 +17,10 @@ public class SubQuery implements Source {
 
     public static SubQuery of(SelectStatement statement) {
         return new SubQuery(statement);
+    }
+
+    public static SubQuery of(Function<SelectStatement.Builder, SelectStatement.Builder> statement) {
+        return new SubQuery(statement.apply(new SelectStatement.Builder()).build());
     }
 
     @Override

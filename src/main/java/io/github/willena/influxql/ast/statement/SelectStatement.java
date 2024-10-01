@@ -97,7 +97,7 @@ public class SelectStatement implements Statement {
             buf.append(String.format(" SOFFSET %d", sOffset));
         }
         if (location != null) {
-            buf.append(String.format("TZ('%s')", location.getID()));
+            buf.append(String.format(" TZ('%s')", location.getID()));
         }
         return buf.toString();
     }

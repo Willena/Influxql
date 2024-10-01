@@ -37,7 +37,7 @@ class MeasurementTest {
     void testError() {
         Pattern pattern = Pattern.compile("");
         assertThrows(IllegalArgumentException.class, () -> Measurement.measurements(pattern));
-        assertThrows(IllegalArgumentException.class, () -> Measurement.measurements(null));
+        assertThrows(IllegalArgumentException.class, () -> Measurement.measurements((Pattern) null));
         assertThrows(IllegalArgumentException.class, () -> Measurement.measurement(""));
         assertThrows(IllegalArgumentException.class, () -> Measurement.measurement(null));
         assertThrows(IllegalArgumentException.class, () -> new Measurement.Builder().build());

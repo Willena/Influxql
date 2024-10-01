@@ -18,7 +18,7 @@ public class RegexLiteral implements Literal<Pattern> {
         return of(Pattern.compile(regex));
     }
 
-    private static RegexLiteral of(Pattern compile) {
+    public static RegexLiteral of(Pattern compile) {
         return new RegexLiteral(compile);
     }
 

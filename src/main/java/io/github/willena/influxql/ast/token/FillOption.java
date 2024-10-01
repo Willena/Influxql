@@ -1,19 +1,19 @@
 package io.github.willena.influxql.ast.token;
 
 public enum FillOption {
-    NULL_FILL {
+    NULL {
         @Override
         public String getSqlForValue(Object value) {
             return "fill(null)";
         }
     },
-    NO_FILL {
+    NONE {
         @Override
         public String getSqlForValue(Object value) {
             return "fill(none)";
         }
     },
-    NUMBER_FILL {
+    NUMBER {
         @Override
         public String getSqlForValue(Object value) {
             if (!(value instanceof Number)) {
@@ -23,13 +23,13 @@ public enum FillOption {
             return "fill(" + value + ")";
         }
     },
-    PREVIOUS_FILL {
+    PREVIOUS {
         @Override
         public String getSqlForValue(Object value) {
             return "fill(previous)";
         }
     },
-    LINEAR_FILL {
+    LINEAR {
         @Override
         public String getSqlForValue(Object value) {
             return "fill(linear)";
