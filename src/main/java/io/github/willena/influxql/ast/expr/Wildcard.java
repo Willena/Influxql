@@ -3,7 +3,19 @@ package io.github.willena.influxql.ast.expr;
 import io.github.willena.influxql.ast.Expression;
 
 public class Wildcard implements Expression {
-    public Wildcard() {
+    private Wildcard() {
+    }
+
+    public static Wildcard wildcard() {
+        return new Wildcard();
+    }
+
+    public static Wildcard wildcardFields() {
+        return new WildcardField();
+    }
+
+    public static Wildcard wildcardTags() {
+        return new WildcardTag();
     }
 
     @Override
@@ -12,24 +24,24 @@ public class Wildcard implements Expression {
     }
 
     public static class WildcardField extends Wildcard {
-        public WildcardField() {
+        private WildcardField() {
             super();
         }
 
         @Override
         public String toString() {
-            return "*::field";
+            return super.toString() + "::field";
         }
     }
 
     public static class WildcardTag extends Wildcard {
-        public WildcardTag() {
+        private WildcardTag() {
             super();
         }
 
         @Override
         public String toString() {
-            return "*::tag";
+            return super.toString() + "::tag";
         }
     }
 }

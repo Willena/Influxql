@@ -31,9 +31,9 @@ class CreateContinuousQueryStatementTest extends GenericStatementTest<CreateCont
                             .withResampleEvery(Duration.ofHours(12))
                             .withResampleFor(Duration.ofHours(1))
                             .withSelectStatement(new SelectStatement.Builder()
-                                    .withSelect(new Field.Builder().withExpr(VarRef.of("F1")).build())
-                                    .withFrom(new Measurement.Builder().withName("Toto").build())
-                                    .withWhere(new BinaryExpression(
+                                    .select(new Field.Builder().withExpr(VarRef.of("F1")).build())
+                                    .from(new Measurement.Builder().withName("Toto").build())
+                                    .where(new BinaryExpression(
                                                     new VarRef("totoField"),
                                             new IntegerLiteral(32L),
                                                     Operator.EQ

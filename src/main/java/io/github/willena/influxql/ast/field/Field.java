@@ -2,7 +2,11 @@ package io.github.willena.influxql.ast.field;
 
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Expression;
+import io.github.willena.influxql.ast.expr.DataType;
+import io.github.willena.influxql.ast.expr.VarRef;
+import io.github.willena.influxql.ast.expr.Wildcard;
 
+import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
 public class Field {
@@ -12,6 +16,7 @@ public class Field {
     private Field(Builder builder) {
         expression = builder.expression;
         alias = builder.alias;
+        ensureDefined("expression", expression);
     }
 
     @Override
@@ -22,6 +27,27 @@ public class Field {
             return str;
         }
         return String.format("%s AS %s", str, quoteIdentifier(alias));
+    }
+
+    public static Field field(String name) {
+        return field(name, null);
+    }
+
+    public static Field field(String name, DataType type) {
+        return new Builder().withExpr(VarRef.of(name, type)).build();
+    }
+
+    public static Field wildcard() {
+        return new Builder().withExpr(Wildcard.wildcard()).build();
+    }
+
+
+    public static Field wildcardFields() {
+        return new Builder().withExpr(Wildcard.wildcardFields()).build();
+    }
+
+    public static Field wildcardTags() {
+        return new Builder().withExpr(Wildcard.wildcardTags()).build();
     }
 
     /**

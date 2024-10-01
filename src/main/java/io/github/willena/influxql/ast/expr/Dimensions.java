@@ -12,4 +12,8 @@ public class Dimensions extends StringJoiningList<Dimension> {
     public Dimensions() {
         super();
     }
+
+    public static Dimensions of(Dimension... dimensions) {
+        return new Dimensions(List.of(dimensions));
+    }
 }

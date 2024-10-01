@@ -63,35 +63,35 @@ public class BinaryExpression implements Expression {
         return new BinaryExpression(left, right, Operator.OR);
     }
 
-    public static BinaryExpression EqRegex(Expression left, Expression right) {
+    public static BinaryExpression eqRegex(Expression left, Expression right) {
         return new BinaryExpression(left, right, Operator.EQREGEX);
     }
 
-    public static BinaryExpression NeqRegex(Expression left, Expression right) {
+    public static BinaryExpression neqRegex(Expression left, Expression right) {
         return new BinaryExpression(left, right, Operator.NEQREGEX);
     }
 
-    public static BinaryExpression Eq(Expression left, Expression right) {
+    public static BinaryExpression eq(Expression left, Expression right) {
         return new BinaryExpression(left, right, Operator.EQ);
     }
 
-    public static BinaryExpression Neq(Expression left, Expression right) {
+    public static BinaryExpression neq(Expression left, Expression right) {
         return new BinaryExpression(left, right, Operator.NEQ);
     }
 
-    public static BinaryExpression Gt(Expression left, Expression right) {
+    public static BinaryExpression gt(Expression left, Expression right) {
         return new BinaryExpression(left, right, Operator.GT);
     }
 
-    public static BinaryExpression Lt(Expression left, Expression right) {
+    public static BinaryExpression lt(Expression left, Expression right) {
         return new BinaryExpression(left, right, Operator.LT);
     }
 
-    public static BinaryExpression Gte(Expression left, Expression right) {
+    public static BinaryExpression gte(Expression left, Expression right) {
         return new BinaryExpression(left, right, Operator.GTE);
     }
 
-    public static BinaryExpression Lte(Expression left, Expression right) {
+    public static BinaryExpression lte(Expression left, Expression right) {
         return new BinaryExpression(left, right, Operator.LTE);
     }
 

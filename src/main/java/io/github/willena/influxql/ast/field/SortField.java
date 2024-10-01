@@ -2,6 +2,9 @@ package io.github.willena.influxql.ast.field;
 
 import io.github.willena.influxql.ast.Buildable;
 
+import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
+import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
+
 public class SortField {
     private final String name;
     private final boolean ascending;
@@ -9,13 +12,24 @@ public class SortField {
     private SortField(Builder builder) {
         name = builder.name;
         ascending = builder.ascending;
+        ensureDefined("name", name);
+    }
+
+    public static SortField asc(String name) {
+        return new Builder().withName(name).withAscending(true).build();
+    }
+
+    public static SortField desc(String name) {
+        return new Builder().withName(name).withAscending(false).build();
     }
 
     @Override
     public String toString() {
         var buf = new StringBuilder();
-        if (!name.isEmpty()) {
-            buf.append(name);
+        if (name != null && !name.isEmpty()) {
+            // TODO: not sure about that
+            // buf.append(name);
+            buf.append(quoteIdentifier(name));
             buf.append(" ");
         }
         if (ascending) {

@@ -2,6 +2,7 @@ package io.github.willena.influxql.ast.expr;
 
 import io.github.willena.influxql.ast.Expression;
 
+import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
 public class VarRef implements Expression {
@@ -11,6 +12,7 @@ public class VarRef implements Expression {
     public VarRef(String value, DataType type) {
         this.value = value;
         this.type = type;
+        ensureDefined("value", value);
     }
 
     public VarRef(String expr) {
@@ -29,7 +31,7 @@ public class VarRef implements Expression {
     public String toString() {
         var buf = new StringBuilder();
         buf.append(quoteIdentifier(value));
-        if (type != null && type != DataType.Unknown) {
+        if (type != null && type != DataType.UNKNOWN) {
             buf.append("::");
             buf.append(type);
         }

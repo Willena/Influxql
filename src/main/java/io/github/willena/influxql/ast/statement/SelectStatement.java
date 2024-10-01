@@ -129,12 +129,12 @@ public class SelectStatement implements Statement {
          * @param fields the {@code fields} to set
          * @return a reference to this Builder
          */
-        public Builder withSelect(Fields fields) {
+        public Builder select(Fields fields) {
             this.fields = fields;
             return this;
         }
 
-        public Builder withSelect(Field field, Field... fields) {
+        public Builder select(Field field, Field... fields) {
             if (this.fields == null) {
                 this.fields = new Fields();
             }
@@ -149,7 +149,7 @@ public class SelectStatement implements Statement {
          * @param target the {@code target} to set
          * @return a reference to this Builder
          */
-        public Builder withInto(Target target) {
+        public Builder into(Target target) {
             this.target = target;
             return this;
         }
@@ -160,12 +160,12 @@ public class SelectStatement implements Statement {
          * @param dimensions the {@code dimensions} to set
          * @return a reference to this Builder
          */
-        public Builder withGroupBy(Dimensions dimensions) {
+        public Builder groupBy(Dimensions dimensions) {
             this.dimensions = dimensions;
             return this;
         }
 
-        public Builder withGroupBy(Dimension dimension, Dimension... dimensions) {
+        public Builder groupBy(Dimension dimension, Dimension... dimensions) {
             if (this.dimensions == null) {
                 this.dimensions = new Dimensions(Collections.emptyList());
             }
@@ -180,12 +180,12 @@ public class SelectStatement implements Statement {
          * @param sources the {@code sources} to set
          * @return a reference to this Builder
          */
-        public Builder withFrom(Sources sources) {
+        public Builder from(Sources sources) {
             this.sources = sources;
             return this;
         }
 
-        public Builder withFrom(Source source, Source... sources) {
+        public Builder from(Source source, Source... sources) {
             if (this.sources == null) {
                 this.sources = new Sources(Collections.emptyList());
             }
@@ -201,7 +201,7 @@ public class SelectStatement implements Statement {
          * @param condition the {@code condition} to set
          * @return a reference to this Builder
          */
-        public Builder withWhere(Expression condition) {
+        public Builder where(Expression condition) {
             this.condition = condition;
             return this;
         }
@@ -212,12 +212,12 @@ public class SelectStatement implements Statement {
          * @param sortFields the {@code sortFields} to set
          * @return a reference to this Builder
          */
-        public Builder withOrderBy(SortFields sortFields) {
+        public Builder orderBy(SortFields sortFields) {
             this.sortFields = sortFields;
             return this;
         }
 
-        public Builder withOrderBy(SortField sortField, SortField... sortFields) {
+        public Builder orderBy(SortField sortField, SortField... sortFields) {
             if (this.sortFields == null) {
                 this.sortFields = new SortFields(Collections.emptyList());
             }
@@ -232,7 +232,7 @@ public class SelectStatement implements Statement {
          * @param limit the {@code limit} to set
          * @return a reference to this Builder
          */
-        public Builder withLimit(int limit) {
+        public Builder limit(int limit) {
             this.limit = limit;
             return this;
         }
@@ -243,7 +243,7 @@ public class SelectStatement implements Statement {
          * @param offset the {@code offset} to set
          * @return a reference to this Builder
          */
-        public Builder withOffset(int offset) {
+        public Builder offset(int offset) {
             this.offset = offset;
             return this;
         }
@@ -254,12 +254,12 @@ public class SelectStatement implements Statement {
          * @param fill the {@code fill} to set
          * @return a reference to this Builder
          */
-        public Builder withFill(FillOption fill) {
+        public Builder fill(FillOption fill) {
             this.fill = fill;
             return this;
         }
 
-        public Builder withFill(FillOption fill, Object value) {
+        public Builder fill(FillOption fill, Object value) {
             this.fill = fill;
             this.fillValue = value;
             return this;
@@ -271,7 +271,7 @@ public class SelectStatement implements Statement {
          * @param fillValue the {@code fillValue} to set
          * @return a reference to this Builder
          */
-        public Builder withFillValue(Object fillValue) {
+        public Builder fillValue(Object fillValue) {
             this.fillValue = fillValue;
             return this;
         }
@@ -282,17 +282,17 @@ public class SelectStatement implements Statement {
          * @param location the {@code location} to set
          * @return a reference to this Builder
          */
-        public Builder withTimeZone(TimeZone location) {
+        public Builder timezone(TimeZone location) {
             this.location = location;
             return this;
         }
 
-        public Builder withSeriesLimit(int sLimit) {
+        public Builder sLimit(int sLimit) {
             this.sLimit = sLimit;
             return this;
         }
 
-        public Builder withSeriesOffset(int sOffset) {
+        public Builder sOffset(int sOffset) {
             this.sOffset = sOffset;
             return this;
         }

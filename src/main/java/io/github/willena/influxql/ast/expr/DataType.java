@@ -1,25 +1,25 @@
 package io.github.willena.influxql.ast.expr;
 
 public enum DataType {
-    Unknown("unknown"),
+    UNKNOWN("unknown"),
     // Float means the data type is a float.
-    Float("float"),
+    FLOAT("float"),
     // Integer means the data type is an integer.
-    Integer("integer"),
+    INTEGER("integer"),
     // String means the data type is a string of text.
-    String("string"),
+    STRING("string"),
     // Boolean means the data type is a boolean.
-    Boolean("boolean"),
+    BOOLEAN("boolean"),
     // Time means the data type is a time.
-    Time("time"),
+    TIME("time"),
     // Duration means the data type is a duration of time.
-    Duration("duration"),
+    DURATION("duration"),
     // Tag means the data type is a tag.
-    Tag("tag"),
+    TAG("tag"),
     // AnyField means the data type is any field.
-    AnyField("field"),
+    ANY_FIELD("field"),
     // Unsigned means the data type is an unsigned integer.
-    Unsigned("unsigned");
+    UNSIGNED("unsigned");
 
     private final String value;
 

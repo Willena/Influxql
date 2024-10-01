@@ -1,6 +1,6 @@
 package io.github.willena.influxql.ast.statement;
 
-import io.github.willena.influxql.ast.addons.RetentionPolicy;
+import io.github.willena.influxql.ast.extra.RetentionPolicy;
 
 import java.time.Duration;
 import java.util.List;

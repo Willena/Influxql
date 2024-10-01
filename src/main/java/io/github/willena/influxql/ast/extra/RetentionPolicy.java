@@ -1,4 +1,4 @@
-package io.github.willena.influxql.ast.addons;
+package io.github.willena.influxql.ast.extra;
 
 import io.github.willena.influxql.ast.Buildable;
 

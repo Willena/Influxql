@@ -20,6 +20,16 @@ public class Measurement implements Source {
         name = builder.name;
         regex = builder.regex;
         systemIterator = builder.systemIterator;
+
+        if ((name == null || name.isBlank()) && (regex == null || regex.pattern().isBlank()) && (systemIterator == null || systemIterator.isBlank())) {
+            throw new IllegalArgumentException("name, regex, systemIterator are required");
+        }
+
+
+        if ((name != null && systemIterator != null) || (regex != null && name != null) || (regex != null && systemIterator != null)) {
+            throw new IllegalArgumentException("name, regex, systemIterator are mutually exclusive");
+        }
+
     }
 
     public String getName() {
@@ -28,6 +38,14 @@ public class Measurement implements Source {
 
     public Pattern getRegex() {
         return regex;
+    }
+
+    public static Measurement measurement(String name) {
+        return new Builder().withName(name).build();
+    }
+
+    public static Measurement measurements(Pattern pattern) {
+        return new Builder().withRegex(pattern).build();
     }
 
     @Override

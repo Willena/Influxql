@@ -13,7 +13,7 @@ public class SortFields extends StringJoiningList<SortField> {
         super();
     }
 
-    public SortFields of(SortField... sortFields) {
+    public static SortFields of(SortField... sortFields) {
         return new SortFields(List.of(sortFields));
     }
 }

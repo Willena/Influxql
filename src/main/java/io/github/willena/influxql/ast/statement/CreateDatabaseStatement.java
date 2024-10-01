@@ -2,7 +2,7 @@ package io.github.willena.influxql.ast.statement;
 
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Statement;
-import io.github.willena.influxql.ast.addons.RetentionPolicy;
+import io.github.willena.influxql.ast.extra.RetentionPolicy;
 
 import java.time.Duration;
 
