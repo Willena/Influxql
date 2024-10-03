@@ -4,7 +4,7 @@ import io.github.willena.influxql.ast.Literal;
 
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 
-public class IntegerLiteral implements Literal<Long> {
+public class IntegerLiteral implements Literal<Long>, NumericLiteral {
     private final Long value;
 
     public IntegerLiteral(Long value) {

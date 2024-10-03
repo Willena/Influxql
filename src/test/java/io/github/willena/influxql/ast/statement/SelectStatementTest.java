@@ -121,7 +121,7 @@ class SelectStatementTest extends GenericStatementTest<SelectStatement> {
                                             .withArguments(VarRef.of("COL"))
                                             .build()))
                                     .from(Measurement.measurement("MyMeasurement"))
-                                    .fill(FillOption.NUMBER, 123)
+                                    .fill(FillOption.NUMBER, IntegerLiteral.of(123))
                     )
                     .withExpectedSql("SELECT MEAN(COL) FROM MyMeasurement fill(123)")
                     .build(),
@@ -170,7 +170,7 @@ class SelectStatementTest extends GenericStatementTest<SelectStatement> {
                                             .build()))
                                     .from(Measurement.measurement("MyMeasurement"))
                                     .groupBy(Dimension.field("COLA"), Dimension.sampledBy(Duration.ofHours(1)))
-                                    .fill(FillOption.NUMBER, 123)
+                                    .fill(FillOption.NUMBER, IntegerLiteral.of(123))
                     )
                     .withExpectedSql("SELECT MEAN(COL) FROM MyMeasurement GROUP BY COLA, time(1h) fill(123)")
                     .build(),

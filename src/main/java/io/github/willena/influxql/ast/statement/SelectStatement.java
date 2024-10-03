@@ -1,9 +1,6 @@
 package io.github.willena.influxql.ast.statement;
 
-import io.github.willena.influxql.ast.Buildable;
-import io.github.willena.influxql.ast.Expression;
-import io.github.willena.influxql.ast.Source;
-import io.github.willena.influxql.ast.Statement;
+import io.github.willena.influxql.ast.*;
 import io.github.willena.influxql.ast.expr.Dimension;
 import io.github.willena.influxql.ast.expr.Dimensions;
 import io.github.willena.influxql.ast.field.Field;
@@ -32,7 +29,7 @@ public class SelectStatement implements Statement {
     private final int sLimit;
     private final int sOffset;
     private final FillOption fill;
-    private final Object fillValue;
+    private final Literal<?> fillValue;
     private final TimeZone location;
 
     private SelectStatement(Builder builder) {
@@ -117,7 +114,7 @@ public class SelectStatement implements Statement {
         private int sLimit;
         private int sOffset;
         private FillOption fill;
-        private Object fillValue;
+        private Literal<?> fillValue;
         private TimeZone location;
 
         public Builder() {
@@ -259,7 +256,7 @@ public class SelectStatement implements Statement {
             return this;
         }
 
-        public Builder fill(FillOption fill, Object value) {
+        public Builder fill(FillOption fill, Literal<?> value) {
             this.fill = fill;
             this.fillValue = value;
             return this;
@@ -271,10 +268,11 @@ public class SelectStatement implements Statement {
          * @param fillValue the {@code fillValue} to set
          * @return a reference to this Builder
          */
-        public Builder fillValue(Object fillValue) {
+        public Builder fillValue(Literal<?> fillValue) {
             this.fillValue = fillValue;
             return this;
         }
+
 
         /**
          * Sets the {@code location} and returns a reference to this Builder enabling method chaining.
