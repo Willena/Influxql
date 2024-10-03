@@ -14,12 +14,10 @@ class ExplainStatementTest extends GenericStatementTest<ExplainStatement> {
             new TestBody.Builder<ExplainStatement>()
                     .withStatement(
                             new ExplainStatement.Builder()
-                                    .withSelect(
-                                            new SelectStatement.Builder()
-                                                    .select(new Field.Builder().withExpr(VarRef.of("F1")).build())
-                                                    .from(new Measurement.Builder().withName("Toto").build())
-                                                    .where(new BinaryExpression(VarRef.of("totoField"), IntegerLiteral.of(32), Operator.EQ))
-                                                    .build()
+                                    .select(s -> s
+                                            .select(new Field.Builder().withExpr(VarRef.of("F1")).build())
+                                            .from(new Measurement.Builder().withName("Toto").build())
+                                            .where(new BinaryExpression(VarRef.of("totoField"), IntegerLiteral.of(32), Operator.EQ))
                                     )
                     )
                     .withExpectedSql("EXPLAIN SELECT F1 FROM Toto WHERE totoField = 32")
@@ -27,14 +25,12 @@ class ExplainStatementTest extends GenericStatementTest<ExplainStatement> {
             new TestBody.Builder<ExplainStatement>()
                     .withStatement(
                             new ExplainStatement.Builder()
-                                    .withAnalyze(true)
-                                    .withVerbose(true)
-                                    .withSelect(
-                                            new SelectStatement.Builder()
-                                                    .select(new Field.Builder().withExpr(VarRef.of("F1")).build())
-                                                    .from(new Measurement.Builder().withName("Toto").build())
-                                                    .where(new BinaryExpression(VarRef.of("totoField"), IntegerLiteral.of(32), Operator.EQ))
-                                                    .build()
+                                    .analyse()
+                                    .verbose()
+                                    .select(s -> s
+                                            .select(new Field.Builder().withExpr(VarRef.of("F1")).build())
+                                            .from(new Measurement.Builder().withName("Toto").build())
+                                            .where(new BinaryExpression(VarRef.of("totoField"), IntegerLiteral.of(32), Operator.EQ))
                                     )
                     )
                     .withExpectedSql("EXPLAIN ANALYZE VERBOSE SELECT F1 FROM Toto WHERE totoField = 32")

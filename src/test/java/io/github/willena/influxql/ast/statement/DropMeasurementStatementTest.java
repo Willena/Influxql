@@ -7,7 +7,7 @@ class DropMeasurementStatementTest extends GenericStatementTest<DropMeasurementS
             new TestBody.Builder<DropMeasurementStatement>()
                     .withStatement(
                             new DropMeasurementStatement.Builder()
-                                    .withMeasurement("Measurement")
+                                    .measurement("Measurement")
                     )
                     .withExpectedSql("DROP MEASUREMENT \"Measurement\"")
                     .build()

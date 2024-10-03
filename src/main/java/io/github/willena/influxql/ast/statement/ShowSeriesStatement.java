@@ -82,7 +82,7 @@ public class ShowSeriesStatement implements Statement {
          * @param database the {@code database} to set
          * @return a reference to this Builder
          */
-        public Builder withDatabase(String database) {
+        public Builder on(String database) {
             this.database = database;
             return this;
         }
@@ -93,12 +93,12 @@ public class ShowSeriesStatement implements Statement {
          * @param sources the {@code sources} to set
          * @return a reference to this Builder
          */
-        public Builder withSources(Sources sources) {
+        public Builder from(Sources sources) {
             this.sources = sources;
             return this;
         }
 
-        public Builder withSources(Source source, Source... sources) {
+        public Builder from(Source source, Source... sources) {
             if (this.sources == null) {
                 this.sources = new Sources();
             }
@@ -113,7 +113,7 @@ public class ShowSeriesStatement implements Statement {
          * @param conditions the {@code conditions} to set
          * @return a reference to this Builder
          */
-        public Builder withConditions(Expression conditions) {
+        public Builder where(Expression conditions) {
             this.conditions = conditions;
             return this;
         }
@@ -124,12 +124,12 @@ public class ShowSeriesStatement implements Statement {
          * @param sortFields the {@code sortFields} to set
          * @return a reference to this Builder
          */
-        public Builder withSortFields(SortFields sortFields) {
+        public Builder orderBy(SortFields sortFields) {
             this.sortFields = sortFields;
             return this;
         }
 
-        public Builder withSortFields(SortField sortField, SortField... sortFields) {
+        public Builder orderBy(SortField sortField, SortField... sortFields) {
             if (this.sortFields == null) {
                 this.sortFields = new SortFields();
             }
@@ -144,7 +144,7 @@ public class ShowSeriesStatement implements Statement {
          * @param limit the {@code limit} to set
          * @return a reference to this Builder
          */
-        public Builder withLimit(int limit) {
+        public Builder limit(int limit) {
             this.limit = limit;
             return this;
         }
@@ -155,7 +155,7 @@ public class ShowSeriesStatement implements Statement {
          * @param offset the {@code offset} to set
          * @return a reference to this Builder
          */
-        public Builder withOffset(int offset) {
+        public Builder offset(int offset) {
             this.offset = offset;
             return this;
         }

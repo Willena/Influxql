@@ -66,7 +66,7 @@ public class CreateSubscriptionStatement implements Statement {
          * @param name the {@code name} to set
          * @return a reference to this Builder
          */
-        public Builder withName(String name) {
+        public Builder name(String name) {
             this.name = name;
             return this;
         }
@@ -77,7 +77,7 @@ public class CreateSubscriptionStatement implements Statement {
          * @param database the {@code database} to set
          * @return a reference to this Builder
          */
-        public Builder withDatabase(String database) {
+        public Builder on(String database) {
             this.database = database;
             return this;
         }
@@ -88,7 +88,7 @@ public class CreateSubscriptionStatement implements Statement {
          * @param retentionPolicy the {@code retentionPolicy} to set
          * @return a reference to this Builder
          */
-        public Builder withRetentionPolicyName(String retentionPolicy) {
+        public Builder retentionPolicy(String retentionPolicy) {
             this.retentionPolicyName = retentionPolicy;
             return this;
         }
@@ -99,12 +99,12 @@ public class CreateSubscriptionStatement implements Statement {
          * @param destinations the {@code destinations} to set
          * @return a reference to this Builder
          */
-        public Builder withDestinations(List<String> destinations) {
+        public Builder destinations(List<String> destinations) {
             this.destinations = destinations;
             return this;
         }
 
-        public Builder withDestinations(String destination, String... destinations) {
+        public Builder destinations(String destination, String... destinations) {
             if (this.destinations == null) {
                 this.destinations = new LinkedList<>();
             }
@@ -119,7 +119,7 @@ public class CreateSubscriptionStatement implements Statement {
          * @param mode the {@code mode} to set
          * @return a reference to this Builder
          */
-        public Builder withMode(SubscriptionMode mode) {
+        public Builder destinationMode(SubscriptionMode mode) {
             this.mode = mode;
             return this;
         }

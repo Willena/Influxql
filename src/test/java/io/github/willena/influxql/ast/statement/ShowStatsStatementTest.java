@@ -13,7 +13,7 @@ class ShowStatsStatementTest extends GenericStatementTest<ShowStatsStatement> {
             new TestBody.Builder<ShowStatsStatement>()
                     .withStatement(
                             new ShowStatsStatement.Builder()
-                                    .withModule("mod")
+                                    .for_("mod")
                     )
                     .withExpectedSql("SHOW STATS FOR 'mod'")
                     .build()

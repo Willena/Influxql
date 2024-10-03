@@ -97,7 +97,7 @@ public class ShowMeasurementsStatement implements Statement {
          * @param database the {@code database} to set
          * @return a reference to this Builder
          */
-        public Builder withDatabase(String database) {
+        public Builder on(String database) {
             this.database = database;
             return this;
         }
@@ -108,7 +108,7 @@ public class ShowMeasurementsStatement implements Statement {
          * @param retentionPolicy the {@code retentionPolicy} to set
          * @return a reference to this Builder
          */
-        public Builder withRetentionPolicy(String retentionPolicy) {
+        public Builder retentionPolicy(String retentionPolicy) {
             this.retentionPolicy = retentionPolicy;
             return this;
         }
@@ -119,7 +119,7 @@ public class ShowMeasurementsStatement implements Statement {
          * @param source the {@code source} to set
          * @return a reference to this Builder
          */
-        public Builder withFrom(Measurement source) {
+        public Builder from(Measurement source) {
             this.source = source;
             return this;
         }
@@ -130,7 +130,7 @@ public class ShowMeasurementsStatement implements Statement {
          * @param condition the {@code condition} to set
          * @return a reference to this Builder
          */
-        public Builder withWhere(Expression condition) {
+        public Builder where(Expression condition) {
             this.condition = condition;
             return this;
         }
@@ -141,12 +141,12 @@ public class ShowMeasurementsStatement implements Statement {
          * @param sortFields the {@code sortFields} to set
          * @return a reference to this Builder
          */
-        public Builder withSortFields(SortFields sortFields) {
+        public Builder orderBy(SortFields sortFields) {
             this.sortFields = sortFields;
             return this;
         }
 
-        public Builder withSortFields(SortField sortField, SortField... sortFields) {
+        public Builder orderBy(SortField sortField, SortField... sortFields) {
             if (this.sortFields == null) {
                 this.sortFields = new SortFields();
             }
@@ -161,7 +161,7 @@ public class ShowMeasurementsStatement implements Statement {
          * @param limit the {@code limit} to set
          * @return a reference to this Builder
          */
-        public Builder withLimit(int limit) {
+        public Builder limit(int limit) {
             this.limit = limit;
             return this;
         }
@@ -172,7 +172,7 @@ public class ShowMeasurementsStatement implements Statement {
          * @param offset the {@code offset} to set
          * @return a reference to this Builder
          */
-        public Builder withOffset(int offset) {
+        public Builder offset(int offset) {
             this.offset = offset;
             return this;
         }

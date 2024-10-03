@@ -25,7 +25,7 @@ public class DropUserStatement implements Statement {
         public Builder() {
         }
 
-        public Builder withUsername(String name) {
+        public Builder username(String name) {
             this.name = name;
             return this;
         }

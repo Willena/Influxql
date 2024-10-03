@@ -49,7 +49,7 @@ public class CreateUserStatement implements Statement {
          * @param name the {@code name} to set
          * @return a reference to this Builder
          */
-        public Builder withUserName(String name) {
+        public Builder username(String name) {
             this.name = name;
             return this;
         }
@@ -60,7 +60,7 @@ public class CreateUserStatement implements Statement {
          * @param password the {@code password} to set
          * @return a reference to this Builder
          */
-        public Builder withPassword(String password) {
+        public Builder password(String password) {
             this.password = password;
             return this;
         }
@@ -71,9 +71,13 @@ public class CreateUserStatement implements Statement {
          * @param admin the {@code admin} to set
          * @return a reference to this Builder
          */
-        public Builder isAdmin(boolean admin) {
+        public Builder admin(boolean admin) {
             this.admin = admin;
             return this;
+        }
+
+        public Builder admin() {
+            return admin(true);
         }
 
         /**

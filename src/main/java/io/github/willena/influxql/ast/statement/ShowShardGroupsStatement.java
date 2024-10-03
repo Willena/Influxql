@@ -6,6 +6,10 @@ public class ShowShardGroupsStatement implements Statement {
     public ShowShardGroupsStatement() {
     }
 
+    public static ShowShardGroupsStatement showShardGroups() {
+        return new ShowShardGroupsStatement();
+    }
+
     @Override
     public String toString() {
         return "SHOW SHARD GROUPS";

@@ -21,24 +21,22 @@ class ShowTagValuesStatementTest extends GenericStatementTest<ShowTagValuesState
             new TestBody.Builder<ShowTagValuesStatement>()
                     .withStatement(
                             new ShowTagValuesStatement.Builder()
-                                    .withOperator(Operator.EQ)
-                                    .withTagKeyExpr(StringLiteral.of("kkk"))
+                                    .withKey(Operator.EQ, StringLiteral.of("kkk"))
                     )
                     .withExpectedSql("SHOW TAG VALUES WITH KEY = kkk")
                     .build(),
             new TestBody.Builder<ShowTagValuesStatement>()
                     .withStatement(
                             new ShowTagValuesStatement.Builder()
-                                    .withSources(new Measurement.Builder().withName("name").build())
-                                    .withSortFields(new SortField.Builder().withAscending(false).withName("field").build())
-                                    .withDatabase("db")
-                                    .withCondition(new BinaryExpression(VarRef.of("kkk"), StringLiteral.of("jkj"), Operator.NEQ))
-                                    .withLimit(1)
-                                    .withOffset(10)
-                                    .withOperator(Operator.EQ)
-                                    .withTagKeyExpr(StringLiteral.of("kkk"))
+                                    .from(new Measurement.Builder().withName("name").build())
+                                    .orderBY(new SortField.Builder().withAscending(false).withName("field").build())
+                                    .on("db")
+                                    .where(new BinaryExpression(VarRef.of("kkk"), StringLiteral.of("jkj"), Operator.NEQ))
+                                    .limit(1)
+                                    .offset(10)
+                                    .withKey(Operator.EQ, StringLiteral.of("kkk"))
                     )
-                    .withExpectedSql("SHOW TAG VALUES ON db FROM \"name\" WITH KEY = kkk WHERE kkk != 'jkj' ORDER BY field DESC LIMIT 1 OFFSET 10")
+                    .withExpectedSql("SHOW TAG VALUES ON db FROM \"name\" WITH KEY = kkk WHERE kkk != 'jkj' ORDER BY \"field\" DESC LIMIT 1 OFFSET 10")
                     .build()
 
     );

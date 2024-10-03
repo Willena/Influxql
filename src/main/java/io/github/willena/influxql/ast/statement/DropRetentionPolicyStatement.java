@@ -34,12 +34,12 @@ public class DropRetentionPolicyStatement implements Statement {
         public Builder() {
         }
 
-        public Builder withRetentionPolicy(String name) {
+        public Builder retentionPolicy(String name) {
             this.name = name;
             return this;
         }
 
-        public Builder withDatabase(String database) {
+        public Builder on(String database) {
             this.database = database;
             return this;
         }

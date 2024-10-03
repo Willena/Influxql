@@ -9,31 +9,41 @@ class CreateRetentionPolicyStatementTest extends GenericStatementTest<CreateRete
             new TestBody.Builder<CreateRetentionPolicyStatement>()
                     .withStatement(
                             new CreateRetentionPolicyStatement.Builder()
-                                    .withPolicyName("PolicyName")
-                                    .withDatabase("database")
+                                    .name("PolicyName")
+                                    .on("database")
                     )
-//                    .withExpectedSql("CREATE RETENTION POLICY PolicyName ON \"database\" DURATION 0s REPLICATION 0")
+                    .withExpectedSql("Missing replication, duration")
                     .withShouldFail(true)
                     .build(),
 
             new TestBody.Builder<CreateRetentionPolicyStatement>()
                     .withStatement(
                             new CreateRetentionPolicyStatement.Builder()
-                                    .withPolicyName("PolicyName")
-                                    .withDatabase("database")
+                                    .name("PolicyName")
+                                    .on("database")
                                     .withIsDefault(true)
                     )
                     .withShouldFail(true)
-//                    .withExpectedSql("CREATE RETENTION POLICY PolicyName ON \"database\" DURATION 0s REPLICATION 0 DEFAULT")
+                    .withExpectedSql("Missing replication, duration")
                     .build(),
 
             new TestBody.Builder<CreateRetentionPolicyStatement>()
                     .withStatement(
-
                             new CreateRetentionPolicyStatement.Builder()
-                                    .withPolicyName("PolicyName")
-                                    .withDatabase("database")
-                                    .withDuration(Duration.ofHours(1))
+                                    .name("PolicyName")
+                                    .on("database")
+                                    .duration(Duration.ofHours(1))
+                    )
+                    .withExpectedSql("Missing replication")
+                    .withShouldFail(true)
+                    .build(),
+
+            new TestBody.Builder<CreateRetentionPolicyStatement>()
+                    .withStatement(
+                            new CreateRetentionPolicyStatement.Builder()
+                                    .name("PolicyName")
+                                    .on("database")
+                                    .shardDuration(Duration.ofHours(1))
                     )
                     .withShouldFail(true)
 //                    .withExpectedSql("CREATE RETENTION POLICY PolicyName ON \"database\" DURATION 0s REPLICATION 0 DEFAULT")
@@ -42,33 +52,22 @@ class CreateRetentionPolicyStatementTest extends GenericStatementTest<CreateRete
             new TestBody.Builder<CreateRetentionPolicyStatement>()
                     .withStatement(
                             new CreateRetentionPolicyStatement.Builder()
-                                    .withPolicyName("PolicyName")
-                                    .withDatabase("database")
-                                    .withShardGroupDuration(Duration.ofHours(1))
+                                    .name("PolicyName")
+                                    .on("database")
+                                    .shardDuration(Duration.ofHours(1))
+                                    .duration(Duration.ofHours(3))
                     )
                     .withShouldFail(true)
-//                    .withExpectedSql("CREATE RETENTION POLICY PolicyName ON \"database\" DURATION 0s REPLICATION 0 DEFAULT")
-                    .build(),
-
-            new TestBody.Builder<CreateRetentionPolicyStatement>()
-                    .withStatement(
-                            new CreateRetentionPolicyStatement.Builder()
-                                    .withPolicyName("PolicyName")
-                                    .withDatabase("database")
-                                    .withShardGroupDuration(Duration.ofHours(1))
-                                    .withDuration(Duration.ofHours(3))
-                    )
-                    .withShouldFail(true)
-//                    .withExpectedSql("CREATE RETENTION POLICY PolicyName ON \"database\" DURATION 3h REPLICATION 0 SHARD DURATION 1h")
+                    .withExpectedSql("Missing replication")
                     .build(),
             new TestBody.Builder<CreateRetentionPolicyStatement>()
                     .withStatement(
                             new CreateRetentionPolicyStatement.Builder()
-                                    .withPolicyName("PolicyName")
-                                    .withDatabase("database")
-                                    .withShardGroupDuration(Duration.ofHours(1))
-                                    .withDuration(Duration.ofHours(3))
-                                    .withReplication(36)
+                                    .name("PolicyName")
+                                    .on("database")
+                                    .shardDuration(Duration.ofHours(1))
+                                    .duration(Duration.ofHours(3))
+                                    .replication(36)
                     )
                     .withExpectedSql("CREATE RETENTION POLICY PolicyName ON \"database\" DURATION 3h REPLICATION 36 SHARD DURATION 1h")
                     .build()

@@ -7,8 +7,8 @@ class DropRetentionPolicyStatementTest extends GenericStatementTest<DropRetentio
             new TestBody.Builder<DropRetentionPolicyStatement>()
                     .withStatement(
                             new DropRetentionPolicyStatement.Builder()
-                                    .withDatabase("database")
-                                    .withRetentionPolicy("RetentionPolicy")
+                                    .on("database")
+                                    .retentionPolicy("RetentionPolicy")
                     )
                     .withExpectedSql("DROP RETENTION POLICY RetentionPolicy ON \"database\"")
                     .build()

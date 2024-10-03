@@ -11,22 +11,22 @@ class CreateDatabaseStatementTest extends GenericStatementTest<CreateDatabaseSta
             new TestBody.Builder<CreateDatabaseStatement>()
                     .withStatement(
                             new CreateDatabaseStatement.Builder()
-                                    .withName("DatabaseName")
+                                    .name("DatabaseName")
                     )
                     .withExpectedSql("CREATE DATABASE DatabaseName")
                     .build(),
 
             new TestBody.Builder<CreateDatabaseStatement>()
                     .withStatement(new CreateDatabaseStatement.Builder()
-                            .withName("Datab'aseName")
+                            .name("Datab'aseName")
                             .withRetentionPolicy(new RetentionPolicy.Builder()
-                                    .withRetentionPolicyReplication(3)
-                                    .withRetentionPolicyDuration(Duration.ofHours(1))
-                                    .withRetentionPolicyShardGroupDuration(Duration.ofHours(2))
+                                    .replication(3)
+                                    .duration(Duration.ofHours(1))
+                                    .shardDuration(Duration.ofHours(2))
                                     .build()
                             )
                     )
-                    .withExpectedSql("CREATE DATABASE \"Datab'aseName\" WITH DURATION 1h0m0s REPLICATION 3 SHARD DURATION 2h0m0s")
+                    .withExpectedSql("CREATE DATABASE \"Datab'aseName\" WITH DURATION 1h REPLICATION 3 SHARD DURATION 2h")
                     .build()
     );
 }

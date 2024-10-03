@@ -62,7 +62,7 @@ public class CreateDatabaseStatement implements Statement {
          * @param name the {@code name} to set
          * @return a reference to this Builder
          */
-        public Builder withName(String name) {
+        public Builder name(String name) {
             this.name = name;
             return this;
         }

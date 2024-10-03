@@ -8,6 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class CallTest {
     @Test
     void testCall() {
-        assertEquals("mean(uuu, 'ddd')", new Call.Builder().withName("mean").withArgs(VarRef.of("uuu"), StringLiteral.of("ddd")).build().toString());
+        assertEquals("mean(uuu, 'ddd')", new Call.Builder().function("mean").withArguments(VarRef.of("uuu"), StringLiteral.of("ddd")).build().toString());
     }
 }

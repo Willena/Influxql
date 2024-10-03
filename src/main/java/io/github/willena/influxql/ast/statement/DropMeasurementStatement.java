@@ -27,7 +27,7 @@ public class DropMeasurementStatement implements Statement {
         public Builder() {
         }
 
-        public Builder withMeasurement(String name) {
+        public Builder measurement(String name) {
             this.name = name;
             return this;
         }

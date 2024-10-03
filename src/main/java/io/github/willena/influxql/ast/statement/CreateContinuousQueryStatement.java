@@ -4,6 +4,7 @@ import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Statement;
 
 import java.time.Duration;
+import java.util.function.Function;
 
 import static io.github.willena.influxql.ast.utils.Utils.*;
 
@@ -67,7 +68,7 @@ public class CreateContinuousQueryStatement implements Statement {
          * @param name the {@code name} to set
          * @return a reference to this Builder
          */
-        public Builder withName(String name) {
+        public Builder name(String name) {
             this.name = name;
             return this;
         }
@@ -78,7 +79,7 @@ public class CreateContinuousQueryStatement implements Statement {
          * @param database the {@code database} to set
          * @return a reference to this Builder
          */
-        public Builder withDatabase(String database) {
+        public Builder on(String database) {
             this.database = database;
             return this;
         }
@@ -89,9 +90,13 @@ public class CreateContinuousQueryStatement implements Statement {
          * @param source the {@code source} to set
          * @return a reference to this Builder
          */
-        public Builder withSelectStatement(SelectStatement source) {
+        public Builder select(SelectStatement source) {
             this.selectStatement = source;
             return this;
+        }
+
+        public Builder select(Function<SelectStatement.Builder, SelectStatement.Builder> builder) {
+            return select(builder.apply(new SelectStatement.Builder()).build());
         }
 
         /**
@@ -100,7 +105,7 @@ public class CreateContinuousQueryStatement implements Statement {
          * @param resampleEvery the {@code resampleEvery} to set
          * @return a reference to this Builder
          */
-        public Builder withResampleEvery(Duration resampleEvery) {
+        public Builder resampleEvery(Duration resampleEvery) {
             this.resampleEvery = resampleEvery;
             return this;
         }
@@ -111,7 +116,7 @@ public class CreateContinuousQueryStatement implements Statement {
          * @param resampleFor the {@code resampleFor} to set
          * @return a reference to this Builder
          */
-        public Builder withResampleFor(Duration resampleFor) {
+        public Builder for_(Duration resampleFor) {
             this.resampleFor = resampleFor;
             return this;
         }

@@ -29,7 +29,7 @@ public class ShowDiagnosticsStatement implements Statement {
         public Builder() {
         }
 
-        public Builder withModule(String module) {
+        public Builder for_(String module) {
             this.module = module;
             return this;
         }

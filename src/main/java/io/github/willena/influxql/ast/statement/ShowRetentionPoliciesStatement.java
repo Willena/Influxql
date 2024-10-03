@@ -29,7 +29,7 @@ public class ShowRetentionPoliciesStatement implements Statement {
         public Builder() {
         }
 
-        public Builder withDatabase(String database) {
+        public Builder on(String database) {
             this.database = database;
             return this;
         }

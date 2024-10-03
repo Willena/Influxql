@@ -97,7 +97,7 @@ public class ShowTagValuesStatement implements Statement {
          * @param database the {@code database} to set
          * @return a reference to this Builder
          */
-        public Builder withDatabase(String database) {
+        public Builder on(String database) {
             this.database = database;
             return this;
         }
@@ -108,12 +108,12 @@ public class ShowTagValuesStatement implements Statement {
          * @param sources the {@code sources} to set
          * @return a reference to this Builder
          */
-        public Builder withSources(Sources sources) {
+        public Builder from(Sources sources) {
             this.sources = sources;
             return this;
         }
 
-        public Builder withSources(Source source, Source... sources) {
+        public Builder from(Source source, Source... sources) {
             if (this.sources == null) {
                 this.sources = new Sources();
             }
@@ -123,24 +123,14 @@ public class ShowTagValuesStatement implements Statement {
         }
 
         /**
-         * Sets the {@code operator} and returns a reference to this Builder enabling method chaining.
-         *
-         * @param operator the {@code operator} to set
-         * @return a reference to this Builder
-         */
-        public Builder withOperator(Operator operator) {
-            this.operator = operator;
-            return this;
-        }
-
-        /**
          * Sets the {@code tagKeyExpr} and returns a reference to this Builder enabling method chaining.
          *
          * @param tagKeyExpr the {@code tagKeyExpr} to set
          * @return a reference to this Builder
          */
-        public Builder withTagKeyExpr(Literal<?> tagKeyExpr) {
+        public Builder withKey(Operator op, Literal<?> tagKeyExpr) {
             this.tagKeyExpr = tagKeyExpr;
+            this.operator = op;
             return this;
         }
 
@@ -150,7 +140,7 @@ public class ShowTagValuesStatement implements Statement {
          * @param condition the {@code condition} to set
          * @return a reference to this Builder
          */
-        public Builder withCondition(Expression condition) {
+        public Builder where(Expression condition) {
             this.condition = condition;
             return this;
         }
@@ -161,12 +151,12 @@ public class ShowTagValuesStatement implements Statement {
          * @param sortFields the {@code sortFields} to set
          * @return a reference to this Builder
          */
-        public Builder withSortFields(SortFields sortFields) {
+        public Builder orderBY(SortFields sortFields) {
             this.sortFields = sortFields;
             return this;
         }
 
-        public Builder withSortFields(SortField sortField, SortField... sortFields) {
+        public Builder orderBY(SortField sortField, SortField... sortFields) {
             if (this.sortFields == null) {
                 this.sortFields = new SortFields();
             }
@@ -181,7 +171,7 @@ public class ShowTagValuesStatement implements Statement {
          * @param limit the {@code limit} to set
          * @return a reference to this Builder
          */
-        public Builder withLimit(int limit) {
+        public Builder limit(int limit) {
             this.limit = limit;
             return this;
         }
@@ -192,7 +182,7 @@ public class ShowTagValuesStatement implements Statement {
          * @param offset the {@code offset} to set
          * @return a reference to this Builder
          */
-        public Builder withOffset(int offset) {
+        public Builder offset(int offset) {
             this.offset = offset;
             return this;
         }

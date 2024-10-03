@@ -46,7 +46,7 @@ public class DeleteStatement implements Statement {
          * @param source the {@code source} to set
          * @return a reference to this Builder
          */
-        public Builder withFrom(Source source) {
+        public Builder from(Source source) {
             this.source = source;
             return this;
         }
@@ -57,7 +57,7 @@ public class DeleteStatement implements Statement {
          * @param condition the {@code condition} to set
          * @return a reference to this Builder
          */
-        public Builder withWhere(Expression condition) {
+        public Builder where(Expression condition) {
             this.condition = condition;
             return this;
         }

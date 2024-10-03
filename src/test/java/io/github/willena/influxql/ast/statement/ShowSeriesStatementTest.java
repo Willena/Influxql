@@ -20,14 +20,14 @@ class ShowSeriesStatementTest extends GenericStatementTest<ShowSeriesStatement> 
             new TestBody.Builder<ShowSeriesStatement>()
                     .withStatement(
                             new ShowSeriesStatement.Builder()
-                                    .withSources(new Measurement.Builder().withName("name").build())
-                                    .withDatabase("db")
-                                    .withSortFields(new SortField.Builder().withName("Field").withAscending(false).build())
-                                    .withConditions(new BinaryExpression(VarRef.of("Field"), IntegerLiteral.of(110), Operator.EQ))
-                                    .withLimit(1)
-                                    .withOffset(10)
+                                    .from(new Measurement.Builder().withName("name").build())
+                                    .on("db")
+                                    .where(new BinaryExpression(VarRef.of("Field"), IntegerLiteral.of(110), Operator.EQ))
+                                    .orderBy(new SortField.Builder().withName("Field").withAscending(false).build())
+                                    .limit(1)
+                                    .offset(10)
                     )
-                    .withExpectedSql("SHOW SERIES ON db FROM \"name\" WHERE \"Field\" = 110 ORDER BY Field DESC LIMIT 1 OFFSET 10")
+                    .withExpectedSql("SHOW SERIES ON db FROM \"name\" WHERE \"Field\" = 110 ORDER BY \"Field\" DESC LIMIT 1 OFFSET 10")
                     .build()
 
     );

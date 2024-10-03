@@ -40,17 +40,17 @@ public class RevokeStatement implements Statement {
         public Builder() {
         }
 
-        public Builder withPrivilege(Privilege privilege) {
+        public Builder privilege(Privilege privilege) {
             this.privilege = privilege;
             return this;
         }
 
-        public Builder withDatabase(String database) {
+        public Builder on(String database) {
             this.database = database;
             return this;
         }
 
-        public Builder withUsername(String username) {
+        public Builder from(String username) {
             this.username = username;
             return this;
         }

@@ -7,7 +7,7 @@ class GrantAdminStatementTest extends GenericStatementTest<GrantAdminStatement> 
             new TestBody.Builder<GrantAdminStatement>()
                     .withStatement(
                             new GrantAdminStatement.Builder()
-                                    .withUsername("Usr")
+                                    .to("Usr")
                     )
                     .withExpectedSql("GRANT ALL PRIVILEGES TO Usr")
                     .build()

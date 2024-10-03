@@ -44,7 +44,7 @@ public class KillQueryStatement implements Statement {
          * @param queryId the {@code queryId} to set
          * @return a reference to this Builder
          */
-        public Builder withQueryId(Long queryId) {
+        public Builder queryId(Long queryId) {
             this.queryId = queryId;
             return this;
         }
@@ -55,7 +55,7 @@ public class KillQueryStatement implements Statement {
          * @param host the {@code host} to set
          * @return a reference to this Builder
          */
-        public Builder withHost(String host) {
+        public Builder on(String host) {
             this.host = host;
             return this;
         }

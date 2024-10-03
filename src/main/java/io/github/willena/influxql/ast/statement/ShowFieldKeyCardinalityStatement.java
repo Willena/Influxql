@@ -88,7 +88,7 @@ public class ShowFieldKeyCardinalityStatement implements Statement {
          * @param database the {@code database} to set
          * @return a reference to this Builder
          */
-        public Builder withDatabase(String database) {
+        public Builder on(String database) {
             this.database = database;
             return this;
         }
@@ -99,9 +99,13 @@ public class ShowFieldKeyCardinalityStatement implements Statement {
          * @param exact the {@code exact} to set
          * @return a reference to this Builder
          */
-        public Builder withExact(boolean exact) {
+        public Builder exact(boolean exact) {
             this.exact = exact;
             return this;
+        }
+
+        public Builder exact() {
+            return exact(true);
         }
 
         /**
@@ -110,12 +114,12 @@ public class ShowFieldKeyCardinalityStatement implements Statement {
          * @param sources the {@code sources} to set
          * @return a reference to this Builder
          */
-        public Builder withSources(Sources sources) {
+        public Builder from(Sources sources) {
             this.sources = sources;
             return this;
         }
 
-        public Builder withSources(Source source, Source... sources) {
+        public Builder from(Source source, Source... sources) {
             if (this.sources == null) {
                 this.sources = new Sources();
             }
@@ -130,7 +134,7 @@ public class ShowFieldKeyCardinalityStatement implements Statement {
          * @param condition the {@code condition} to set
          * @return a reference to this Builder
          */
-        public Builder withCondition(Expression condition) {
+        public Builder where(Expression condition) {
             this.condition = condition;
             return this;
         }
@@ -141,12 +145,12 @@ public class ShowFieldKeyCardinalityStatement implements Statement {
          * @param dimensions the {@code dimensions} to set
          * @return a reference to this Builder
          */
-        public Builder withDimensions(Dimensions dimensions) {
+        public Builder groupBy(Dimensions dimensions) {
             this.dimensions = dimensions;
             return this;
         }
 
-        public Builder withDimensions(Dimension dimension, Dimension... dimensions) {
+        public Builder groupBy(Dimension dimension, Dimension... dimensions) {
             if (this.dimensions == null) {
                 this.dimensions = new Dimensions();
             }
@@ -161,7 +165,7 @@ public class ShowFieldKeyCardinalityStatement implements Statement {
          * @param limit the {@code limit} to set
          * @return a reference to this Builder
          */
-        public Builder withLimit(int limit) {
+        public Builder limit(int limit) {
             this.limit = limit;
             return this;
         }
@@ -172,7 +176,7 @@ public class ShowFieldKeyCardinalityStatement implements Statement {
          * @param offset the {@code offset} to set
          * @return a reference to this Builder
          */
-        public Builder withOffset(int offset) {
+        public Builder offset(int offset) {
             this.offset = offset;
             return this;
         }

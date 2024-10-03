@@ -24,7 +24,7 @@ public class Dimension {
     }
 
     public static Dimension sampledBy(Duration duration) {
-        return Dimension.of(new Call.Builder().withName("time").withArgs(DurationLiteral.of(duration)).build());
+        return Dimension.of(new Call.Builder().function("time").withArguments(DurationLiteral.of(duration)).build());
     }
 
     @Override

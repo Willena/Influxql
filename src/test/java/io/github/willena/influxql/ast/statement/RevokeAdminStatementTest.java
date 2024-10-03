@@ -7,7 +7,7 @@ class RevokeAdminStatementTest extends GenericStatementTest<RevokeAdminStatement
             new TestBody.Builder<RevokeAdminStatement>()
                     .withStatement(
                             new RevokeAdminStatement.Builder()
-                                    .withUsername("Usr")
+                                    .from("Usr")
                     )
                     .withExpectedSql("REVOKE ALL PRIVILEGES FROM Usr")
                     .build()

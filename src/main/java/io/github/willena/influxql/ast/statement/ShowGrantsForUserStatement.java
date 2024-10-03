@@ -25,7 +25,7 @@ public class ShowGrantsForUserStatement implements Statement {
         public Builder() {
         }
 
-        public Builder withUsername(String name) {
+        public Builder for_(String name) {
             this.name = name;
             return this;
         }

@@ -7,7 +7,7 @@ class DropUserStatementTest extends GenericStatementTest<DropUserStatement> {
             new TestBody.Builder<DropUserStatement>()
                     .withStatement(
                             new DropUserStatement.Builder()
-                                    .withUsername("Usr")
+                                    .username("Usr")
                     )
                     .withExpectedSql("DROP USER Usr")
                     .build()

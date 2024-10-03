@@ -25,7 +25,7 @@ public class DropShardStatement implements Statement {
         public Builder() {
         }
 
-        public Builder withShardId(Long id) {
+        public Builder shardId(Long id) {
             this.id = id;
             return this;
         }

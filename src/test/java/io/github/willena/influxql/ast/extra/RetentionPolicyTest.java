@@ -10,10 +10,10 @@ class RetentionPolicyTest {
     @Test
     void retentionPolicy() {
         RetentionPolicy rp = new RetentionPolicy.Builder()
-                .withRetentionPolicyDuration(Duration.ofSeconds(1))
+                .duration(Duration.ofSeconds(1))
                 .withRetentionPolicyName("test")
-                .withRetentionPolicyShardGroupDuration(Duration.ofHours(1))
-                .withRetentionPolicyReplication(10)
+                .shardDuration(Duration.ofHours(1))
+                .replication(10)
                 .build();
 
         assertEquals("test", rp.getRetentionPolicyName());

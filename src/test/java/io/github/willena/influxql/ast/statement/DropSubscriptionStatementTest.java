@@ -7,9 +7,9 @@ class DropSubscriptionStatementTest extends GenericStatementTest<DropSubscriptio
             new TestBody.Builder<DropSubscriptionStatement>()
                     .withStatement(
                             new DropSubscriptionStatement.Builder()
-                                    .withName("Subscription")
-                                    .withDatabase("database")
-                                    .withRetentionPolicy("policy")
+                                    .subscription("Subscription")
+                                    .on("database")
+                                    .retentionPolicy("policy")
                     )
                     .withExpectedSql("DROP SUBSCRIPTION \"Subscription\" ON \"database\".\"policy\"")
                     .build()

@@ -25,7 +25,7 @@ public class GrantAdminStatement implements Statement {
         public Builder() {
         }
 
-        public Builder withUsername(String user) {
+        public Builder to(String user) {
             this.user = user;
             return this;
         }

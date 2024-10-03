@@ -16,13 +16,13 @@ class ShowFieldKeysStatementTest extends GenericStatementTest<ShowFieldKeysState
             new TestBody.Builder<ShowFieldKeysStatement>()
                     .withStatement(
                             new ShowFieldKeysStatement.Builder()
-                                    .withSources(new Measurement.Builder().withName("name").build())
-                                    .withSortFields(new SortField.Builder().withName("field").withAscending(false).build())
-                                    .withDatabase("db")
-                                    .withLimit(1)
-                                    .withOffset(10)
+                                    .from(new Measurement.Builder().withName("name").build())
+                                    .orderBy(new SortField.Builder().withName("field").withAscending(false).build())
+                                    .on("db")
+                                    .limit(1)
+                                    .offset(10)
                     )
-                    .withExpectedSql("SHOW FIELD KEYS ON db FROM \"name\" ORDER BY field DESC LIMIT 1 OFFSET 10")
+                    .withExpectedSql("SHOW FIELD KEYS ON db FROM \"name\" ORDER BY \"field\" DESC LIMIT 1 OFFSET 10")
                     .build()
     );
 }

@@ -14,7 +14,7 @@ class ShowGrantsForUserStatementTest extends GenericStatementTest<ShowGrantsForU
             new TestBody.Builder<ShowGrantsForUserStatement>()
                     .withStatement(
                             new ShowGrantsForUserStatement.Builder()
-                                    .withUsername("username")
+                                    .for_("username")
                     )
                     .withExpectedSql("SHOW GRANTS FOR username")
                     .build()

@@ -7,17 +7,17 @@ class SetPasswordUserStatementTest extends GenericStatementTest<SetPasswordUserS
             new TestBody.Builder<SetPasswordUserStatement>()
                     .withStatement(
                             new SetPasswordUserStatement.Builder()
-                                    .withUsername("name")
-                                    .withPassword("password")
+                                    .for_("name")
+                                    .password("password")
                     )
                     .withExpectedSql("SET PASSWORD FOR \"name\" = 'password'")
                     .build(),
             new TestBody.Builder<SetPasswordUserStatement>()
                     .withStatement(
                             new SetPasswordUserStatement.Builder()
-                                    .withUsername("name")
-                                    .withPassword("password")
-                                    .withRedacted(true)
+                                    .for_("name")
+                                    .password("password")
+                                    .redacted()
                     )
                     .withExpectedSql("SET PASSWORD FOR \"name\" = [REDACTED]")
                     .build()

@@ -85,7 +85,7 @@ public class AlterRetentionPolicyStatement implements Statement {
          * @param name the {@code name} to set
          * @return a reference to this Builder
          */
-        public Builder withPolicyName(String name) {
+        public Builder policyName(String name) {
             this.name = name;
             return this;
         }
@@ -96,7 +96,7 @@ public class AlterRetentionPolicyStatement implements Statement {
          * @param database the {@code database} to set
          * @return a reference to this Builder
          */
-        public Builder withDatabase(String database) {
+        public Builder on(String database) {
             this.database = database;
             return this;
         }
@@ -107,7 +107,7 @@ public class AlterRetentionPolicyStatement implements Statement {
          * @param duration the {@code duration} to set
          * @return a reference to this Builder
          */
-        public Builder withDuration(Duration duration) {
+        public Builder duration(Duration duration) {
             this.duration = duration;
             return this;
         }
@@ -118,7 +118,7 @@ public class AlterRetentionPolicyStatement implements Statement {
          * @param replication the {@code replication} to set
          * @return a reference to this Builder
          */
-        public Builder withReplicationFactor(Integer replication) {
+        public Builder replicationFactor(Integer replication) {
             this.replication = replication;
             return this;
         }
@@ -129,12 +129,16 @@ public class AlterRetentionPolicyStatement implements Statement {
          * @param isDefault the {@code isDefault} to set
          * @return a reference to this Builder
          */
-        public Builder isDefault(boolean isDefault) {
+        public Builder default_(boolean isDefault) {
             this.isDefault = isDefault;
             return this;
         }
 
-        public Builder withShardGroupDuration(Duration shardGroupDuration) {
+        public Builder default_() {
+            return default_(true);
+        }
+
+        public Builder shardDuration(Duration shardGroupDuration) {
             this.shardGroupDuration = shardGroupDuration;
             return this;
         }

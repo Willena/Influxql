@@ -70,7 +70,7 @@ public class CreateRetentionPolicyStatement implements Statement {
          * @param name the {@code name} to set
          * @return a reference to this Builder
          */
-        public Builder withPolicyName(String name) {
+        public Builder name(String name) {
             this.name = name;
             return this;
         }
@@ -81,7 +81,7 @@ public class CreateRetentionPolicyStatement implements Statement {
          * @param database the {@code database} to set
          * @return a reference to this Builder
          */
-        public Builder withDatabase(String database) {
+        public Builder on(String database) {
             this.database = database;
             return this;
         }
@@ -92,7 +92,7 @@ public class CreateRetentionPolicyStatement implements Statement {
          * @param duration the {@code duration} to set
          * @return a reference to this Builder
          */
-        public Builder withDuration(Duration duration) {
+        public Builder duration(Duration duration) {
             this.duration = duration;
             return this;
         }
@@ -103,7 +103,7 @@ public class CreateRetentionPolicyStatement implements Statement {
          * @param replication the {@code replication} to set
          * @return a reference to this Builder
          */
-        public Builder withReplication(Integer replication) {
+        public Builder replication(Integer replication) {
             this.replication = replication;
             return this;
         }
@@ -125,7 +125,7 @@ public class CreateRetentionPolicyStatement implements Statement {
          * @param shardGroupDuration the {@code shardGroupDuration} to set
          * @return a reference to this Builder
          */
-        public Builder withShardGroupDuration(Duration shardGroupDuration) {
+        public Builder shardDuration(Duration shardGroupDuration) {
             this.shardGroupDuration = shardGroupDuration;
             return this;
         }

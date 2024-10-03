@@ -8,8 +8,8 @@ class DropContinuousQueryStatementTest extends GenericStatementTest<DropContinuo
             new TestBody.Builder<DropContinuousQueryStatement>()
                     .withStatement(
                             new DropContinuousQueryStatement.Builder()
-                                    .withName("QueryName")
-                                    .withDatabase("database")
+                                    .query("QueryName")
+                                    .on("database")
                     )
                     .withExpectedSql("DROP CONTINUOUS QUERY QueryName ON \"database\"")
                     .build()

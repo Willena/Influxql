@@ -3,6 +3,7 @@ package io.github.willena.influxql.ast.utils;
 import io.github.willena.influxql.ast.token.Keywords;
 
 import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 import static io.github.willena.influxql.ast.utils.ParserUtils.isIdentChar;
 import static io.github.willena.influxql.ast.utils.ParserUtils.isIdentFirstChar;
@@ -28,36 +29,57 @@ public final class Utils {
         long secs = duration.getSeconds();
         long nanos = duration.getNano();
 
+        long asNano = TimeUnit.SECONDS.toNanos(secs) + nanos;
 
-        // Over simplified !
         // if d == 0 {
         //		return "0s"
+        if (duration.isZero()) {
+            return "0s";
+        }
+
         //	} else if d%(7*24*time.Hour) == 0 {
         //		return fmt.Sprintf("%dw", d/(7*24*time.Hour))
+        if (asNano % TimeUnit.DAYS.toNanos(7) == 0) {
+            return String.format("%dw", asNano / TimeUnit.DAYS.toNanos(7));
+        }
         //	} else if d%(24*time.Hour) == 0 {
         //		return fmt.Sprintf("%dd", d/(24*time.Hour))
+        else if (asNano % TimeUnit.DAYS.toNanos(1) == 0) {
+            return String.format("%dd", asNano / TimeUnit.DAYS.toNanos(1));
+        }
         //	} else if d%time.Hour == 0 {
         //		return fmt.Sprintf("%dh", d/time.Hour)
+        else if (asNano % TimeUnit.HOURS.toNanos(1) == 0) {
+            return String.format("%dh", asNano / TimeUnit.HOURS.toNanos(1));
+        }
         //	} else if d%time.Minute == 0 {
         //		return fmt.Sprintf("%dm", d/time.Minute)
+        else if (asNano % TimeUnit.MINUTES.toNanos(1) == 0) {
+            return String.format("%dm", asNano / TimeUnit.MINUTES.toNanos(1));
+        }
         //	} else if d%time.Second == 0 {
         //		return fmt.Sprintf("%ds", d/time.Second)
+        else if (asNano % TimeUnit.SECONDS.toNanos(1) == 0) {
+            return String.format("%ds", asNano / TimeUnit.SECONDS.toNanos(1));
+        }
         //	} else if d%time.Millisecond == 0 {
         //		return fmt.Sprintf("%dms", d/time.Millisecond)
+        else if (asNano % TimeUnit.MILLISECONDS.toNanos(1) == 0) {
+            return String.format("%dms", asNano / TimeUnit.MILLISECONDS.toNanos(1));
+        }
+
         //	} else if d%time.Microsecond == 0 {
         //		// Although we accept both "u" and "µ" when reading microsecond durations,
         //		// we output with "u", which can be represented in 1 byte,
         //		// instead of "µ", which requires 2 bytes.
         //		return fmt.Sprintf("%du", d/time.Microsecond)
         //	}
+        else if (asNano % TimeUnit.MICROSECONDS.toNanos(1) == 0) {
+            return String.format("%du", asNano / TimeUnit.MICROSECONDS.toNanos(1));
+        }
         //	return fmt.Sprintf("%dns", d)
-
-        if (nanos != 0 && secs != 0) {
-            return String.format("%d%dns", secs, nanos);
-        } else if (nanos == 0) {
-            return String.format("%ds", secs);
-        } else {
-            return String.format("%dns", nanos);
+        else {
+            return String.format("%dns", asNano);
         }
     }
 

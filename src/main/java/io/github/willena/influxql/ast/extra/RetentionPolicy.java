@@ -51,7 +51,7 @@ public class RetentionPolicy {
          * @param retentionPolicyDuration the {@code retentionPolicyDuration} to set
          * @return a reference to this Builder
          */
-        public Builder withRetentionPolicyDuration(Duration retentionPolicyDuration) {
+        public Builder duration(Duration retentionPolicyDuration) {
             this.retentionPolicyDuration = retentionPolicyDuration;
             return this;
         }
@@ -62,7 +62,7 @@ public class RetentionPolicy {
          * @param retentionPolicyReplication the {@code retentionPolicyReplication} to set
          * @return a reference to this Builder
          */
-        public Builder withRetentionPolicyReplication(Integer retentionPolicyReplication) {
+        public Builder replication(Integer retentionPolicyReplication) {
             this.retentionPolicyReplication = retentionPolicyReplication;
             return this;
         }
@@ -84,7 +84,7 @@ public class RetentionPolicy {
          * @param retentionPolicyShardGroupDuration the {@code retentionPolicyShardGroupDuration} to set
          * @return a reference to this Builder
          */
-        public Builder withRetentionPolicyShardGroupDuration(Duration retentionPolicyShardGroupDuration) {
+        public Builder shardDuration(Duration retentionPolicyShardGroupDuration) {
             this.retentionPolicyShardGroupDuration = retentionPolicyShardGroupDuration;
             return this;
         }

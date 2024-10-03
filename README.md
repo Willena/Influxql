@@ -40,8 +40,8 @@ import io.github.willena.influxql.ast.statement.AlterRetentionPolicyStatement;
 
 public static void main(String[] args) {
     AlterRetentionPolicyStatement stm = new AlterRetentionPolicyStatement.Builder()
-            .withDatabase("DB")
-            .withPolicyName("Policy")
+            .on("DB")
+            .policyName("Policy")
             .build();
 
     System.out.println("stm = " + stm);

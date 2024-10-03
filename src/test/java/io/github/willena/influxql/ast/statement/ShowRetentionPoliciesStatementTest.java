@@ -13,7 +13,7 @@ class ShowRetentionPoliciesStatementTest extends GenericStatementTest<ShowRetent
             new TestBody.Builder<ShowRetentionPoliciesStatement>()
                     .withStatement(
                             new ShowRetentionPoliciesStatement.Builder()
-                                    .withDatabase("db")
+                                    .on("db")
                     )
                     .withExpectedSql("SHOW RETENTION POLICIES ON db")
                     .build()

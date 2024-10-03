@@ -8,7 +8,7 @@ class DropDatabaseStatementTest extends GenericStatementTest<DropDatabaseStateme
             new TestBody.Builder<DropDatabaseStatement>()
                     .withStatement(
                             new DropDatabaseStatement.Builder()
-                                    .withDatabase("database")
+                                    .database("database")
                     )
                     .withExpectedSql("DROP DATABASE \"database\"")
                     .build()

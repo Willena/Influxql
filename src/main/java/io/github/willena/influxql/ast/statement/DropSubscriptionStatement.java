@@ -35,17 +35,17 @@ public class DropSubscriptionStatement implements Statement {
         public Builder() {
         }
 
-        public Builder withName(String name) {
+        public Builder subscription(String name) {
             this.name = name;
             return this;
         }
 
-        public Builder withDatabase(String database) {
+        public Builder on(String database) {
             this.database = database;
             return this;
         }
 
-        public Builder withRetentionPolicy(String retentionPolicy) {
+        public Builder retentionPolicy(String retentionPolicy) {
             this.retentionPolicy = retentionPolicy;
             return this;
         }

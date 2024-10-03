@@ -5,7 +5,6 @@ import io.github.willena.influxql.ast.expr.VarRef;
 import io.github.willena.influxql.ast.expr.literal.IntegerLiteral;
 import io.github.willena.influxql.ast.field.Field;
 import io.github.willena.influxql.ast.source.Measurement;
-import io.github.willena.influxql.ast.token.Operator;
 
 import java.time.Duration;
 import java.util.List;
@@ -15,10 +14,10 @@ class CreateContinuousQueryStatementTest extends GenericStatementTest<CreateCont
     public static final List<GenericStatementTest.TestBody<CreateContinuousQueryStatement>> TEST_BODIES = List.of(
             new GenericStatementTest.TestBody.Builder<CreateContinuousQueryStatement>()
                     .withStatement(new CreateContinuousQueryStatement.Builder()
-                            .withName("ContinuousQuery")
-                            .withDatabase("db")
-                            .withResampleEvery(Duration.ofHours(12))
-                            .withResampleFor(Duration.ofHours(1))
+                            .name("ContinuousQuery")
+                            .on("db")
+                            .resampleEvery(Duration.ofHours(12))
+                            .for_(Duration.ofHours(1))
                     )
                     .withShouldFail(true)
                     .withExpectedSql("CREATE CONTINUOUS QUERY ContinuousQuery ON db RESAMPLE EVERY 12h FOR 1h BEGIN SELECT  END")
@@ -26,22 +25,21 @@ class CreateContinuousQueryStatementTest extends GenericStatementTest<CreateCont
 
             new GenericStatementTest.TestBody.Builder<CreateContinuousQueryStatement>()
                     .withStatement(new CreateContinuousQueryStatement.Builder()
-                            .withName("ContinuousQuery")
-                            .withDatabase("db")
-                            .withResampleEvery(Duration.ofHours(12))
-                            .withResampleFor(Duration.ofHours(1))
-                            .withSelectStatement(new SelectStatement.Builder()
-                                    .select(new Field.Builder().withExpr(VarRef.of("F1")).build())
-                                    .from(new Measurement.Builder().withName("Toto").build())
-                                    .where(new BinaryExpression(
-                                                    new VarRef("totoField"),
-                                            new IntegerLiteral(32L),
-                                                    Operator.EQ
+                            .name("ContinuousQuery")
+                            .on("db")
+                            .resampleEvery(Duration.ofHours(12))
+                            .for_(Duration.ofHours(1))
+                            .select(s -> s
+                                    .select(Field.field("F1"))
+                                    .from(Measurement.measurement("Toto"))
+                                    .where(BinaryExpression.eq(
+                                            VarRef.of("totoField"),
+                                            IntegerLiteral.of(32L)
                                             )
-                                    ).build()
+                                    )
                             )
                     )
-                    .withExpectedSql("CREATE CONTINUOUS QUERY ContinuousQuery ON db RESAMPLE EVERY 12h FOR 1h BEGIN SELECT F1 FROM Toto WHERE (totoField = 32) END")
+                    .withExpectedSql("CREATE CONTINUOUS QUERY ContinuousQuery ON db RESAMPLE EVERY 12h FOR 1h BEGIN SELECT F1 FROM Toto WHERE totoField = 32 END")
                     .build()
     );
 }

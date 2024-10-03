@@ -3,6 +3,8 @@ package io.github.willena.influxql.ast.statement;
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Statement;
 
+import java.util.function.Function;
+
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 
 public class ExplainStatement implements Statement {
@@ -48,9 +50,13 @@ public class ExplainStatement implements Statement {
          * @param statement the {@code statement} to set
          * @return a reference to this Builder
          */
-        public Builder withSelect(SelectStatement statement) {
+        public Builder select(SelectStatement statement) {
             this.statement = statement;
             return this;
+        }
+
+        public Builder select(Function<SelectStatement.Builder, SelectStatement.Builder> builder) {
+            return select(builder.apply(new SelectStatement.Builder()).build());
         }
 
         /**
@@ -59,9 +65,13 @@ public class ExplainStatement implements Statement {
          * @param analyze the {@code analyze} to set
          * @return a reference to this Builder
          */
-        public Builder withAnalyze(boolean analyze) {
+        public Builder analyse(boolean analyze) {
             this.analyze = analyze;
             return this;
+        }
+
+        public Builder analyse() {
+            return analyse(true);
         }
 
         /**
@@ -70,9 +80,13 @@ public class ExplainStatement implements Statement {
          * @param verbose the {@code verbose} to set
          * @return a reference to this Builder
          */
-        public Builder withVerbose(boolean verbose) {
+        public Builder verbose(boolean verbose) {
             this.verbose = verbose;
             return this;
+        }
+
+        public Builder verbose() {
+            return verbose(true);
         }
 
         /**

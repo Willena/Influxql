@@ -25,7 +25,7 @@ public class RevokeAdminStatement implements Statement {
         public Builder() {
         }
 
-        public Builder withUsername(String user) {
+        public Builder from(String user) {
             this.user = user;
             return this;
         }

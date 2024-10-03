@@ -4,7 +4,6 @@ import io.github.willena.influxql.ast.expr.BinaryExpression;
 import io.github.willena.influxql.ast.expr.VarRef;
 import io.github.willena.influxql.ast.expr.literal.TimeLiteral;
 import io.github.willena.influxql.ast.source.Measurement;
-import io.github.willena.influxql.ast.token.Operator;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -16,18 +15,17 @@ class DeleteStatementTest extends GenericStatementTest<DeleteStatement> {
             new TestBody.Builder<DeleteStatement>()
                     .withStatement(
                             new DeleteStatement.Builder()
-                                    .withFrom(new Measurement.Builder().withName("cpu").build())
+                                    .from(Measurement.measurement("cpu"))
                     )
                     .withExpectedSql("DELETE FROM cpu")
                     .build(),
             new TestBody.Builder<DeleteStatement>()
                     .withStatement(
                             new DeleteStatement.Builder()
-                                    .withFrom(new Measurement.Builder().withName("cpu").build())
-                                    .withWhere(new BinaryExpression(
+                                    .from(Measurement.measurement("cpu"))
+                                    .where(BinaryExpression.lt(
                                             VarRef.of("time"),
-                                            TimeLiteral.of(ZonedDateTime.of(2000, 1, 1, 0, 0, 0, 0, ZoneId.of("UTC")).toInstant()),
-                                            Operator.LT
+                                            TimeLiteral.of(ZonedDateTime.of(2000, 1, 1, 0, 0, 0, 0, ZoneId.of("UTC")).toInstant())
                                     ))
                     )
                     .withExpectedSql("DELETE FROM cpu WHERE time < '2000-01-01T00:00:00Z'")
@@ -35,11 +33,10 @@ class DeleteStatementTest extends GenericStatementTest<DeleteStatement> {
             new TestBody.Builder<DeleteStatement>()
                     .withStatement(
                             new DeleteStatement.Builder()
-                                    .withFrom(new Measurement.Builder().withRegex(Pattern.compile(".*")).build())
-                                    .withWhere(new BinaryExpression(
+                                    .from(Measurement.measurements(Pattern.compile(".*")))
+                                    .where(BinaryExpression.lt(
                                             VarRef.of("time"),
-                                            TimeLiteral.of(ZonedDateTime.of(2000, 1, 1, 0, 0, 0, 0, ZoneId.of("UTC")).toInstant()),
-                                            Operator.LT
+                                            TimeLiteral.of(ZonedDateTime.of(2000, 1, 1, 0, 0, 0, 0, ZoneId.of("UTC")).toInstant())
                                     ))
                     )
                     .withExpectedSql("DELETE FROM /.*/ WHERE time < '2000-01-01T00:00:00Z'")

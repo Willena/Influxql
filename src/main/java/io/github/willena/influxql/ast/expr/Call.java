@@ -18,6 +18,14 @@ public class Call implements Expression {
         ensureDefined("args", args);
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public StringJoiningList<Expression> getArgs() {
+        return args;
+    }
+
     @Override
     public String toString() {
         return name + "(" + args + ")";
@@ -30,17 +38,17 @@ public class Call implements Expression {
         public Builder() {
         }
 
-        public Builder withName(String name) {
+        public Builder function(String name) {
             this.name = name;
             return this;
         }
 
-        public Builder withArgs(StringJoiningList<Expression> args) {
+        public Builder withArguments(StringJoiningList<Expression> args) {
             this.args = args;
             return this;
         }
 
-        public Builder withArgs(Expression... args) {
+        public Builder withArguments(Expression... args) {
             if (this.args == null) {
                 this.args = new StringJoiningList<>();
             }

@@ -10,6 +10,6 @@ class SortFieldsTest {
     void test() {
         assertEquals(0, new SortFields().size());
         assertEquals(0, SortFields.of().size());
-        assertEquals("name ASC, another DESC", SortFields.of(SortField.asc("name"), SortField.desc("another")).toString());
+        assertEquals("\"name\" ASC, another DESC", SortFields.of(SortField.asc("name"), SortField.desc("another")).toString());
     }
 }

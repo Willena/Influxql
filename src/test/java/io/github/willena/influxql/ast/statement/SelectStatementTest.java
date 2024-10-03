@@ -76,8 +76,8 @@ class SelectStatementTest extends GenericStatementTest<SelectStatement> {
                     .withStatement(
                             new SelectStatement.Builder()
                                     .select(Field.of(new Call.Builder()
-                                            .withName("MEAN")
-                                            .withArgs(StringLiteral.of("FieldA"))
+                                            .function("MEAN")
+                                            .withArguments(StringLiteral.of("FieldA"))
                                             .build()))
                                     .from(Measurement.measurement("MyMeasurement"))
                     )
@@ -87,8 +87,8 @@ class SelectStatementTest extends GenericStatementTest<SelectStatement> {
                     .withStatement(
                             new SelectStatement.Builder()
                                     .select(Field.of(new Call.Builder()
-                                            .withName("MEAN")
-                                            .withArgs(
+                                            .function("MEAN")
+                                            .withArguments(
                                                     VarRef.of("COL"),
                                                     IntegerLiteral.of(12),
                                                     TimeLiteral.of(Instant.parse("2015-08-18T00:00:00Z"))
@@ -102,8 +102,8 @@ class SelectStatementTest extends GenericStatementTest<SelectStatement> {
                     .withStatement(
                             new SelectStatement.Builder()
                                     .select(Field.of(new Call.Builder()
-                                            .withName("MEAN")
-                                            .withArgs(
+                                            .function("MEAN")
+                                            .withArguments(
                                                     VarRef.of("CO'L"),
                                                     IntegerLiteral.of(12),
                                                     TimeLiteral.of(Instant.parse("2015-08-18T00:00:00Z"))
@@ -117,8 +117,8 @@ class SelectStatementTest extends GenericStatementTest<SelectStatement> {
                     .withStatement(
                             new SelectStatement.Builder()
                                     .select(Field.of(new Call.Builder()
-                                            .withName("MEAN")
-                                            .withArgs(VarRef.of("COL"))
+                                            .function("MEAN")
+                                            .withArguments(VarRef.of("COL"))
                                             .build()))
                                     .from(Measurement.measurement("MyMeasurement"))
                                     .fill(FillOption.NUMBER, 123)
@@ -129,8 +129,8 @@ class SelectStatementTest extends GenericStatementTest<SelectStatement> {
                     .withStatement(
                             new SelectStatement.Builder()
                                     .select(Field.of(new Call.Builder()
-                                            .withName("MEAN")
-                                            .withArgs(VarRef.of("COL"))
+                                            .function("MEAN")
+                                            .withArguments(VarRef.of("COL"))
                                             .build()))
                                     .from(Measurement.measurement("MyMeasurement"))
                                     .fill(FillOption.PREVIOUS)
@@ -141,8 +141,8 @@ class SelectStatementTest extends GenericStatementTest<SelectStatement> {
                     .withStatement(
                             new SelectStatement.Builder()
                                     .select(Field.of(new Call.Builder()
-                                            .withName("MEAN")
-                                            .withArgs(VarRef.of("COL"))
+                                            .function("MEAN")
+                                            .withArguments(VarRef.of("COL"))
                                             .build()))
                                     .from(Measurement.measurement("MyMeasurement"))
                                     .fill(FillOption.LINEAR)
@@ -153,8 +153,8 @@ class SelectStatementTest extends GenericStatementTest<SelectStatement> {
                     .withStatement(
                             new SelectStatement.Builder()
                                     .select(Field.of(new Call.Builder()
-                                            .withName("MEAN")
-                                            .withArgs(VarRef.of("COL"))
+                                            .function("MEAN")
+                                            .withArguments(VarRef.of("COL"))
                                             .build()))
                                     .from(Measurement.measurement("MyMeasurement"))
                                     .fill(FillOption.NULL)
@@ -165,8 +165,8 @@ class SelectStatementTest extends GenericStatementTest<SelectStatement> {
                     .withStatement(
                             new SelectStatement.Builder()
                                     .select(Field.of(new Call.Builder()
-                                            .withName("MEAN")
-                                            .withArgs(VarRef.of("COL"))
+                                            .function("MEAN")
+                                            .withArguments(VarRef.of("COL"))
                                             .build()))
                                     .from(Measurement.measurement("MyMeasurement"))
                                     .groupBy(Dimension.field("COLA"), Dimension.sampledBy(Duration.ofHours(1)))

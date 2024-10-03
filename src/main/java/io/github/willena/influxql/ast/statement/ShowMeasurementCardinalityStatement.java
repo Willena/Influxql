@@ -89,9 +89,13 @@ public class ShowMeasurementCardinalityStatement implements Statement {
          * @param exact the {@code exact} to set
          * @return a reference to this Builder
          */
-        public Builder withExact(boolean exact) {
+        public Builder exact(boolean exact) {
             this.exact = exact;
             return this;
+        }
+
+        public Builder exact() {
+            return exact(true);
         }
 
         /**
@@ -100,7 +104,7 @@ public class ShowMeasurementCardinalityStatement implements Statement {
          * @param database the {@code database} to set
          * @return a reference to this Builder
          */
-        public Builder withDatabase(String database) {
+        public Builder on(String database) {
             this.database = database;
             return this;
         }
@@ -111,12 +115,12 @@ public class ShowMeasurementCardinalityStatement implements Statement {
          * @param sources the {@code sources} to set
          * @return a reference to this Builder
          */
-        public Builder withFrom(Sources sources) {
+        public Builder from(Sources sources) {
             this.sources = sources;
             return this;
         }
 
-        public Builder withFrom(Source source, Source... sources) {
+        public Builder from(Source source, Source... sources) {
             if (this.sources == null) {
                 this.sources = new Sources();
             }
@@ -131,7 +135,7 @@ public class ShowMeasurementCardinalityStatement implements Statement {
          * @param condition the {@code condition} to set
          * @return a reference to this Builder
          */
-        public Builder withWhere(Expression condition) {
+        public Builder where(Expression condition) {
             this.condition = condition;
             return this;
         }
@@ -142,12 +146,12 @@ public class ShowMeasurementCardinalityStatement implements Statement {
          * @param dimensions the {@code dimensions} to set
          * @return a reference to this Builder
          */
-        public Builder withGroupBy(Dimensions dimensions) {
+        public Builder groupBy(Dimensions dimensions) {
             this.dimensions = dimensions;
             return this;
         }
 
-        public Builder withGroupBy(Dimension dimension, Dimension... dimensions) {
+        public Builder groupBy(Dimension dimension, Dimension... dimensions) {
             if (this.dimensions == null) {
                 this.dimensions = new Dimensions();
             }
@@ -162,7 +166,7 @@ public class ShowMeasurementCardinalityStatement implements Statement {
          * @param limit the {@code limit} to set
          * @return a reference to this Builder
          */
-        public Builder withLimit(int limit) {
+        public Builder limit(int limit) {
             this.limit = limit;
             return this;
         }
@@ -173,7 +177,7 @@ public class ShowMeasurementCardinalityStatement implements Statement {
          * @param offset the {@code offset} to set
          * @return a reference to this Builder
          */
-        public Builder withOffset(int offset) {
+        public Builder offset(int offset) {
             this.offset = offset;
             return this;
         }

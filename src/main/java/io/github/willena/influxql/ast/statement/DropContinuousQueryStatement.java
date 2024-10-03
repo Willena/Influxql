@@ -30,12 +30,12 @@ public class DropContinuousQueryStatement implements Statement {
         public Builder() {
         }
 
-        public Builder withName(String name) {
+        public Builder query(String name) {
             this.name = name;
             return this;
         }
 
-        public Builder withDatabase(String database) {
+        public Builder on(String database) {
             this.database = database;
             return this;
         }

@@ -44,19 +44,23 @@ public class SetPasswordUserStatement implements Statement {
         public Builder() {
         }
 
-        public Builder withPassword(String password) {
+        public Builder password(String password) {
             this.password = password;
             return this;
         }
 
-        public Builder withUsername(String name) {
+        public Builder for_(String name) {
             this.name = name;
             return this;
         }
 
-        public Builder withRedacted(boolean redacted) {
+        public Builder redacted(boolean redacted) {
             this.redacted = redacted;
             return this;
+        }
+
+        public Builder redacted() {
+            return redacted(true);
         }
 
         public SetPasswordUserStatement build() {

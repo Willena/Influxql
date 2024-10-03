@@ -7,7 +7,7 @@ class DropShardStatementTest extends GenericStatementTest<DropShardStatement> {
             new TestBody.Builder<DropShardStatement>()
                     .withStatement(
                             new DropShardStatement.Builder()
-                                    .withShardId(1L)
+                                    .shardId(1L)
                     )
                     .withExpectedSql("DROP SHARD 1")
                     .build(),

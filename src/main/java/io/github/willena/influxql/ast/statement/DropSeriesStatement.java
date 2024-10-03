@@ -50,12 +50,12 @@ public class DropSeriesStatement implements Statement {
          * @param sources the {@code sources} to set
          * @return a reference to this Builder
          */
-        public Builder withFrom(Sources sources) {
+        public Builder from(Sources sources) {
             this.sources = sources;
             return this;
         }
 
-        public Builder withFrom(Source source, Source... sources) {
+        public Builder from(Source source, Source... sources) {
             if (this.sources == null) {
                 this.sources = new Sources();
             }
@@ -70,7 +70,7 @@ public class DropSeriesStatement implements Statement {
          * @param condition the {@code condition} to set
          * @return a reference to this Builder
          */
-        public Builder withWhere(Expression condition) {
+        public Builder where(Expression condition) {
             this.condition = condition;
             return this;
         }

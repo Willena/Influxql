@@ -23,7 +23,7 @@ public class DropDatabaseStatement implements Statement {
         public Builder() {
         }
 
-        public Builder withDatabase(String name) {
+        public Builder database(String name) {
             this.name = name;
             return this;
         }

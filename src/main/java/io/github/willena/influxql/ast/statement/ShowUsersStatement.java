@@ -6,6 +6,10 @@ public class ShowUsersStatement implements Statement {
     public ShowUsersStatement() {
     }
 
+    public static ShowUsersStatement showUsers() {
+        return new ShowUsersStatement();
+    }
+
     @Override
     public String toString() {
         return "SHOW USERS";
