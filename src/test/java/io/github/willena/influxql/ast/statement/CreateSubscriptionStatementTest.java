@@ -5,7 +5,7 @@ import io.github.willena.influxql.ast.token.SubscriptionMode;
 import java.util.List;
 
 class CreateSubscriptionStatementTest extends GenericStatementTest<CreateSubscriptionStatement> {
-    public static final List<TestBody> TEST_BODIES = List.of(
+    public static final List<TestBody<CreateSubscriptionStatement>> TEST_BODIES = List.of(
             new TestBody.Builder<CreateSubscriptionStatement>()
                     .withStatement(
                             new CreateSubscriptionStatement.Builder()

@@ -4,6 +4,7 @@ import io.github.willena.influxql.ast.expr.BinaryExpression;
 import io.github.willena.influxql.ast.expr.VarRef;
 import io.github.willena.influxql.ast.expr.literal.StringLiteral;
 import io.github.willena.influxql.ast.field.SortField;
+import io.github.willena.influxql.ast.field.SortFields;
 import io.github.willena.influxql.ast.source.Measurement;
 import io.github.willena.influxql.ast.token.Operator;
 
@@ -25,6 +26,19 @@ class ShowMeasurementsStatementTest extends GenericStatementTest<ShowMeasurement
                                     .on("db")
                                     .retentionPolicy("policy")
                                     .orderBy(new SortField.Builder().withName("name").build())
+                                    .where(new BinaryExpression(VarRef.of("field"), StringLiteral.of("ok"), Operator.EQ))
+                                    .limit(1)
+                                    .offset(10)
+                    )
+                    .withExpectedSql("SHOW MEASUREMENTS ON db.policy WITH MEASUREMENT = \"name\" WHERE \"field\" = 'ok' ORDER BY \"name\" DESC LIMIT 1 OFFSET 10")
+                    .build(),
+            new TestBody.Builder<ShowMeasurementsStatement>()
+                    .withStatement(
+                            new ShowMeasurementsStatement.Builder()
+                                    .from(new Measurement.Builder().withName("name").build())
+                                    .on("db")
+                                    .retentionPolicy("policy")
+                                    .orderBy(new SortFields(List.of(new SortField.Builder().withName("name").build())))
                                     .where(new BinaryExpression(VarRef.of("field"), StringLiteral.of("ok"), Operator.EQ))
                                     .limit(1)
                                     .offset(10)

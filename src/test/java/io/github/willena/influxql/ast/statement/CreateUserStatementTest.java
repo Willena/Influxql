@@ -17,7 +17,7 @@ class CreateUserStatementTest extends GenericStatementTest<CreateUserStatement> 
                             new CreateUserStatement.Builder()
                                     .username("UserName")
                                     .password("password!&é!$^ù")
-                                    .admin(true)
+                                    .admin()
                     )
                     .withExpectedSql("CREATE USER UserName WITH PASSWORD 'password!&é!$^ù' WITH ALL PRIVILEGES")
                     .build()

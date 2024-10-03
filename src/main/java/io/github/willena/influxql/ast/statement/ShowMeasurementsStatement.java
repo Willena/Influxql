@@ -80,8 +80,6 @@ public class ShowMeasurementsStatement implements Statement {
     public static final class Builder implements Buildable<ShowMeasurementsStatement> {
         private String database;
         private String retentionPolicy;
-        private boolean wildcardDatabase;
-        private boolean wildcardRetentionPolicy;
         private Measurement source;
         private Expression condition;
         private SortFields sortFields;

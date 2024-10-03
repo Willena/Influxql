@@ -7,8 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class DimensionsTest {
     @Test
     void testDimensionsEmpty() {
-        Dimensions dimensions = new Dimensions();
-        assertEquals(0, dimensions.size());
+        assertEquals(0, new Dimensions().size());
     }
 
     @Test
