@@ -36,7 +36,17 @@ decide if your request is globally valid and can target your data.
 
 ```java
 
+import io.github.willena.influxql.ast.expr.Dimension;
+import io.github.willena.influxql.ast.expr.VarRef;
+import io.github.willena.influxql.ast.field.Field;
+import io.github.willena.influxql.ast.source.Measurement;
 import io.github.willena.influxql.ast.statement.AlterRetentionPolicyStatement;
+import io.github.willena.influxql.ast.statement.SelectStatement;
+import io.github.willena.influxql.ast.extra.FunctionFactory.Aggregations.mean;
+import io.github.willena.influxql.ast.source.Measurement.measurement;
+import io.github.willena.influxql.ast.expr.Dimension.sampledBy;
+
+import java.time.Duration;
 
 public static void main(String[] args) {
     AlterRetentionPolicyStatement stm = new AlterRetentionPolicyStatement.Builder()
@@ -44,8 +54,17 @@ public static void main(String[] args) {
             .policyName("Policy")
             .build();
 
-    System.out.println("stm = " + stm);
+    System.out.println(stm);
     // Prints 'ALTER RETENTION POLICY Policy ON "DB"'
+
+    SelectStatement select = new SelectStatement.Builder()
+            .select(Field.of(mean(VarRef.of("field"))))
+            .from(measurement("meas"))
+            .groupBy(sampledBy(Duration.ofDays(1)))
+            .build();
+    System.out.println(stm);
+    // Prints 'SELECT MEAN(field) FROM meas GROUP BY time(1d)'
+
 }
 
 ```
