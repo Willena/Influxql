@@ -18,7 +18,7 @@ public final class FunctionFactory {
         public static final String DISTINCT_NAME = "DISTINCT";
         public static final String INTEGRAL_NAME = "INTEGRAL";
         public static final String MEAN_NAME = "MEAN";
-        public static final String MEDIAN_NAME = "MODE";
+        public static final String MEDIAN_NAME = "MEDIAN";
         public static final String MODE_NAME = "MODE";
         public static final String SPREAD_NAME = "SPREAD";
         public static final String STDDEV_NAME = "STDDEV";
@@ -232,11 +232,11 @@ public final class FunctionFactory {
         }
 
         public static Call percentile(RegexLiteral regexLiteral, IntegerLiteral n) {
-            return new Call.Builder().function(PERCENTILE_NAME).withArguments(regexLiteral).build();
+            return new Call.Builder().function(PERCENTILE_NAME).withArguments(regexLiteral, n).build();
         }
 
         public static Call percentile(VarRef field, IntegerLiteral n) {
-            return new Call.Builder().function(PERCENTILE_NAME).withArguments(field).build();
+            return new Call.Builder().function(PERCENTILE_NAME).withArguments(field, n).build();
         }
 
         public static Call sample(Wildcard wildcard, IntegerLiteral n) {
@@ -244,11 +244,11 @@ public final class FunctionFactory {
         }
 
         public static Call sample(RegexLiteral regexLiteral, IntegerLiteral n) {
-            return new Call.Builder().function(SAMPLE_NAME).withArguments(regexLiteral).build();
+            return new Call.Builder().function(SAMPLE_NAME).withArguments(regexLiteral, n).build();
         }
 
         public static Call sample(VarRef field, IntegerLiteral n) {
-            return new Call.Builder().function(SAMPLE_NAME).withArguments(field).build();
+            return new Call.Builder().function(SAMPLE_NAME).withArguments(field, n).build();
         }
 
         public static Call top(VarRef field, VarRef tag, IntegerLiteral n) {
@@ -258,7 +258,6 @@ public final class FunctionFactory {
         public static Call top(VarRef field, IntegerLiteral n) {
             return new Call.Builder().function(TOP_NAME).withArguments(field, n).build();
         }
-
     }
 
     public static final class Transformations {
@@ -288,7 +287,17 @@ public final class FunctionFactory {
         public static String SQRT_NAME = "SQRT";
         public static String TAN_NAME = "TAN";
 
-        private static final List<String> ALLOWED_NESTED = List.of(Aggregations.COUNT_NAME, Aggregations.MEAN_NAME, Aggregations.MEDIAN_NAME, Aggregations.MODE_NAME, Aggregations.SUM_NAME, Selectors.FIRST_NAME, Selectors.LAST_NAME, Selectors.MIN_NAME, Selectors.MAX_NAME, Selectors.PERCENTILE_NAME);
+        private static final List<String> ALLOWED_NESTED = List.of(
+                Aggregations.COUNT_NAME,
+                Aggregations.MEAN_NAME,
+                Aggregations.MEDIAN_NAME,
+                Aggregations.MODE_NAME,
+                Aggregations.SUM_NAME,
+                Selectors.FIRST_NAME,
+                Selectors.LAST_NAME,
+                Selectors.MIN_NAME,
+                Selectors.MAX_NAME,
+                Selectors.PERCENTILE_NAME);
 
         private Transformations() {
             // nothing
