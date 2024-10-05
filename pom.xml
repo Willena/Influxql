@@ -23,7 +23,11 @@
 
     <groupId>io.github.willena.influx</groupId>
     <artifactId>influxql</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
+
+    <name>InfluxQL</name>
+    <description>InfluxQL query builder and parser</description>
+    <url>https://github.com/willena/influxql</url>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
@@ -40,6 +44,12 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
+
+    <scm>
+        <connection>scm:git:git://github.com/willena/influxql.git</connection>
+        <developerConnection>scm:git:git@github.com:/willena/influxql.git</developerConnection>
+        <url>https://github.com/willena/influxql</url>
+    </scm>
 
     <developers>
         <developer>
