@@ -54,5 +54,6 @@ jobs:
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         run: |
-          mvn --settings <(echo "$MVN_SETTINGS" | base64 --decode) --batch-mode --no-transfer-progress clean deploy -P release
+          echo "$MVN_SETTINGS" | base64 --decode > /tmp/settings.xml
+          mvn --settings /tmp/settings.xml --batch-mode --no-transfer-progress clean deploy -P release
 
