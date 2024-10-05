@@ -36,7 +36,7 @@ jobs:
           cache: 'maven'
       - name: Ensure snapshot
         run: | 
-          res=mvn help:evaluate -Dexpression=project.version -q -DforceStdout
+          res=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
           if ! [[ $res == *"SNAPSHOT"* ]]
           then
             echo "Build reserved to snapshots"
