@@ -1,13 +1,19 @@
 # InfluxQL
 
-Java library inspired from the official [influxql](https://github.com/influxdata/influxql),
-and [influxqb](https://github.com/Willena/influxqb) go package.
+
+
+![CI](https://img.shields.io/github/actions/workflow/status/willena/influxql/ci.yml?branch=master)
+[![MVN](https://img.shields.io/maven-central/v/io.github.willena/influxql)](https://maven-badges.herokuapp.com/maven-central/io.github.willena/influxql/)
+[![JDOC](https://javadoc.io/badge2/io.github.willena/influxql/javadoc.svg)](https://javadoc.io/doc/io.github.willena/influxql)
+[![SNAP](https://img.shields.io/nexus/s/io.github.willena/influxql?color=blue&label=maven%20snapshot&server=https%3A%2F%2Foss.sonatype.org%2F)](https://oss.sonatype.org/content/repositories/snapshots/io/github/willena/influxql/)
+
+Java library inspired from the official [influxql](https://github.com/influxdata/influxql) and [influxqb](https://github.com/Willena/influxqb) go package.
 
 Building strongly typed and secure InfluxQL queries from string is not always an easy task You have to take care of the
 sanitization, keep the distinction between function, identifier, numbers and string literals to build a valid query.
 
 The influxQL parser contains all the required types to manually build a query from scratch. More importantly it also
-contains String() method on each type and statement. The parser then take care of escaping character, putting quotes or
+contains String() method on each type and statement. The parse  r then take care of escaping character, putting quotes or
 not, ...
 
 The implementation is based on types from the go parser AST.
