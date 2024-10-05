@@ -19,10 +19,11 @@ jobs:
           cache: 'maven'
       - name: spotless:check
         run: mvn --batch-mode --no-transfer-progress spotless:check
+
   build_deploy:
     permissions:
       contents: write
-    name: Build natives libraries
+    name: Build library
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -52,5 +53,6 @@ jobs:
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-        run: mvn --settings <(echo "$MVN_SETTINGS") --batch-mode --no-transfer-progress clean deploy -P release
+        run: |
+          mvn --settings <(echo "$MVN_SETTINGS" | base64 --decode) --batch-mode --no-transfer-progress clean deploy -P release
 
