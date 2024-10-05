@@ -1,11 +1,9 @@
 package io.github.willena.influxql.ast.extra;
 
+import io.github.willena.influxql.ast.expr.Call;
 import io.github.willena.influxql.ast.expr.VarRef;
 import io.github.willena.influxql.ast.expr.Wildcard;
-import io.github.willena.influxql.ast.expr.literal.DurationLiteral;
-import io.github.willena.influxql.ast.expr.literal.IntegerLiteral;
-import io.github.willena.influxql.ast.expr.literal.NumberLiteral;
-import io.github.willena.influxql.ast.expr.literal.RegexLiteral;
+import io.github.willena.influxql.ast.expr.literal.*;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
@@ -360,6 +358,180 @@ class FunctionFactoryTest {
         assertEquals("TAN(ooo)", FunctionFactory.Transformations.tan(VarRef.of("ooo")).toString());
         assertEquals("TAN(MAX(oo))", FunctionFactory.Transformations.tan(FunctionFactory.Selectors.max(VarRef.of("oo"))).toString());
         assertThrows(IllegalArgumentException.class, () -> FunctionFactory.Transformations.tan(FunctionFactory.Selectors.sample(VarRef.of("oo"), IntegerLiteral.of(1))).toString());
+    }
+
+    @Test
+    void predictorsHoltWinters() {
+        assertThrows(IllegalArgumentException.class, () -> FunctionFactory.Predictors.holtWinters(FunctionFactory.Aggregations.count(Wildcard.wildcard()), IntegerLiteral.of(1), IntegerLiteral.of(1)));
+        assertEquals("HOLT_WINTERS(COUNT(rrr), 1, 1)", FunctionFactory.Predictors.holtWinters(FunctionFactory.Aggregations.count(VarRef.of("rrr")), IntegerLiteral.of(1), IntegerLiteral.of(1)).toString());
+    }
+
+    @Test
+    void predictorsHoltWintersWithFit() {
+        assertThrows(IllegalArgumentException.class, () -> FunctionFactory.Predictors.holtWintersWithFit(FunctionFactory.Aggregations.count(Wildcard.wildcard()), IntegerLiteral.of(1), IntegerLiteral.of(1)));
+        assertEquals("HOLT_WINTERS_WITH_FIT(COUNT(rrr), 1, 1)", FunctionFactory.Predictors.holtWintersWithFit(FunctionFactory.Aggregations.count(VarRef.of("rrr")), IntegerLiteral.of(1), IntegerLiteral.of(1)).toString());
+    }
+
+    @Test
+    void technicalAnalysisChandeMomentumOscillator() {
+        assertEquals("CHANDE_MOMENTUM_OSCILLATOR(*, 1)", FunctionFactory.TechnicalAnalysis.chandeMomentumOscillator(Wildcard.wildcard(), IntegerLiteral.of(1)).toString());
+        assertEquals("CHANDE_MOMENTUM_OSCILLATOR(*, 1, 1)", FunctionFactory.TechnicalAnalysis.chandeMomentumOscillator(Wildcard.wildcard(), IntegerLiteral.of(1), IntegerLiteral.of(1)).toString());
+        assertEquals("CHANDE_MOMENTUM_OSCILLATOR(*, 1, 1, 'warmup')", FunctionFactory.TechnicalAnalysis.chandeMomentumOscillator(Wildcard.wildcard(), IntegerLiteral.of(1), IntegerLiteral.of(1), StringLiteral.of("warmup")).toString());
+
+        assertEquals("CHANDE_MOMENTUM_OSCILLATOR(v, 1)", FunctionFactory.TechnicalAnalysis.chandeMomentumOscillator(VarRef.of("v"), IntegerLiteral.of(1)).toString());
+        assertEquals("CHANDE_MOMENTUM_OSCILLATOR(v, 1, 1)", FunctionFactory.TechnicalAnalysis.chandeMomentumOscillator(VarRef.of("v"), IntegerLiteral.of(1), IntegerLiteral.of(1)).toString());
+        assertEquals("CHANDE_MOMENTUM_OSCILLATOR(v, 1, 1, 'warmup')", FunctionFactory.TechnicalAnalysis.chandeMomentumOscillator(VarRef.of("v"), IntegerLiteral.of(1), IntegerLiteral.of(1), StringLiteral.of("warmup")).toString());
+
+        assertEquals("CHANDE_MOMENTUM_OSCILLATOR(/v/, 1)", FunctionFactory.TechnicalAnalysis.chandeMomentumOscillator(RegexLiteral.of("v"), IntegerLiteral.of(1)).toString());
+        assertEquals("CHANDE_MOMENTUM_OSCILLATOR(/v/, 1, 1)", FunctionFactory.TechnicalAnalysis.chandeMomentumOscillator(RegexLiteral.of("v"), IntegerLiteral.of(1), IntegerLiteral.of(1)).toString());
+        assertEquals("CHANDE_MOMENTUM_OSCILLATOR(/v/, 1, 1, 'warmup')", FunctionFactory.TechnicalAnalysis.chandeMomentumOscillator(RegexLiteral.of("v"), IntegerLiteral.of(1), IntegerLiteral.of(1), StringLiteral.of("warmup")).toString());
+
+        Call c = FunctionFactory.Aggregations.mean(VarRef.of("v"));
+
+        assertEquals("CHANDE_MOMENTUM_OSCILLATOR(MEAN(v), 1)", FunctionFactory.TechnicalAnalysis.chandeMomentumOscillator(c, IntegerLiteral.of(1)).toString());
+        assertEquals("CHANDE_MOMENTUM_OSCILLATOR(MEAN(v), 1, 1)", FunctionFactory.TechnicalAnalysis.chandeMomentumOscillator(c, IntegerLiteral.of(1), IntegerLiteral.of(1)).toString());
+        assertEquals("CHANDE_MOMENTUM_OSCILLATOR(MEAN(v), 1, 1, 'warmup')", FunctionFactory.TechnicalAnalysis.chandeMomentumOscillator(c, IntegerLiteral.of(1), IntegerLiteral.of(1), StringLiteral.of("warmup")).toString());
+
+    }
+
+    @Test
+    void technicalAnalysisExponentialMovingAverage() {
+        assertEquals("EXPONENTIAL_MOVING_AVERAGE(*, 1)", FunctionFactory.TechnicalAnalysis.exponentialMovingAverage(Wildcard.wildcard(), IntegerLiteral.of(1)).toString());
+        assertEquals("EXPONENTIAL_MOVING_AVERAGE(*, 1, 1)", FunctionFactory.TechnicalAnalysis.exponentialMovingAverage(Wildcard.wildcard(), IntegerLiteral.of(1), IntegerLiteral.of(1)).toString());
+        assertEquals("EXPONENTIAL_MOVING_AVERAGE(*, 1, 1, 'warmup')", FunctionFactory.TechnicalAnalysis.exponentialMovingAverage(Wildcard.wildcard(), IntegerLiteral.of(1), IntegerLiteral.of(1), StringLiteral.of("warmup")).toString());
+
+        assertEquals("EXPONENTIAL_MOVING_AVERAGE(v, 1)", FunctionFactory.TechnicalAnalysis.exponentialMovingAverage(VarRef.of("v"), IntegerLiteral.of(1)).toString());
+        assertEquals("EXPONENTIAL_MOVING_AVERAGE(v, 1, 1)", FunctionFactory.TechnicalAnalysis.exponentialMovingAverage(VarRef.of("v"), IntegerLiteral.of(1), IntegerLiteral.of(1)).toString());
+        assertEquals("EXPONENTIAL_MOVING_AVERAGE(v, 1, 1, 'warmup')", FunctionFactory.TechnicalAnalysis.exponentialMovingAverage(VarRef.of("v"), IntegerLiteral.of(1), IntegerLiteral.of(1), StringLiteral.of("warmup")).toString());
+
+        assertEquals("EXPONENTIAL_MOVING_AVERAGE(/v/, 1)", FunctionFactory.TechnicalAnalysis.exponentialMovingAverage(RegexLiteral.of("v"), IntegerLiteral.of(1)).toString());
+        assertEquals("EXPONENTIAL_MOVING_AVERAGE(/v/, 1, 1)", FunctionFactory.TechnicalAnalysis.exponentialMovingAverage(RegexLiteral.of("v"), IntegerLiteral.of(1), IntegerLiteral.of(1)).toString());
+        assertEquals("EXPONENTIAL_MOVING_AVERAGE(/v/, 1, 1, 'warmup')", FunctionFactory.TechnicalAnalysis.exponentialMovingAverage(RegexLiteral.of("v"), IntegerLiteral.of(1), IntegerLiteral.of(1), StringLiteral.of("warmup")).toString());
+
+        Call c = FunctionFactory.Aggregations.mean(VarRef.of("v"));
+
+        assertEquals("EXPONENTIAL_MOVING_AVERAGE(MEAN(v), 1)", FunctionFactory.TechnicalAnalysis.exponentialMovingAverage(c, IntegerLiteral.of(1)).toString());
+        assertEquals("EXPONENTIAL_MOVING_AVERAGE(MEAN(v), 1, 1)", FunctionFactory.TechnicalAnalysis.exponentialMovingAverage(c, IntegerLiteral.of(1), IntegerLiteral.of(1)).toString());
+        assertEquals("EXPONENTIAL_MOVING_AVERAGE(MEAN(v), 1, 1, 'warmup')", FunctionFactory.TechnicalAnalysis.exponentialMovingAverage(c, IntegerLiteral.of(1), IntegerLiteral.of(1), StringLiteral.of("warmup")).toString());
+    }
+
+    @Test
+    void technicalAnalysisDoubleExponentialMovingAverage() {
+        assertEquals("DOUBLE_EXPONENTIAL_MOVING_AVERAGE(*, 1)", FunctionFactory.TechnicalAnalysis.doubleExponentialMovingAverage(Wildcard.wildcard(), IntegerLiteral.of(1)).toString());
+        assertEquals("DOUBLE_EXPONENTIAL_MOVING_AVERAGE(*, 1, 1)", FunctionFactory.TechnicalAnalysis.doubleExponentialMovingAverage(Wildcard.wildcard(), IntegerLiteral.of(1), IntegerLiteral.of(1)).toString());
+        assertEquals("DOUBLE_EXPONENTIAL_MOVING_AVERAGE(*, 1, 1, 'warmup')", FunctionFactory.TechnicalAnalysis.doubleExponentialMovingAverage(Wildcard.wildcard(), IntegerLiteral.of(1), IntegerLiteral.of(1), StringLiteral.of("warmup")).toString());
+
+        assertEquals("DOUBLE_EXPONENTIAL_MOVING_AVERAGE(v, 1)", FunctionFactory.TechnicalAnalysis.doubleExponentialMovingAverage(VarRef.of("v"), IntegerLiteral.of(1)).toString());
+        assertEquals("DOUBLE_EXPONENTIAL_MOVING_AVERAGE(v, 1, 1)", FunctionFactory.TechnicalAnalysis.doubleExponentialMovingAverage(VarRef.of("v"), IntegerLiteral.of(1), IntegerLiteral.of(1)).toString());
+        assertEquals("DOUBLE_EXPONENTIAL_MOVING_AVERAGE(v, 1, 1, 'warmup')", FunctionFactory.TechnicalAnalysis.doubleExponentialMovingAverage(VarRef.of("v"), IntegerLiteral.of(1), IntegerLiteral.of(1), StringLiteral.of("warmup")).toString());
+
+        assertEquals("DOUBLE_EXPONENTIAL_MOVING_AVERAGE(/v/, 1)", FunctionFactory.TechnicalAnalysis.doubleExponentialMovingAverage(RegexLiteral.of("v"), IntegerLiteral.of(1)).toString());
+        assertEquals("DOUBLE_EXPONENTIAL_MOVING_AVERAGE(/v/, 1, 1)", FunctionFactory.TechnicalAnalysis.doubleExponentialMovingAverage(RegexLiteral.of("v"), IntegerLiteral.of(1), IntegerLiteral.of(1)).toString());
+        assertEquals("DOUBLE_EXPONENTIAL_MOVING_AVERAGE(/v/, 1, 1, 'warmup')", FunctionFactory.TechnicalAnalysis.doubleExponentialMovingAverage(RegexLiteral.of("v"), IntegerLiteral.of(1), IntegerLiteral.of(1), StringLiteral.of("warmup")).toString());
+
+        Call c = FunctionFactory.Aggregations.mean(VarRef.of("v"));
+
+        assertEquals("DOUBLE_EXPONENTIAL_MOVING_AVERAGE(MEAN(v), 1)", FunctionFactory.TechnicalAnalysis.doubleExponentialMovingAverage(c, IntegerLiteral.of(1)).toString());
+        assertEquals("DOUBLE_EXPONENTIAL_MOVING_AVERAGE(MEAN(v), 1, 1)", FunctionFactory.TechnicalAnalysis.doubleExponentialMovingAverage(c, IntegerLiteral.of(1), IntegerLiteral.of(1)).toString());
+        assertEquals("DOUBLE_EXPONENTIAL_MOVING_AVERAGE(MEAN(v), 1, 1, 'warmup')", FunctionFactory.TechnicalAnalysis.doubleExponentialMovingAverage(c, IntegerLiteral.of(1), IntegerLiteral.of(1), StringLiteral.of("warmup")).toString());
+    }
+
+    @Test
+    void technicalAnalysisKaufmansEffeciencyRatio() {
+        assertEquals("KAUFMANS_EFFICIENCY_RATIO(*, 1)", FunctionFactory.TechnicalAnalysis.kaufmansEffeciencyRatio(Wildcard.wildcard(), IntegerLiteral.of(1)).toString());
+        assertEquals("KAUFMANS_EFFICIENCY_RATIO(*, 1, 1)", FunctionFactory.TechnicalAnalysis.kaufmansEffeciencyRatio(Wildcard.wildcard(), IntegerLiteral.of(1), IntegerLiteral.of(1)).toString());
+
+        assertEquals("KAUFMANS_EFFICIENCY_RATIO(v, 1)", FunctionFactory.TechnicalAnalysis.kaufmansEffeciencyRatio(VarRef.of("v"), IntegerLiteral.of(1)).toString());
+        assertEquals("KAUFMANS_EFFICIENCY_RATIO(v, 1, 1)", FunctionFactory.TechnicalAnalysis.kaufmansEffeciencyRatio(VarRef.of("v"), IntegerLiteral.of(1), IntegerLiteral.of(1)).toString());
+
+        assertEquals("KAUFMANS_EFFICIENCY_RATIO(/v/, 1)", FunctionFactory.TechnicalAnalysis.kaufmansEffeciencyRatio(RegexLiteral.of("v"), IntegerLiteral.of(1)).toString());
+        assertEquals("KAUFMANS_EFFICIENCY_RATIO(/v/, 1, 1)", FunctionFactory.TechnicalAnalysis.kaufmansEffeciencyRatio(RegexLiteral.of("v"), IntegerLiteral.of(1), IntegerLiteral.of(1)).toString());
+
+        Call c = FunctionFactory.Aggregations.mean(VarRef.of("v"));
+
+        assertEquals("KAUFMANS_EFFICIENCY_RATIO(MEAN(v), 1)", FunctionFactory.TechnicalAnalysis.kaufmansEffeciencyRatio(c, IntegerLiteral.of(1)).toString());
+        assertEquals("KAUFMANS_EFFICIENCY_RATIO(MEAN(v), 1, 1)", FunctionFactory.TechnicalAnalysis.kaufmansEffeciencyRatio(c, IntegerLiteral.of(1), IntegerLiteral.of(1)).toString());
+    }
+
+
+    @Test
+    void technicalAnalysisKaufmansAdaptativeMovingAverage() {
+        assertEquals("KAUFMANS_ADAPTIVE_MOVING_AVERAGE(*, 1)", FunctionFactory.TechnicalAnalysis.kaufmansAdaptativeMovingAverage(Wildcard.wildcard(), IntegerLiteral.of(1)).toString());
+        assertEquals("KAUFMANS_ADAPTIVE_MOVING_AVERAGE(*, 1, 1)", FunctionFactory.TechnicalAnalysis.kaufmansAdaptativeMovingAverage(Wildcard.wildcard(), IntegerLiteral.of(1), IntegerLiteral.of(1)).toString());
+
+        assertEquals("KAUFMANS_ADAPTIVE_MOVING_AVERAGE(v, 1)", FunctionFactory.TechnicalAnalysis.kaufmansAdaptativeMovingAverage(VarRef.of("v"), IntegerLiteral.of(1)).toString());
+        assertEquals("KAUFMANS_ADAPTIVE_MOVING_AVERAGE(v, 1, 1)", FunctionFactory.TechnicalAnalysis.kaufmansAdaptativeMovingAverage(VarRef.of("v"), IntegerLiteral.of(1), IntegerLiteral.of(1)).toString());
+
+        assertEquals("KAUFMANS_ADAPTIVE_MOVING_AVERAGE(/v/, 1)", FunctionFactory.TechnicalAnalysis.kaufmansAdaptativeMovingAverage(RegexLiteral.of("v"), IntegerLiteral.of(1)).toString());
+        assertEquals("KAUFMANS_ADAPTIVE_MOVING_AVERAGE(/v/, 1, 1)", FunctionFactory.TechnicalAnalysis.kaufmansAdaptativeMovingAverage(RegexLiteral.of("v"), IntegerLiteral.of(1), IntegerLiteral.of(1)).toString());
+
+        Call c = FunctionFactory.Aggregations.mean(VarRef.of("v"));
+
+        assertEquals("KAUFMANS_ADAPTIVE_MOVING_AVERAGE(MEAN(v), 1)", FunctionFactory.TechnicalAnalysis.kaufmansAdaptativeMovingAverage(c, IntegerLiteral.of(1)).toString());
+        assertEquals("KAUFMANS_ADAPTIVE_MOVING_AVERAGE(MEAN(v), 1, 1)", FunctionFactory.TechnicalAnalysis.kaufmansAdaptativeMovingAverage(c, IntegerLiteral.of(1), IntegerLiteral.of(1)).toString());
+    }
+
+    @Test
+    void technicalAnalysisTripleExponentialMovingAverage() {
+        assertEquals("TRIPLE_EXPONENTIAL_MOVING_AVERAGE(*, 1)", FunctionFactory.TechnicalAnalysis.tripleExponentialMovingAverage(Wildcard.wildcard(), IntegerLiteral.of(1)).toString());
+        assertEquals("TRIPLE_EXPONENTIAL_MOVING_AVERAGE(*, 1, 1)", FunctionFactory.TechnicalAnalysis.tripleExponentialMovingAverage(Wildcard.wildcard(), IntegerLiteral.of(1), IntegerLiteral.of(1)).toString());
+        assertEquals("TRIPLE_EXPONENTIAL_MOVING_AVERAGE(*, 1, 1, 'warmup')", FunctionFactory.TechnicalAnalysis.tripleExponentialMovingAverage(Wildcard.wildcard(), IntegerLiteral.of(1), IntegerLiteral.of(1), StringLiteral.of("warmup")).toString());
+
+        assertEquals("TRIPLE_EXPONENTIAL_MOVING_AVERAGE(v, 1)", FunctionFactory.TechnicalAnalysis.tripleExponentialMovingAverage(VarRef.of("v"), IntegerLiteral.of(1)).toString());
+        assertEquals("TRIPLE_EXPONENTIAL_MOVING_AVERAGE(v, 1, 1)", FunctionFactory.TechnicalAnalysis.tripleExponentialMovingAverage(VarRef.of("v"), IntegerLiteral.of(1), IntegerLiteral.of(1)).toString());
+        assertEquals("TRIPLE_EXPONENTIAL_MOVING_AVERAGE(v, 1, 1, 'warmup')", FunctionFactory.TechnicalAnalysis.tripleExponentialMovingAverage(VarRef.of("v"), IntegerLiteral.of(1), IntegerLiteral.of(1), StringLiteral.of("warmup")).toString());
+
+        assertEquals("TRIPLE_EXPONENTIAL_MOVING_AVERAGE(/v/, 1)", FunctionFactory.TechnicalAnalysis.tripleExponentialMovingAverage(RegexLiteral.of("v"), IntegerLiteral.of(1)).toString());
+        assertEquals("TRIPLE_EXPONENTIAL_MOVING_AVERAGE(/v/, 1, 1)", FunctionFactory.TechnicalAnalysis.tripleExponentialMovingAverage(RegexLiteral.of("v"), IntegerLiteral.of(1), IntegerLiteral.of(1)).toString());
+        assertEquals("TRIPLE_EXPONENTIAL_MOVING_AVERAGE(/v/, 1, 1, 'warmup')", FunctionFactory.TechnicalAnalysis.tripleExponentialMovingAverage(RegexLiteral.of("v"), IntegerLiteral.of(1), IntegerLiteral.of(1), StringLiteral.of("warmup")).toString());
+
+        Call c = FunctionFactory.Aggregations.mean(VarRef.of("v"));
+
+        assertEquals("TRIPLE_EXPONENTIAL_MOVING_AVERAGE(MEAN(v), 1)", FunctionFactory.TechnicalAnalysis.tripleExponentialMovingAverage(c, IntegerLiteral.of(1)).toString());
+        assertEquals("TRIPLE_EXPONENTIAL_MOVING_AVERAGE(MEAN(v), 1, 1)", FunctionFactory.TechnicalAnalysis.tripleExponentialMovingAverage(c, IntegerLiteral.of(1), IntegerLiteral.of(1)).toString());
+        assertEquals("TRIPLE_EXPONENTIAL_MOVING_AVERAGE(MEAN(v), 1, 1, 'warmup')", FunctionFactory.TechnicalAnalysis.tripleExponentialMovingAverage(c, IntegerLiteral.of(1), IntegerLiteral.of(1), StringLiteral.of("warmup")).toString());
+    }
+
+    @Test
+    void technicalAnalysisTripleExponentialDerivative() {
+        assertEquals("TRIPLE_EXPONENTIAL_DERIVATIVE(*, 1)", FunctionFactory.TechnicalAnalysis.tripleExponentialDerivative(Wildcard.wildcard(), IntegerLiteral.of(1)).toString());
+        assertEquals("TRIPLE_EXPONENTIAL_DERIVATIVE(*, 1, 1)", FunctionFactory.TechnicalAnalysis.tripleExponentialDerivative(Wildcard.wildcard(), IntegerLiteral.of(1), IntegerLiteral.of(1)).toString());
+        assertEquals("TRIPLE_EXPONENTIAL_DERIVATIVE(*, 1, 1, 'warmup')", FunctionFactory.TechnicalAnalysis.tripleExponentialDerivative(Wildcard.wildcard(), IntegerLiteral.of(1), IntegerLiteral.of(1), StringLiteral.of("warmup")).toString());
+
+        assertEquals("TRIPLE_EXPONENTIAL_DERIVATIVE(v, 1)", FunctionFactory.TechnicalAnalysis.tripleExponentialDerivative(VarRef.of("v"), IntegerLiteral.of(1)).toString());
+        assertEquals("TRIPLE_EXPONENTIAL_DERIVATIVE(v, 1, 1)", FunctionFactory.TechnicalAnalysis.tripleExponentialDerivative(VarRef.of("v"), IntegerLiteral.of(1), IntegerLiteral.of(1)).toString());
+        assertEquals("TRIPLE_EXPONENTIAL_DERIVATIVE(v, 1, 1, 'warmup')", FunctionFactory.TechnicalAnalysis.tripleExponentialDerivative(VarRef.of("v"), IntegerLiteral.of(1), IntegerLiteral.of(1), StringLiteral.of("warmup")).toString());
+
+        assertEquals("TRIPLE_EXPONENTIAL_DERIVATIVE(/v/, 1)", FunctionFactory.TechnicalAnalysis.tripleExponentialDerivative(RegexLiteral.of("v"), IntegerLiteral.of(1)).toString());
+        assertEquals("TRIPLE_EXPONENTIAL_DERIVATIVE(/v/, 1, 1)", FunctionFactory.TechnicalAnalysis.tripleExponentialDerivative(RegexLiteral.of("v"), IntegerLiteral.of(1), IntegerLiteral.of(1)).toString());
+        assertEquals("TRIPLE_EXPONENTIAL_DERIVATIVE(/v/, 1, 1, 'warmup')", FunctionFactory.TechnicalAnalysis.tripleExponentialDerivative(RegexLiteral.of("v"), IntegerLiteral.of(1), IntegerLiteral.of(1), StringLiteral.of("warmup")).toString());
+
+        Call c = FunctionFactory.Aggregations.mean(VarRef.of("v"));
+
+        assertEquals("TRIPLE_EXPONENTIAL_DERIVATIVE(MEAN(v), 1)", FunctionFactory.TechnicalAnalysis.tripleExponentialDerivative(c, IntegerLiteral.of(1)).toString());
+        assertEquals("TRIPLE_EXPONENTIAL_DERIVATIVE(MEAN(v), 1, 1)", FunctionFactory.TechnicalAnalysis.tripleExponentialDerivative(c, IntegerLiteral.of(1), IntegerLiteral.of(1)).toString());
+        assertEquals("TRIPLE_EXPONENTIAL_DERIVATIVE(MEAN(v), 1, 1, 'warmup')", FunctionFactory.TechnicalAnalysis.tripleExponentialDerivative(c, IntegerLiteral.of(1), IntegerLiteral.of(1), StringLiteral.of("warmup")).toString());
+    }
+
+    @Test
+    void technicalAnalysisRelativeStrengthIndex() {
+        assertEquals("RELATIVE_STRENGTH_INDEX(*, 1)", FunctionFactory.TechnicalAnalysis.relativeStrengthIndex(Wildcard.wildcard(), IntegerLiteral.of(1)).toString());
+        assertEquals("RELATIVE_STRENGTH_INDEX(*, 1, 1)", FunctionFactory.TechnicalAnalysis.relativeStrengthIndex(Wildcard.wildcard(), IntegerLiteral.of(1), IntegerLiteral.of(1)).toString());
+        assertEquals("RELATIVE_STRENGTH_INDEX(*, 1, 1, 'warmup')", FunctionFactory.TechnicalAnalysis.relativeStrengthIndex(Wildcard.wildcard(), IntegerLiteral.of(1), IntegerLiteral.of(1), StringLiteral.of("warmup")).toString());
+
+        assertEquals("RELATIVE_STRENGTH_INDEX(v, 1)", FunctionFactory.TechnicalAnalysis.relativeStrengthIndex(VarRef.of("v"), IntegerLiteral.of(1)).toString());
+        assertEquals("RELATIVE_STRENGTH_INDEX(v, 1, 1)", FunctionFactory.TechnicalAnalysis.relativeStrengthIndex(VarRef.of("v"), IntegerLiteral.of(1), IntegerLiteral.of(1)).toString());
+        assertEquals("RELATIVE_STRENGTH_INDEX(v, 1, 1, 'warmup')", FunctionFactory.TechnicalAnalysis.relativeStrengthIndex(VarRef.of("v"), IntegerLiteral.of(1), IntegerLiteral.of(1), StringLiteral.of("warmup")).toString());
+
+        assertEquals("RELATIVE_STRENGTH_INDEX(/v/, 1)", FunctionFactory.TechnicalAnalysis.relativeStrengthIndex(RegexLiteral.of("v"), IntegerLiteral.of(1)).toString());
+        assertEquals("RELATIVE_STRENGTH_INDEX(/v/, 1, 1)", FunctionFactory.TechnicalAnalysis.relativeStrengthIndex(RegexLiteral.of("v"), IntegerLiteral.of(1), IntegerLiteral.of(1)).toString());
+        assertEquals("RELATIVE_STRENGTH_INDEX(/v/, 1, 1, 'warmup')", FunctionFactory.TechnicalAnalysis.relativeStrengthIndex(RegexLiteral.of("v"), IntegerLiteral.of(1), IntegerLiteral.of(1), StringLiteral.of("warmup")).toString());
+
+        Call c = FunctionFactory.Aggregations.mean(VarRef.of("v"));
+
+        assertEquals("RELATIVE_STRENGTH_INDEX(MEAN(v), 1)", FunctionFactory.TechnicalAnalysis.relativeStrengthIndex(c, IntegerLiteral.of(1)).toString());
+        assertEquals("RELATIVE_STRENGTH_INDEX(MEAN(v), 1, 1)", FunctionFactory.TechnicalAnalysis.relativeStrengthIndex(c, IntegerLiteral.of(1), IntegerLiteral.of(1)).toString());
+        assertEquals("RELATIVE_STRENGTH_INDEX(MEAN(v), 1, 1, 'warmup')", FunctionFactory.TechnicalAnalysis.relativeStrengthIndex(c, IntegerLiteral.of(1), IntegerLiteral.of(1), StringLiteral.of("warmup")).toString());
     }
 
 }
