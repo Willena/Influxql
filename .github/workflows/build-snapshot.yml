@@ -1,4 +1,4 @@
-name: CI
+name: Build-SNAPSHOT
 
 on:
   workflow_dispatch:
