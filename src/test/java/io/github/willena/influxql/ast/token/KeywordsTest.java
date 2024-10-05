@@ -22,7 +22,7 @@ class KeywordsTest {
     }
 
     @Test
-    void getValue() {
-        assertEquals("WHERE", Keywords.WHERE.getValue());
+    void toString() {
+        assertEquals("WHERE", Keywords.WHERE.toString());
     }
 }

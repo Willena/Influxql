@@ -91,7 +91,7 @@ class SelectStatementTest extends GenericStatementTest<SelectStatement> {
                                             .withArguments(
                                                     VarRef.of("COL"),
                                                     IntegerLiteral.of(12),
-                                                    TimeLiteral.of(Instant.parse("2015-08-18T00:00:00Z"))
+                                                    TimestampLiteral.of(Instant.parse("2015-08-18T00:00:00Z"))
                                             )
                                             .build()))
                                     .from(Measurement.measurement("MyMeasurement"))
@@ -106,7 +106,7 @@ class SelectStatementTest extends GenericStatementTest<SelectStatement> {
                                             .withArguments(
                                                     VarRef.of("CO'L"),
                                                     IntegerLiteral.of(12),
-                                                    TimeLiteral.of(Instant.parse("2015-08-18T00:00:00Z"))
+                                                    TimestampLiteral.of(Instant.parse("2015-08-18T00:00:00Z"))
                                             )
                                             .build()))
                                     .from(Measurement.measurement("MyMeasurement"))
@@ -255,7 +255,7 @@ class SelectStatementTest extends GenericStatementTest<SelectStatement> {
                                     .where(
                                             BinaryExpression.and(
                                                     BinaryExpression.eq(VarRef.of("toto"), IntegerLiteral.of(56)),
-                                                    BinaryExpression.lt(VarRef.of("time"), TimeLiteral.of(Instant.parse("2020-05-16T00:00:00.000000153Z")))
+                                                    BinaryExpression.lt(VarRef.of("time"), TimestampLiteral.of(Instant.parse("2020-05-16T00:00:00.000000153Z")))
                                             )
                                     )
                                     .orderBy(SortField.desc("time"))
@@ -273,7 +273,7 @@ class SelectStatementTest extends GenericStatementTest<SelectStatement> {
                                                             BinaryExpression.or(
                                                                     BinaryExpression.and(
                                                                             BinaryExpression.eq(VarRef.of("toto"), IntegerLiteral.of(56)),
-                                                                            BinaryExpression.lt(VarRef.of("time"), TimeLiteral.of(Instant.parse("2020-05-16T00:00:00.000000153Z")))
+                                                                            BinaryExpression.lt(VarRef.of("time"), TimestampLiteral.of(Instant.parse("2020-05-16T00:00:00.000000153Z")))
                                                                     ),
                                                                     Parentheses.of(
                                                                             BinaryExpression.and(
@@ -410,7 +410,7 @@ class SelectStatementTest extends GenericStatementTest<SelectStatement> {
                                                     ),
                                                     BinaryExpression.lte(
                                                             VarRef.of("time"),
-                                                            TimeLiteral.of(Instant.parse("1970-01-01T00:00:00Z"))
+                                                            TimestampLiteral.of(Instant.parse("1970-01-01T00:00:00Z"))
                                                     )
                                             )
                                     )
@@ -436,7 +436,7 @@ class SelectStatementTest extends GenericStatementTest<SelectStatement> {
                                                             ),
                                                             BinaryExpression.lte(
                                                                     VarRef.of("time"),
-                                                                    TimeLiteral.of(Instant.parse("1970-01-01T00:00:00Z"))
+                                                                    TimestampLiteral.of(Instant.parse("1970-01-01T00:00:00Z"))
                                                             )
                                                     )
                                             )

@@ -6,16 +6,31 @@ import java.time.Instant;
 
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 
-public class TimeLiteral implements Literal<Instant> {
+/**
+ * Time / Timestamp literal
+ */
+public class TimestampLiteral implements Literal<Instant> {
     private final Instant value;
 
-    public TimeLiteral(Instant value) {
+    /**
+     * Build timestamp literal form instant
+     *
+     * @param value instant
+     */
+    public TimestampLiteral(Instant value) {
         this.value = value;
         ensureDefined("value", value);
     }
 
-    public static TimeLiteral of(Instant instant) {
-        return new TimeLiteral(instant);
+
+    /**
+     * Build timestamp literal form instant
+     *
+     * @param instant instant
+     * @return a new literal
+     */
+    public static TimestampLiteral of(Instant instant) {
+        return new TimestampLiteral(instant);
     }
 
     @Override

@@ -1,11 +1,15 @@
 package io.github.willena.influxql.ast.field;
 
 import io.github.willena.influxql.ast.Buildable;
+import io.github.willena.influxql.ast.Node;
 
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
-public class SortField {
+/**
+ * A Field used to sort the data.
+ */
+public class SortField implements Node {
     private final String name;
     private final boolean ascending;
 
@@ -15,12 +19,24 @@ public class SortField {
         ensureDefined("name", name);
     }
 
+    /**
+     * Create an ASC based sort field
+     *
+     * @param name the field name
+     * @return a sort field
+     */
     public static SortField asc(String name) {
-        return new Builder().withName(name).withAscending(true).build();
+        return new Builder().field(name).ascending(true).build();
     }
 
+    /**
+     * Create an DESC based sort field
+     *
+     * @param name the field name
+     * @return a sort field
+     */
     public static SortField desc(String name) {
-        return new Builder().withName(name).withAscending(false).build();
+        return new Builder().field(name).ascending(false).build();
     }
 
     @Override
@@ -56,7 +72,7 @@ public class SortField {
          * @param name the {@code name} to set
          * @return a reference to this Builder
          */
-        public Builder withName(String name) {
+        public Builder field(String name) {
             this.name = name;
             return this;
         }
@@ -67,7 +83,7 @@ public class SortField {
          * @param ascending the {@code ascending} to set
          * @return a reference to this Builder
          */
-        public Builder withAscending(boolean ascending) {
+        public Builder ascending(boolean ascending) {
             this.ascending = ascending;
             return this;
         }

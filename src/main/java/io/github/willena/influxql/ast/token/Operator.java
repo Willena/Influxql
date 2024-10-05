@@ -1,5 +1,8 @@
 package io.github.willena.influxql.ast.token;
 
+/**
+ * InfluxQl well known Operators
+ */
 public enum Operator {
     // ADD and the following are InfluxQL Operators
     ADD("+"),      // +
@@ -25,10 +28,20 @@ public enum Operator {
 
     private final String value;
 
+    /**
+     * Create a new Operator given the operator representation
+     *
+     * @param value the representation
+     */
     Operator(String value) {
         this.value = value;
     }
 
+    /**
+     * Get the String representation as InfluxQL for the operator
+     *
+     * @return the String representation
+     */
     @Override
     public String toString() {
         return value;

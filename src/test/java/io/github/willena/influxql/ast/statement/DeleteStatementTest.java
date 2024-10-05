@@ -2,7 +2,7 @@ package io.github.willena.influxql.ast.statement;
 
 import io.github.willena.influxql.ast.expr.BinaryExpression;
 import io.github.willena.influxql.ast.expr.VarRef;
-import io.github.willena.influxql.ast.expr.literal.TimeLiteral;
+import io.github.willena.influxql.ast.expr.literal.TimestampLiteral;
 import io.github.willena.influxql.ast.source.Measurement;
 
 import java.time.ZoneId;
@@ -25,7 +25,7 @@ class DeleteStatementTest extends GenericStatementTest<DeleteStatement> {
                                     .from(Measurement.measurement("cpu"))
                                     .where(BinaryExpression.lt(
                                             VarRef.of("time"),
-                                            TimeLiteral.of(ZonedDateTime.of(2000, 1, 1, 0, 0, 0, 0, ZoneId.of("UTC")).toInstant())
+                                            TimestampLiteral.of(ZonedDateTime.of(2000, 1, 1, 0, 0, 0, 0, ZoneId.of("UTC")).toInstant())
                                     ))
                     )
                     .withExpectedSql("DELETE FROM cpu WHERE time < '2000-01-01T00:00:00Z'")
@@ -36,7 +36,7 @@ class DeleteStatementTest extends GenericStatementTest<DeleteStatement> {
                                     .from(Measurement.measurements(Pattern.compile(".*")))
                                     .where(BinaryExpression.lt(
                                             VarRef.of("time"),
-                                            TimeLiteral.of(ZonedDateTime.of(2000, 1, 1, 0, 0, 0, 0, ZoneId.of("UTC")).toInstant())
+                                            TimestampLiteral.of(ZonedDateTime.of(2000, 1, 1, 0, 0, 0, 0, ZoneId.of("UTC")).toInstant())
                                     ))
                     )
                     .withExpectedSql("DELETE FROM /.*/ WHERE time < '2000-01-01T00:00:00Z'")

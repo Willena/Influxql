@@ -62,12 +62,16 @@ public static void main(String[] args) {
             .from(measurement("meas"))
             .groupBy(sampledBy(Duration.ofDays(1)))
             .build();
-    System.out.println(stm);
+    System.out.println(select);
     // Prints 'SELECT MEAN(field) FROM meas GROUP BY time(1d)'
-
 }
 
 ```
+
+## Note:
+
+The InfluxQL ANTLR-based gramar included in the repo is not fully working.
+A parser for influxql syntax is not yet included.
 
 ## Licence
 

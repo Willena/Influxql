@@ -2,6 +2,7 @@ package io.github.willena.influxql.ast.field;
 
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Expression;
+import io.github.willena.influxql.ast.Node;
 import io.github.willena.influxql.ast.expr.DataType;
 import io.github.willena.influxql.ast.expr.VarRef;
 import io.github.willena.influxql.ast.expr.Wildcard;
@@ -9,7 +10,10 @@ import io.github.willena.influxql.ast.expr.Wildcard;
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
-public class Field {
+/**
+ * Basic selection Field
+ */
+public class Field implements Node {
     private final Expression expression;
     private final String alias;
 
@@ -29,27 +33,60 @@ public class Field {
         return String.format("%s AS %s", str, quoteIdentifier(alias));
     }
 
+    /**
+     * Build a field by name
+     *
+     * @param name field name
+     * @return a field
+     */
     public static Field field(String name) {
         return field(name, null);
     }
 
+    /**
+     * Build  a field with name and datatype
+     *
+     * @param name name
+     * @param type type
+     * @return the Field
+     */
     public static Field field(String name, DataType type) {
         return of(VarRef.of(name, type));
     }
 
+    /**
+     * Create a wildcard field
+     *
+     * @return field
+     */
     public static Field wildcard() {
         return of(Wildcard.wildcard());
     }
 
-
+    /**
+     * Create a field that wildcard all field but not tags
+     *
+     * @return a field
+     */
     public static Field wildcardFields() {
         return of(Wildcard.wildcardFields());
     }
 
+    /**
+     * Create a field that wildcard all tags but not field
+     *
+     * @return a field
+     */
     public static Field wildcardTags() {
         return of(Wildcard.wildcardTags());
     }
 
+    /**
+     * Build a generic field based on an expression
+     *
+     * @param expression the expresion for the field
+     * @return a field
+     */
     public static Field of(Expression expression) {
         return new Builder().withExpr(expression).build();
     }
@@ -61,6 +98,9 @@ public class Field {
         private Expression expression;
         private String alias;
 
+        /**
+         * Create a new builder of Field
+         */
         public Builder() {
         }
 

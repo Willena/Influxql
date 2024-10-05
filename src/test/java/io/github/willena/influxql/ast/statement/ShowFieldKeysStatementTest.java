@@ -17,7 +17,7 @@ class ShowFieldKeysStatementTest extends GenericStatementTest<ShowFieldKeysState
                     .withStatement(
                             new ShowFieldKeysStatement.Builder()
                                     .from(new Measurement.Builder().withName("name").build())
-                                    .orderBy(new SortField.Builder().withName("field").withAscending(false).build())
+                                    .orderBy(new SortField.Builder().field("field").ascending(false).build())
                                     .on("db")
                                     .limit(1)
                                     .offset(10)

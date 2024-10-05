@@ -1,5 +1,8 @@
 package io.github.willena.influxql.ast.expr;
 
+/**
+ * InfluxQL / InfluxDB known types
+ */
 public enum DataType {
     UNKNOWN("unknown"),
     // Float means the data type is a float.
@@ -23,6 +26,11 @@ public enum DataType {
 
     private final String value;
 
+    /**
+     * Create type from its influxQl representation
+     *
+     * @param value representation
+     */
     DataType(String value) {
         this.value = value;
     }

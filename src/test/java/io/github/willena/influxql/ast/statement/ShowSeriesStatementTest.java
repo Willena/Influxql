@@ -23,7 +23,7 @@ class ShowSeriesStatementTest extends GenericStatementTest<ShowSeriesStatement> 
                                     .from(new Measurement.Builder().withName("name").build())
                                     .on("db")
                                     .where(new BinaryExpression(VarRef.of("Field"), IntegerLiteral.of(110), Operator.EQ))
-                                    .orderBy(new SortField.Builder().withName("Field").withAscending(false).build())
+                                    .orderBy(new SortField.Builder().field("Field").ascending(false).build())
                                     .limit(1)
                                     .offset(10)
                     )

@@ -22,7 +22,7 @@ class ShowTagKeysStatementTest extends GenericStatementTest<ShowTagKeysStatement
                             new ShowTagKeysStatement.Builder()
                                     .from(new Measurement.Builder().withName("name").build())
                                     .on("db")
-                                    .orderBy(new SortField.Builder().withName("name").build())
+                                    .orderBy(new SortField.Builder().field("name").build())
                                     .where(new BinaryExpression(VarRef.of("oooo"), IntegerLiteral.of(10), Operator.EQ))
                                     .limit(1)
                                     .sLimit(2)

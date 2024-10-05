@@ -29,7 +29,7 @@ class ShowTagValuesStatementTest extends GenericStatementTest<ShowTagValuesState
                     .withStatement(
                             new ShowTagValuesStatement.Builder()
                                     .from(new Measurement.Builder().withName("name").build())
-                                    .orderBY(new SortField.Builder().withAscending(false).withName("field").build())
+                                    .orderBY(new SortField.Builder().ascending(false).field("field").build())
                                     .on("db")
                                     .where(new BinaryExpression(VarRef.of("kkk"), StringLiteral.of("jkj"), Operator.NEQ))
                                     .limit(1)

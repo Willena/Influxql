@@ -4,6 +4,10 @@ import io.github.willena.influxql.ast.Buildable;
 
 import java.time.Duration;
 
+/**
+ * Helper class to build retention policy object;
+ * This one is not in the original AST but allow deduplication of member and easier builder based usage
+ */
 public class RetentionPolicy {
     private final Duration retentionPolicyDuration;
     private final Integer retentionPolicyReplication;
@@ -17,18 +21,38 @@ public class RetentionPolicy {
         retentionPolicyShardGroupDuration = builder.retentionPolicyShardGroupDuration;
     }
 
+    /**
+     * Get the RP duration
+     *
+     * @return the duration
+     */
     public Duration getRetentionPolicyDuration() {
         return retentionPolicyDuration;
     }
 
+    /**
+     * Get the RP replication
+     *
+     * @return the replication
+     */
     public Integer getRetentionPolicyReplication() {
         return retentionPolicyReplication;
     }
 
+    /**
+     * Get the RP name
+     *
+     * @return the name
+     */
     public String getRetentionPolicyName() {
         return retentionPolicyName;
     }
 
+    /**
+     * Get the RP shard duration
+     *
+     * @return the shard duration
+     */
     public Duration getRetentionPolicyShardGroupDuration() {
         return retentionPolicyShardGroupDuration;
     }

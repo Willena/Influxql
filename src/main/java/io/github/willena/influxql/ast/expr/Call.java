@@ -7,6 +7,9 @@ import java.util.List;
 
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 
+/**
+ * Function / Call expression
+ */
 public class Call implements Expression {
     private final String name;
     private final StringJoiningList<Expression> args;
@@ -18,10 +21,20 @@ public class Call implements Expression {
         ensureDefined("args", args);
     }
 
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Gets args.
+     *
+     * @return the args
+     */
     public StringJoiningList<Expression> getArgs() {
         return args;
     }
@@ -31,23 +44,47 @@ public class Call implements Expression {
         return name + "(" + args + ")";
     }
 
+    /**
+     * The type Builder.
+     */
     public static final class Builder {
         private String name;
         private StringJoiningList<Expression> args;
 
+        /**
+         * Instantiates a new Builder.
+         */
         public Builder() {
         }
 
+        /**
+         * Function name builder.
+         *
+         * @param name the name
+         * @return the builder
+         */
         public Builder function(String name) {
             this.name = name;
             return this;
         }
 
+        /**
+         * With arguments builder.
+         *
+         * @param args the args list
+         * @return the builder
+         */
         public Builder withArguments(StringJoiningList<Expression> args) {
             this.args = args;
             return this;
         }
 
+        /**
+         * With arguments builder.
+         *
+         * @param args the args
+         * @return the builder
+         */
         public Builder withArguments(Expression... args) {
             if (this.args == null) {
                 this.args = new StringJoiningList<>();
@@ -56,6 +93,11 @@ public class Call implements Expression {
             return this;
         }
 
+        /**
+         * Build call.
+         *
+         * @return the call
+         */
         public Call build() {
             return new Call(this);
         }

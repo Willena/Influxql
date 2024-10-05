@@ -8,23 +8,42 @@ import java.util.concurrent.TimeUnit;
 import static io.github.willena.influxql.ast.utils.ParserUtils.isIdentChar;
 import static io.github.willena.influxql.ast.utils.ParserUtils.isIdentFirstChar;
 
+/**
+ * Utility class for String and conversion utils
+ */
 public final class Utils {
 
     private Utils() {
     }
 
-
+    /**
+     * Escape the given string to be influxql compatible and safe.
+     *
+     * @param s the string to escape
+     * @return the escaped string
+     */
     public static String escapeString(String s) {
         return s.replaceAll("\n", "\\\\n")
                 .replaceAll("\\\\", "\\\\\\\\")
                 .replaceAll("'", "\\\\'");
     }
 
-    // QuoteString returns a quoted string.
+    /**
+     * Quote a string escaping it if required to be a safe InfluxQL String
+     *
+     * @param s the string
+     * @return the quoted and escaped string
+     */
     public static String quoteString(String s) {
         return "'" + escapeString(s) + "'";
     }
 
+    /**
+     * Format a JavaDuration to an InfluxQL duration String. Only integer of the most précise unit available will be generated
+     *
+     * @param duration the duration
+     * @return an InfluxQL duration String
+     */
     public static String formatDuration(Duration duration) {
         long secs = duration.getSeconds();
         long nanos = duration.getNano();
@@ -84,7 +103,12 @@ public final class Utils {
     }
 
 
-    // QuoteIdent returns a quoted identifier from multiple bare identifiers.
+    /**
+     * Returns a quoted identifier if required, from multiple bare identifiers.
+     *
+     * @param segments identifier segments
+     * @return a quoted identifier (if required)
+     */
     public static String quoteIdentifier(String... segments) {
         StringBuilder buf = new StringBuilder();
 
@@ -113,19 +137,36 @@ public final class Utils {
     }
 
 
+    /**
+     * Ensure the given value is not null and not blank
+     *
+     * @param name  the value name (used to fill the exception)
+     * @param value the current value
+     */
     public static void ensureDefined(String name, String value) {
         if (value == null || value.isBlank()) {
             throw new IllegalArgumentException(name + " must be defined");
         }
     }
 
+    /**
+     * Ensure the given value is not null
+     *
+     * @param name  the value name (used to full the exception)
+     * @param value the current value
+     */
     public static void ensureDefined(String name, Object value) {
         if (value == null) {
             throw new IllegalArgumentException(name + " must be defined");
         }
     }
 
-    // IdentNeedsQuotes returns true if the ident string given would require quotes.
+    /**
+     * Checks if the current identifier required quotes
+     *
+     * @param ident identifier
+     * @return true if quotes are needed
+     */
     private static boolean identNeedsQuotes(String ident) {
         // check if this identifier is a keyword
         if (Keywords.hasValue(ident)) {
@@ -141,6 +182,12 @@ public final class Utils {
         return false;
     }
 
+    /**
+     * Escape char in identifier to make it safe
+     *
+     * @param ident identifier
+     * @return safe escaped identifier
+     */
     private static String escapeIdentifierChar(String ident) {
         // 	// Quote Ident replacer.
         //	qiReplacer = strings.NewReplacer("\n", `\n`, `\`, `\\`, `"`, `\"`)

@@ -7,6 +7,9 @@ import java.util.regex.Pattern;
 
 import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
+/**
+ * An influxQL measurement in FROM clauses
+ */
 public class Measurement implements Source {
     private final String database;
     private final String retentionPolicy;
@@ -32,24 +35,52 @@ public class Measurement implements Source {
 
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public Pattern getRegex() {
-        return regex;
-    }
-
+    /**
+     * Build a measurement given its name
+     *
+     * @param name name
+     * @return the {@link Measurement}
+     */
     public static Measurement measurement(String name) {
         return new Builder().withName(name).build();
     }
 
+    /**
+     * Build a measurement given a regex pattern
+     *
+     * @param pattern the regex pattern
+     * @return the {@link Measurement}
+     */
     public static Measurement measurements(Pattern pattern) {
         return new Builder().withRegex(pattern).build();
     }
 
+    /**
+     * Build a measurement given a regex pattern
+     *
+     * @param pattern the regex pattern
+     * @return the {@link Measurement}
+     */
     public static Measurement measurements(String pattern) {
         return new Builder().withRegex(Pattern.compile(pattern)).build();
+    }
+
+    /**
+     * Get name
+     *
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Get the regex
+     *
+     * @return the regex
+     */
+    public Pattern getRegex() {
+        return regex;
     }
 
     @Override
@@ -91,6 +122,9 @@ public class Measurement implements Source {
         private Pattern regex;
         private String systemIterator;
 
+        /**
+         * Create new Builder
+         */
         public Builder() {
         }
 
@@ -138,6 +172,12 @@ public class Measurement implements Source {
             return this;
         }
 
+        /**
+         * Sets the system iterator
+         *
+         * @param systemIterator it
+         * @return the builder
+         */
         public Builder withSystemIterator(String systemIterator) {
             this.systemIterator = systemIterator;
             return this;

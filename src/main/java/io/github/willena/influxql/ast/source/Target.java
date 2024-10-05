@@ -1,15 +1,31 @@
 package io.github.willena.influxql.ast.source;
 
+import io.github.willena.influxql.ast.Node;
+
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 
-public class Target {
+/**
+ * Destination Measurement when using SELECT INTO statements
+ */
+public class Target implements Node {
     private final Measurement measurement;
 
+    /**
+     * Build a new Target
+     *
+     * @param measurement measurement to use
+     */
     public Target(Measurement measurement) {
         this.measurement = measurement;
         ensureDefined("measurement", measurement);
     }
 
+    /**
+     * Build a {@link Target} from {@link Measurement}
+     *
+     * @param measurement the measurement
+     * @return the {@link Target}
+     */
     public static Target of(Measurement measurement) {
         return new Target(measurement);
     }
