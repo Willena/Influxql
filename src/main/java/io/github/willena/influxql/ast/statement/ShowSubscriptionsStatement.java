@@ -20,8 +20,7 @@ package io.github.willena.influxql.ast.statement;
 import io.github.willena.influxql.ast.Statement;
 
 public class ShowSubscriptionsStatement implements Statement {
-    public ShowSubscriptionsStatement() {
-    }
+    public ShowSubscriptionsStatement() {}
 
     public static ShowSubscriptionsStatement showSubscriptions() {
         return new ShowSubscriptionsStatement();

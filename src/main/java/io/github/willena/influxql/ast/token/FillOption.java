@@ -20,31 +20,23 @@ package io.github.willena.influxql.ast.token;
 import io.github.willena.influxql.ast.Literal;
 import io.github.willena.influxql.ast.expr.literal.NumericLiteral;
 
-/**
- * Fill options
- */
+/** Fill options */
 public enum FillOption {
-    /**
-     * Null fil option
-     */
+    /** Null fil option */
     NULL {
         @Override
         public String getSqlForValue(Literal<?> value) {
             return "fill(null)";
         }
     },
-    /**
-     * None fill option
-     */
+    /** None fill option */
     NONE {
         @Override
         public String getSqlForValue(Literal<?> value) {
             return "fill(none)";
         }
     },
-    /**
-     * Number fill option
-     */
+    /** Number fill option */
     NUMBER {
         @Override
         public String getSqlForValue(Literal<?> value) {
@@ -55,18 +47,14 @@ public enum FillOption {
             return "fill(" + value + ")";
         }
     },
-    /**
-     * Previous fill option
-     */
+    /** Previous fill option */
     PREVIOUS {
         @Override
         public String getSqlForValue(Literal<?> value) {
             return "fill(previous)";
         }
     },
-    /**
-     * Linear fill option
-     */
+    /** Linear fill option */
     LINEAR {
         @Override
         public String getSqlForValue(Literal<?> value) {

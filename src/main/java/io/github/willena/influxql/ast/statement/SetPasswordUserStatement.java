@@ -17,10 +17,10 @@
 
 package io.github.willena.influxql.ast.statement;
 
+import static io.github.willena.influxql.ast.utils.Utils.*;
+
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Statement;
-
-import static io.github.willena.influxql.ast.utils.Utils.*;
 
 public class SetPasswordUserStatement implements Statement {
     private final String password;
@@ -58,8 +58,7 @@ public class SetPasswordUserStatement implements Statement {
         private String name;
         private boolean redacted;
 
-        public Builder() {
-        }
+        public Builder() {}
 
         public Builder password(String password) {
             this.password = password;

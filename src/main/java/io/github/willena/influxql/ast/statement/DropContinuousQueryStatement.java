@@ -17,11 +17,11 @@
 
 package io.github.willena.influxql.ast.statement;
 
-import io.github.willena.influxql.ast.Buildable;
-import io.github.willena.influxql.ast.Statement;
-
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
+
+import io.github.willena.influxql.ast.Buildable;
+import io.github.willena.influxql.ast.Statement;
 
 public class DropContinuousQueryStatement implements Statement {
 
@@ -37,15 +37,17 @@ public class DropContinuousQueryStatement implements Statement {
 
     @Override
     public String toString() {
-        return "DROP CONTINUOUS QUERY " + quoteIdentifier(name) + " ON " + quoteIdentifier(database);
+        return "DROP CONTINUOUS QUERY "
+                + quoteIdentifier(name)
+                + " ON "
+                + quoteIdentifier(database);
     }
 
     public static final class Builder implements Buildable<DropContinuousQueryStatement> {
         private String name;
         private String database;
 
-        public Builder() {
-        }
+        public Builder() {}
 
         public Builder query(String name) {
             this.name = name;

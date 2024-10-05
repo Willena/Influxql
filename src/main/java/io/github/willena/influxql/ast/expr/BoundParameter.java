@@ -17,13 +17,11 @@
 
 package io.github.willena.influxql.ast.expr;
 
-import io.github.willena.influxql.ast.Expression;
-
 import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
-/**
- * Bound parameter expression
- */
+import io.github.willena.influxql.ast.Expression;
+
+/** Bound parameter expression */
 public class BoundParameter implements Expression {
     private final String name;
 

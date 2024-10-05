@@ -17,14 +17,12 @@
 
 package io.github.willena.influxql.ast.expr;
 
+import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
+
 import io.github.willena.influxql.ast.Expression;
 import io.github.willena.influxql.ast.token.Operator;
 
-import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
-
-/**
- * Binary expression
- */
+/** Binary expression */
 public class BinaryExpression implements Expression {
     private final Expression left;
     private final Expression right;
@@ -33,9 +31,9 @@ public class BinaryExpression implements Expression {
     /**
      * Create a new Binary expression with LHS and RHS and operator
      *
-     * @param left  left expression
+     * @param left left expression
      * @param right right expression
-     * @param op    operator between
+     * @param op operator between
      */
     public BinaryExpression(Expression left, Expression right, Operator op) {
         this.left = left;
@@ -49,9 +47,9 @@ public class BinaryExpression implements Expression {
     /**
      * Generic helper method for binaryExpression
      *
-     * @param left  LHS
+     * @param left LHS
      * @param right RHS
-     * @param op    operator
+     * @param op operator
      * @return a binaryExpression
      */
     public static BinaryExpression of(Expression left, Expression right, Operator op) {
@@ -61,7 +59,7 @@ public class BinaryExpression implements Expression {
     /**
      * Add binary expression
      *
-     * @param left  LHS
+     * @param left LHS
      * @param right RHS
      */
     public static BinaryExpression add(Expression left, Expression right) {
@@ -71,7 +69,7 @@ public class BinaryExpression implements Expression {
     /**
      * Sub binary expression
      *
-     * @param left  LHS
+     * @param left LHS
      * @param right RHS
      */
     public static BinaryExpression sub(Expression left, Expression right) {
@@ -81,7 +79,7 @@ public class BinaryExpression implements Expression {
     /**
      * Multiplicative binary expression
      *
-     * @param left  LHS
+     * @param left LHS
      * @param right RHS
      */
     public static BinaryExpression mul(Expression left, Expression right) {
@@ -91,7 +89,7 @@ public class BinaryExpression implements Expression {
     /**
      * Divide binary expression
      *
-     * @param left  LHS
+     * @param left LHS
      * @param right RHS
      */
     public static BinaryExpression div(Expression left, Expression right) {
@@ -101,7 +99,7 @@ public class BinaryExpression implements Expression {
     /**
      * modulus binary expression
      *
-     * @param left  LHS
+     * @param left LHS
      * @param right RHS
      */
     public static BinaryExpression mod(Expression left, Expression right) {
@@ -111,7 +109,7 @@ public class BinaryExpression implements Expression {
     /**
      * bit or binary expression
      *
-     * @param left  LHS
+     * @param left LHS
      * @param right RHS
      */
     public static BinaryExpression bitwiseOr(Expression left, Expression right) {
@@ -121,7 +119,7 @@ public class BinaryExpression implements Expression {
     /**
      * bit and binary expression
      *
-     * @param left  LHS
+     * @param left LHS
      * @param right RHS
      */
     public static BinaryExpression bitwiseAnd(Expression left, Expression right) {
@@ -131,7 +129,7 @@ public class BinaryExpression implements Expression {
     /**
      * bit xor binary expression
      *
-     * @param left  LHS
+     * @param left LHS
      * @param right RHS
      */
     public static BinaryExpression bitwiseXor(Expression left, Expression right) {
@@ -141,7 +139,7 @@ public class BinaryExpression implements Expression {
     /**
      * and binary expression
      *
-     * @param left  LHS
+     * @param left LHS
      * @param right RHS
      */
     public static BinaryExpression and(Expression left, Expression right) {
@@ -151,7 +149,7 @@ public class BinaryExpression implements Expression {
     /**
      * or expression
      *
-     * @param left  LHS
+     * @param left LHS
      * @param right RHS
      */
     public static BinaryExpression or(Expression left, Expression right) {
@@ -161,7 +159,7 @@ public class BinaryExpression implements Expression {
     /**
      * equals regex binary expression
      *
-     * @param left  LHS
+     * @param left LHS
      * @param right RHS
      */
     public static BinaryExpression eqRegex(Expression left, Expression right) {
@@ -171,7 +169,7 @@ public class BinaryExpression implements Expression {
     /**
      * not equals regex binary expression
      *
-     * @param left  LHS
+     * @param left LHS
      * @param right RHS
      */
     public static BinaryExpression neqRegex(Expression left, Expression right) {
@@ -181,7 +179,7 @@ public class BinaryExpression implements Expression {
     /**
      * equal binary expression
      *
-     * @param left  LHS
+     * @param left LHS
      * @param right RHS
      */
     public static BinaryExpression eq(Expression left, Expression right) {
@@ -191,7 +189,7 @@ public class BinaryExpression implements Expression {
     /**
      * non equal binary expression
      *
-     * @param left  LHS
+     * @param left LHS
      * @param right RHS
      */
     public static BinaryExpression neq(Expression left, Expression right) {
@@ -201,7 +199,7 @@ public class BinaryExpression implements Expression {
     /**
      * greater than binary expression
      *
-     * @param left  LHS
+     * @param left LHS
      * @param right RHS
      */
     public static BinaryExpression gt(Expression left, Expression right) {
@@ -211,7 +209,7 @@ public class BinaryExpression implements Expression {
     /**
      * lesser than binary expression
      *
-     * @param left  LHS
+     * @param left LHS
      * @param right RHS
      */
     public static BinaryExpression lt(Expression left, Expression right) {
@@ -221,7 +219,7 @@ public class BinaryExpression implements Expression {
     /**
      * greater equals binary expression
      *
-     * @param left  LHS
+     * @param left LHS
      * @param right RHS
      */
     public static BinaryExpression gte(Expression left, Expression right) {
@@ -231,7 +229,7 @@ public class BinaryExpression implements Expression {
     /**
      * less than equal binary expression
      *
-     * @param left  LHS
+     * @param left LHS
      * @param right RHS
      */
     public static BinaryExpression lte(Expression left, Expression right) {
@@ -243,4 +241,3 @@ public class BinaryExpression implements Expression {
         return left.toString() + " " + op.toString() + " " + right.toString();
     }
 }
-

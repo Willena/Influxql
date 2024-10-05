@@ -17,9 +17,9 @@
 
 package io.github.willena.influxql.ast.field;
 
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
 
 class FieldsTest {
 
@@ -29,6 +29,4 @@ class FieldsTest {
         assertEquals(0, Fields.of().size());
         assertEquals(1, Fields.of(Field.field("name")).size());
     }
-
-
 }

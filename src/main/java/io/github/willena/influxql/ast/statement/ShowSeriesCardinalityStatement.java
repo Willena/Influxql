@@ -17,6 +17,8 @@
 
 package io.github.willena.influxql.ast.statement;
 
+import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
+
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Expression;
 import io.github.willena.influxql.ast.Source;
@@ -24,10 +26,7 @@ import io.github.willena.influxql.ast.Statement;
 import io.github.willena.influxql.ast.expr.Dimension;
 import io.github.willena.influxql.ast.expr.Dimensions;
 import io.github.willena.influxql.ast.source.Sources;
-
 import java.util.List;
-
-import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
 public class ShowSeriesCardinalityStatement implements Statement {
     private final String database;
@@ -85,9 +84,7 @@ public class ShowSeriesCardinalityStatement implements Statement {
         return buf.toString();
     }
 
-    /**
-     * {@code ShowSeriesCardinalityStatement} builder static inner class.
-     */
+    /** {@code ShowSeriesCardinalityStatement} builder static inner class. */
     public static final class Builder implements Buildable<ShowSeriesCardinalityStatement> {
         private String database;
         private boolean exact;
@@ -97,11 +94,11 @@ public class ShowSeriesCardinalityStatement implements Statement {
         private int limit;
         private int offset;
 
-        public Builder() {
-        }
+        public Builder() {}
 
         /**
-         * Sets the {@code database} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code database} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param database the {@code database} to set
          * @return a reference to this Builder
@@ -127,7 +124,8 @@ public class ShowSeriesCardinalityStatement implements Statement {
         }
 
         /**
-         * Sets the {@code sources} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code sources} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param sources the {@code sources} to set
          * @return a reference to this Builder
@@ -147,7 +145,8 @@ public class ShowSeriesCardinalityStatement implements Statement {
         }
 
         /**
-         * Sets the {@code condition} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code condition} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param condition the {@code condition} to set
          * @return a reference to this Builder
@@ -158,7 +157,8 @@ public class ShowSeriesCardinalityStatement implements Statement {
         }
 
         /**
-         * Sets the {@code dimensions} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code dimensions} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param dimensions the {@code dimensions} to set
          * @return a reference to this Builder
@@ -200,9 +200,11 @@ public class ShowSeriesCardinalityStatement implements Statement {
         }
 
         /**
-         * Returns a {@code ShowSeriesCardinalityStatement} built from the parameters previously set.
+         * Returns a {@code ShowSeriesCardinalityStatement} built from the parameters previously
+         * set.
          *
-         * @return a {@code ShowSeriesCardinalityStatement} built with parameters of this {@code ShowSeriesCardinalityStatement.Builder}
+         * @return a {@code ShowSeriesCardinalityStatement} built with parameters of this {@code
+         *     ShowSeriesCardinalityStatement.Builder}
          */
         public ShowSeriesCardinalityStatement build() {
             return new ShowSeriesCardinalityStatement(this);

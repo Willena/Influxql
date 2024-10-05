@@ -17,12 +17,11 @@
 
 package io.github.willena.influxql.ast.statement;
 
+import static io.github.willena.influxql.ast.utils.Utils.*;
+
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Statement;
-
 import java.time.Duration;
-
-import static io.github.willena.influxql.ast.utils.Utils.*;
 
 public class CreateRetentionPolicyStatement implements Statement {
     private final String name;
@@ -67,9 +66,7 @@ public class CreateRetentionPolicyStatement implements Statement {
         return buf.toString();
     }
 
-    /**
-     * {@code CreateRetentionPolicyStatement} builder static inner class.
-     */
+    /** {@code CreateRetentionPolicyStatement} builder static inner class. */
     public static final class Builder implements Buildable<CreateRetentionPolicyStatement> {
         private String name;
         private String database;
@@ -78,8 +75,7 @@ public class CreateRetentionPolicyStatement implements Statement {
         private boolean isDefault;
         private Duration shardGroupDuration;
 
-        public Builder() {
-        }
+        public Builder() {}
 
         /**
          * Sets the {@code name} and returns a reference to this Builder enabling method chaining.
@@ -93,7 +89,8 @@ public class CreateRetentionPolicyStatement implements Statement {
         }
 
         /**
-         * Sets the {@code database} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code database} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param database the {@code database} to set
          * @return a reference to this Builder
@@ -104,7 +101,8 @@ public class CreateRetentionPolicyStatement implements Statement {
         }
 
         /**
-         * Sets the {@code duration} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code duration} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param duration the {@code duration} to set
          * @return a reference to this Builder
@@ -115,7 +113,8 @@ public class CreateRetentionPolicyStatement implements Statement {
         }
 
         /**
-         * Sets the {@code replication} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code replication} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param replication the {@code replication} to set
          * @return a reference to this Builder
@@ -126,7 +125,8 @@ public class CreateRetentionPolicyStatement implements Statement {
         }
 
         /**
-         * Sets the {@code isDefault} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code isDefault} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param isDefault the {@code isDefault} to set
          * @return a reference to this Builder
@@ -137,7 +137,8 @@ public class CreateRetentionPolicyStatement implements Statement {
         }
 
         /**
-         * Sets the {@code shardGroupDuration} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code shardGroupDuration} and returns a reference to this Builder enabling
+         * method chaining.
          *
          * @param shardGroupDuration the {@code shardGroupDuration} to set
          * @return a reference to this Builder
@@ -148,9 +149,11 @@ public class CreateRetentionPolicyStatement implements Statement {
         }
 
         /**
-         * Returns a {@code CreateRetentionPolicyStatement} built from the parameters previously set.
+         * Returns a {@code CreateRetentionPolicyStatement} built from the parameters previously
+         * set.
          *
-         * @return a {@code CreateRetentionPolicyStatement} built with parameters of this {@code CreateRetentionPolicyStatement.Builder}
+         * @return a {@code CreateRetentionPolicyStatement} built with parameters of this {@code
+         *     CreateRetentionPolicyStatement.Builder}
          */
         public CreateRetentionPolicyStatement build() {
             return new CreateRetentionPolicyStatement(this);

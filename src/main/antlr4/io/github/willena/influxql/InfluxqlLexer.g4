@@ -17,9 +17,9 @@
 
 lexer grammar InfluxqlLexer;
 
-options {
-    caseInsensitive = true;
-}
+//options {
+//    caseInsensitive = true;
+//}
 
 SCOL      : ';';
 DOT       : '.';

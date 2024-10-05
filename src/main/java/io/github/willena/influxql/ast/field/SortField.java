@@ -17,15 +17,13 @@
 
 package io.github.willena.influxql.ast.field;
 
-import io.github.willena.influxql.ast.Buildable;
-import io.github.willena.influxql.ast.Node;
-
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
-/**
- * A Field used to sort the data.
- */
+import io.github.willena.influxql.ast.Buildable;
+import io.github.willena.influxql.ast.Node;
+
+/** A Field used to sort the data. */
 public class SortField implements Node {
     private final String name;
     private final boolean ascending;
@@ -73,15 +71,12 @@ public class SortField implements Node {
         return buf.toString();
     }
 
-    /**
-     * {@code SortField} builder static inner class.
-     */
+    /** {@code SortField} builder static inner class. */
     public static final class Builder implements Buildable<SortField> {
         private String name;
         private boolean ascending;
 
-        public Builder() {
-        }
+        public Builder() {}
 
         /**
          * Sets the {@code name} and returns a reference to this Builder enabling method chaining.
@@ -95,7 +90,8 @@ public class SortField implements Node {
         }
 
         /**
-         * Sets the {@code ascending} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code ascending} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param ascending the {@code ascending} to set
          * @return a reference to this Builder

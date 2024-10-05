@@ -17,14 +17,12 @@
 
 package io.github.willena.influxql.ast.expr;
 
-import io.github.willena.influxql.ast.Expression;
-
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
-/**
- * Reference to variable of name of field / alias
- */
+import io.github.willena.influxql.ast.Expression;
+
+/** Reference to variable of name of field / alias */
 public class VarRef implements Expression {
     private final String value;
     private final DataType type;
@@ -32,7 +30,7 @@ public class VarRef implements Expression {
     /**
      * Build a varRef from name and type
      *
-     * @param type  type
+     * @param type type
      * @param value value
      */
     public VarRef(String value, DataType type) {

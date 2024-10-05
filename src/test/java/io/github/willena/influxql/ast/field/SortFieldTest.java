@@ -17,9 +17,9 @@
 
 package io.github.willena.influxql.ast.field;
 
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
 
 class SortFieldTest {
     @Test

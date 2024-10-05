@@ -17,11 +17,11 @@
 
 package io.github.willena.influxql.ast.statement;
 
-import io.github.willena.influxql.ast.Buildable;
-import io.github.willena.influxql.ast.Statement;
-
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
+
+import io.github.willena.influxql.ast.Buildable;
+import io.github.willena.influxql.ast.Statement;
 
 public class KillQueryStatement implements Statement {
     private final Long queryId;
@@ -45,18 +45,16 @@ public class KillQueryStatement implements Statement {
         return buf.toString();
     }
 
-    /**
-     * {@code KillQueryStatement} builder static inner class.
-     */
+    /** {@code KillQueryStatement} builder static inner class. */
     public static final class Builder implements Buildable<KillQueryStatement> {
         private Long queryId;
         private String host;
 
-        public Builder() {
-        }
+        public Builder() {}
 
         /**
-         * Sets the {@code queryId} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code queryId} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param queryId the {@code queryId} to set
          * @return a reference to this Builder
@@ -80,7 +78,8 @@ public class KillQueryStatement implements Statement {
         /**
          * Returns a {@code KillQueryStatement} built from the parameters previously set.
          *
-         * @return a {@code KillQueryStatement} built with parameters of this {@code KillQueryStatement.Builder}
+         * @return a {@code KillQueryStatement} built with parameters of this {@code
+         *     KillQueryStatement.Builder}
          */
         public KillQueryStatement build() {
             return new KillQueryStatement(this);

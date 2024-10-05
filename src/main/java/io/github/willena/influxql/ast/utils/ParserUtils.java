@@ -18,12 +18,11 @@
 package io.github.willena.influxql.ast.utils;
 
 /**
- * Parser utils. Mainly used to detect the kind of string being parsed.
- * When building queries, it is used to find if quoting is required or not.
+ * Parser utils. Mainly used to detect the kind of string being parsed. When building queries, it is
+ * used to find if quoting is required or not.
  */
 public final class ParserUtils {
-    private ParserUtils() {
-    }
+    private ParserUtils() {}
 
     /**
      * Check char is a digit
@@ -56,8 +55,8 @@ public final class ParserUtils {
     }
 
     /**
-     * Similar to isIdentChar but check the first char.
-     * returns true if the rune can be used as the first char in an unquoted identifer.
+     * Similar to isIdentChar but check the first char. returns true if the rune can be used as the
+     * first char in an unquoted identifer.
      *
      * @param ch char to test
      * @return true if is a valid identifier first char

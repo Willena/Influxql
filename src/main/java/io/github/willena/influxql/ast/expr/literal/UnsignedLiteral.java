@@ -19,10 +19,7 @@ package io.github.willena.influxql.ast.expr.literal;
 
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 
-/**
- * Unsigned literal:
- * This is the same as an integer literal
- */
+/** Unsigned literal: This is the same as an integer literal */
 public class UnsignedLiteral extends IntegerLiteral {
     /**
      * Build unsigned literal

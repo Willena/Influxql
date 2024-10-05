@@ -17,13 +17,11 @@
 
 package io.github.willena.influxql.ast.expr;
 
-import io.github.willena.influxql.ast.Expression;
-
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 
-/**
- * Distinct expression
- */
+import io.github.willena.influxql.ast.Expression;
+
+/** Distinct expression */
 public class Distinct implements Expression {
     private final String value;
 

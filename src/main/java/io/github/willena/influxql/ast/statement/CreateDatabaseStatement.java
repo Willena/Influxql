@@ -17,13 +17,12 @@
 
 package io.github.willena.influxql.ast.statement;
 
+import static io.github.willena.influxql.ast.utils.Utils.*;
+
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Statement;
 import io.github.willena.influxql.ast.extra.RetentionPolicy;
-
 import java.time.Duration;
-
-import static io.github.willena.influxql.ast.utils.Utils.*;
 
 public class CreateDatabaseStatement implements Statement {
     private final String name;
@@ -51,11 +50,13 @@ public class CreateDatabaseStatement implements Statement {
                 buf.append(" REPLICATION ");
                 buf.append(retentionPolicy.getRetentionPolicyReplication());
             }
-            if (retentionPolicy.getRetentionPolicyShardGroupDuration().compareTo(Duration.ZERO) > 0) {
+            if (retentionPolicy.getRetentionPolicyShardGroupDuration().compareTo(Duration.ZERO)
+                    > 0) {
                 buf.append(" SHARD DURATION ");
                 buf.append(formatDuration(retentionPolicy.getRetentionPolicyShardGroupDuration()));
             }
-            if (retentionPolicy.getRetentionPolicyName() != null && !retentionPolicy.getRetentionPolicyName().isBlank()) {
+            if (retentionPolicy.getRetentionPolicyName() != null
+                    && !retentionPolicy.getRetentionPolicyName().isBlank()) {
                 buf.append(" NAME ");
                 buf.append(quoteIdentifier(retentionPolicy.getRetentionPolicyName()));
             }
@@ -63,15 +64,12 @@ public class CreateDatabaseStatement implements Statement {
         return buf.toString();
     }
 
-    /**
-     * {@code CreateDatabaseStatement} builder static inner class.
-     */
+    /** {@code CreateDatabaseStatement} builder static inner class. */
     public static final class Builder implements Buildable<CreateDatabaseStatement> {
         private String name;
         private RetentionPolicy retentionPolicy;
 
-        public Builder() {
-        }
+        public Builder() {}
 
         /**
          * Sets the {@code name} and returns a reference to this Builder enabling method chaining.
@@ -85,7 +83,8 @@ public class CreateDatabaseStatement implements Statement {
         }
 
         /**
-         * Sets the {@code retentionPolicyCreate} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code retentionPolicyCreate} and returns a reference to this Builder enabling
+         * method chaining.
          *
          * @param retentionPolicy the {@code retentionPolicyCreate} to set
          * @return a reference to this Builder
@@ -98,7 +97,8 @@ public class CreateDatabaseStatement implements Statement {
         /**
          * Returns a {@code CreateDatabaseStatement} built from the parameters previously set.
          *
-         * @return a {@code CreateDatabaseStatement} built with parameters of this {@code CreateDatabaseStatement.Builder}
+         * @return a {@code CreateDatabaseStatement} built with parameters of this {@code
+         *     CreateDatabaseStatement.Builder}
          */
         public CreateDatabaseStatement build() {
             return new CreateDatabaseStatement(this);

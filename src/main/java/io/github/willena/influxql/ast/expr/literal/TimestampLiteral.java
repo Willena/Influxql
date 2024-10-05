@@ -17,15 +17,12 @@
 
 package io.github.willena.influxql.ast.expr.literal;
 
-import io.github.willena.influxql.ast.Literal;
-
-import java.time.Instant;
-
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 
-/**
- * Time / Timestamp literal
- */
+import io.github.willena.influxql.ast.Literal;
+import java.time.Instant;
+
+/** Time / Timestamp literal */
 public class TimestampLiteral implements Literal<Instant> {
     private final Instant value;
 
@@ -38,7 +35,6 @@ public class TimestampLiteral implements Literal<Instant> {
         this.value = value;
         ensureDefined("value", value);
     }
-
 
     /**
      * Build timestamp literal form instant

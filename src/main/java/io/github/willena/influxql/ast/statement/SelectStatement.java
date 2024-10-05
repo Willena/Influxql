@@ -17,6 +17,8 @@
 
 package io.github.willena.influxql.ast.statement;
 
+import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
+
 import io.github.willena.influxql.ast.*;
 import io.github.willena.influxql.ast.expr.Dimension;
 import io.github.willena.influxql.ast.expr.Dimensions;
@@ -27,12 +29,9 @@ import io.github.willena.influxql.ast.field.SortFields;
 import io.github.willena.influxql.ast.source.Sources;
 import io.github.willena.influxql.ast.source.Target;
 import io.github.willena.influxql.ast.token.FillOption;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.TimeZone;
-
-import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 
 public class SelectStatement implements Statement {
     private final Fields fields;
@@ -116,9 +115,7 @@ public class SelectStatement implements Statement {
         return buf.toString();
     }
 
-    /**
-     * {@code SelectStatement} builder static inner class.
-     */
+    /** {@code SelectStatement} builder static inner class. */
     public static final class Builder implements Buildable<SelectStatement> {
         private Fields fields;
         private Target target;
@@ -134,8 +131,7 @@ public class SelectStatement implements Statement {
         private Literal<?> fillValue;
         private TimeZone location;
 
-        public Builder() {
-        }
+        public Builder() {}
 
         /**
          * Sets the {@code fields} and returns a reference to this Builder enabling method chaining.
@@ -169,7 +165,8 @@ public class SelectStatement implements Statement {
         }
 
         /**
-         * Sets the {@code dimensions} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code dimensions} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param dimensions the {@code dimensions} to set
          * @return a reference to this Builder
@@ -189,7 +186,8 @@ public class SelectStatement implements Statement {
         }
 
         /**
-         * Sets the {@code sources} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code sources} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param sources the {@code sources} to set
          * @return a reference to this Builder
@@ -208,9 +206,9 @@ public class SelectStatement implements Statement {
             return this;
         }
 
-
         /**
-         * Sets the {@code condition} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code condition} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param condition the {@code condition} to set
          * @return a reference to this Builder
@@ -221,7 +219,8 @@ public class SelectStatement implements Statement {
         }
 
         /**
-         * Sets the {@code sortFields} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code sortFields} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param sortFields the {@code sortFields} to set
          * @return a reference to this Builder
@@ -275,12 +274,13 @@ public class SelectStatement implements Statement {
 
         public Builder fill(FillOption fill, Literal<?> value) {
             this.fill = fill;
-            this.fillValue = value;
+            this.fillValue(value);
             return this;
         }
 
         /**
-         * Sets the {@code fillValue} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code fillValue} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param fillValue the {@code fillValue} to set
          * @return a reference to this Builder
@@ -290,9 +290,9 @@ public class SelectStatement implements Statement {
             return this;
         }
 
-
         /**
-         * Sets the {@code location} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code location} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param location the {@code location} to set
          * @return a reference to this Builder
@@ -315,7 +315,8 @@ public class SelectStatement implements Statement {
         /**
          * Returns a {@code SelectStatement} built from the parameters previously set.
          *
-         * @return a {@code SelectStatement} built with parameters of this {@code SelectStatement.Builder}
+         * @return a {@code SelectStatement} built with parameters of this {@code
+         *     SelectStatement.Builder}
          */
         public SelectStatement build() {
             return new SelectStatement(this);

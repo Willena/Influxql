@@ -17,16 +17,13 @@
 
 package io.github.willena.influxql.ast.expr.literal;
 
-import io.github.willena.influxql.ast.Literal;
-
-import java.time.Duration;
-
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 import static io.github.willena.influxql.ast.utils.Utils.formatDuration;
 
-/**
- * Duration literal
- */
+import io.github.willena.influxql.ast.Literal;
+import java.time.Duration;
+
+/** Duration literal */
 public class DurationLiteral implements Literal<Duration> {
     private final Duration value;
 

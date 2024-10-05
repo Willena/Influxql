@@ -17,16 +17,13 @@
 
 package io.github.willena.influxql.ast.source;
 
-import io.github.willena.influxql.ast.Buildable;
-import io.github.willena.influxql.ast.Source;
-
-import java.util.regex.Pattern;
-
 import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
-/**
- * An influxQL measurement in FROM clauses
- */
+import io.github.willena.influxql.ast.Buildable;
+import io.github.willena.influxql.ast.Source;
+import java.util.regex.Pattern;
+
+/** An influxQL measurement in FROM clauses */
 public class Measurement implements Source {
     private final String database;
     private final String retentionPolicy;
@@ -41,15 +38,18 @@ public class Measurement implements Source {
         regex = builder.regex;
         systemIterator = builder.systemIterator;
 
-        if ((name == null || name.isBlank()) && (regex == null || regex.pattern().isBlank()) && (systemIterator == null || systemIterator.isBlank())) {
+        if ((name == null || name.isBlank())
+                && (regex == null || regex.pattern().isBlank())
+                && (systemIterator == null || systemIterator.isBlank())) {
             throw new IllegalArgumentException("name, regex, systemIterator are required");
         }
 
-
-        if ((name != null && systemIterator != null) || (regex != null && name != null) || (regex != null && systemIterator != null)) {
-            throw new IllegalArgumentException("name, regex, systemIterator are mutually exclusive");
+        if ((name != null && systemIterator != null)
+                || (regex != null && name != null)
+                || (regex != null && systemIterator != null)) {
+            throw new IllegalArgumentException(
+                    "name, regex, systemIterator are mutually exclusive");
         }
-
     }
 
     /**
@@ -112,11 +112,13 @@ public class Measurement implements Source {
             buf.append(quoteIdentifier(retentionPolicy));
         }
 
-        if ((database != null && !database.isBlank()) || (retentionPolicy != null && !retentionPolicy.isBlank())) {
+        if ((database != null && !database.isBlank())
+                || (retentionPolicy != null && !retentionPolicy.isBlank())) {
             buf.append(".");
         }
 
-        if ((name != null && !name.isBlank()) && (systemIterator == null || systemIterator.isBlank())) {
+        if ((name != null && !name.isBlank())
+                && (systemIterator == null || systemIterator.isBlank())) {
             buf.append(quoteIdentifier(name));
         } else if (systemIterator != null && !systemIterator.isBlank()) {
             buf.append(quoteIdentifier(systemIterator));
@@ -129,9 +131,7 @@ public class Measurement implements Source {
         return buf.toString();
     }
 
-    /**
-     * {@code Measurement} builder static inner class.
-     */
+    /** {@code Measurement} builder static inner class. */
     public static final class Builder implements Buildable<Measurement> {
         private String database;
         private String retentionPolicy;
@@ -139,14 +139,12 @@ public class Measurement implements Source {
         private Pattern regex;
         private String systemIterator;
 
-        /**
-         * Create new Builder
-         */
-        public Builder() {
-        }
+        /** Create new Builder */
+        public Builder() {}
 
         /**
-         * Sets the {@code database} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code database} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param database the {@code database} to set
          * @return a reference to this Builder
@@ -157,7 +155,8 @@ public class Measurement implements Source {
         }
 
         /**
-         * Sets the {@code retentionPolicy} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code retentionPolicy} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param retentionPolicy the {@code retentionPolicy} to set
          * @return a reference to this Builder

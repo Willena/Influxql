@@ -17,17 +17,14 @@
 
 package io.github.willena.influxql.ast.expr;
 
+import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
+
 import io.github.willena.influxql.ast.Expression;
 import io.github.willena.influxql.ast.Node;
 import io.github.willena.influxql.ast.expr.literal.DurationLiteral;
-
 import java.time.Duration;
 
-import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
-
-/**
- * A grouping dimensions
- */
+/** A grouping dimensions */
 public class Dimension implements Node {
     private final Expression expression;
 
@@ -62,14 +59,17 @@ public class Dimension implements Node {
     }
 
     /**
-     * Special dimension for time based groups
-     * This is equivalent to time(duration)
+     * Special dimension for time based groups This is equivalent to time(duration)
      *
      * @param duration duration group
      * @return a dimension
      */
     public static Dimension sampledBy(Duration duration) {
-        return Dimension.of(new Call.Builder().function("time").withArguments(DurationLiteral.of(duration)).build());
+        return Dimension.of(
+                new Call.Builder()
+                        .function("time")
+                        .withArguments(DurationLiteral.of(duration))
+                        .build());
     }
 
     @Override

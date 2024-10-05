@@ -17,13 +17,11 @@
 
 package io.github.willena.influxql.ast.source;
 
-import io.github.willena.influxql.ast.Node;
-
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 
-/**
- * Destination Measurement when using SELECT INTO statements
- */
+import io.github.willena.influxql.ast.Node;
+
+/** Destination Measurement when using SELECT INTO statements */
 public class Target implements Node {
     private final Measurement measurement;
 

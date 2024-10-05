@@ -17,17 +17,16 @@
 
 package io.github.willena.influxql.ast.statement;
 
+import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
+import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
+
 import io.github.willena.influxql.ast.*;
 import io.github.willena.influxql.ast.expr.literal.StringLiteral;
 import io.github.willena.influxql.ast.field.SortField;
 import io.github.willena.influxql.ast.field.SortFields;
 import io.github.willena.influxql.ast.source.Sources;
 import io.github.willena.influxql.ast.token.Operator;
-
 import java.util.List;
-
-import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
-import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
 public class ShowTagValuesStatement implements Statement {
     private final String database;
@@ -92,9 +91,7 @@ public class ShowTagValuesStatement implements Statement {
         return buf.toString();
     }
 
-    /**
-     * {@code ShowTagValuesStatement} builder static inner class.
-     */
+    /** {@code ShowTagValuesStatement} builder static inner class. */
     public static final class Builder implements Buildable<ShowTagValuesStatement> {
         private String database;
         private Sources sources;
@@ -105,11 +102,11 @@ public class ShowTagValuesStatement implements Statement {
         private int limit;
         private int offset;
 
-        public Builder() {
-        }
+        public Builder() {}
 
         /**
-         * Sets the {@code database} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code database} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param database the {@code database} to set
          * @return a reference to this Builder
@@ -120,7 +117,8 @@ public class ShowTagValuesStatement implements Statement {
         }
 
         /**
-         * Sets the {@code sources} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code sources} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param sources the {@code sources} to set
          * @return a reference to this Builder
@@ -140,7 +138,8 @@ public class ShowTagValuesStatement implements Statement {
         }
 
         /**
-         * Sets the {@code tagKeyExpr} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code tagKeyExpr} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param tagKeyExpr the {@code tagKeyExpr} to set
          * @return a reference to this Builder
@@ -152,7 +151,8 @@ public class ShowTagValuesStatement implements Statement {
         }
 
         /**
-         * Sets the {@code condition} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code condition} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param condition the {@code condition} to set
          * @return a reference to this Builder
@@ -163,7 +163,8 @@ public class ShowTagValuesStatement implements Statement {
         }
 
         /**
-         * Sets the {@code sortFields} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code sortFields} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param sortFields the {@code sortFields} to set
          * @return a reference to this Builder
@@ -207,7 +208,8 @@ public class ShowTagValuesStatement implements Statement {
         /**
          * Returns a {@code ShowTagValuesStatement} built from the parameters previously set.
          *
-         * @return a {@code ShowTagValuesStatement} built with parameters of this {@code ShowTagValuesStatement.Builder}
+         * @return a {@code ShowTagValuesStatement} built with parameters of this {@code
+         *     ShowTagValuesStatement.Builder}
          */
         public ShowTagValuesStatement build() {
             return new ShowTagValuesStatement(this);

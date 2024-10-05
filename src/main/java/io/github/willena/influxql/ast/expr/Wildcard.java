@@ -19,12 +19,9 @@ package io.github.willena.influxql.ast.expr;
 
 import io.github.willena.influxql.ast.Expression;
 
-/**
- * Wildcard expressions
- */
+/** Wildcard expressions */
 public class Wildcard implements Expression {
-    private Wildcard() {
-    }
+    private Wildcard() {}
 
     /**
      * Simple wildcard
@@ -58,9 +55,7 @@ public class Wildcard implements Expression {
         return "*";
     }
 
-    /**
-     * Field only wildcard
-     */
+    /** Field only wildcard */
     public static class WildcardField extends Wildcard {
         private WildcardField() {
             super();
@@ -72,9 +67,7 @@ public class Wildcard implements Expression {
         }
     }
 
-    /**
-     * Tags only wildcard
-     */
+    /** Tags only wildcard */
     public static class WildcardTag extends Wildcard {
         private WildcardTag() {
             super();

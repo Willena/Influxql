@@ -23,9 +23,9 @@ grammar InfluxqlParser;
 
 //lexer grammar InfluxqlLexer;
 
-options {
-    caseInsensitive = true;
-}
+//options {
+//    caseInsensitive = true;
+//}
 
 SCOL      : ';';
 DOT       : '.';
@@ -140,9 +140,9 @@ DURATION_LITERAL: INTERGER_LITERAL+ DURATION_UNIT;
 DURATION_UNIT : 'u' | 'µ' | 'ms' | 's' | 'm' | 'h' | 'd' | 'w';
 BOOL_LITERAL: 'TRUE' | 'FALSE';
 REGULAR_EXPRESSION_LITERAL: '/' UNICODE_CHAR* '/';
-DATE_TIME_LITERAL: DATE_LITERAL 'T' TIME_LITERAL;
-fragment DATE_LITERAL: YEAR '-' MONTH '-' DAY;
 fragment TIME_LITERAL: HOUR ':' MINUTES_SECOND ':' MINUTES_SECOND ('.' DIGIT DIGIT DIGIT DIGIT DIGIT DIGIT)? 'Z';
+fragment DATE_LITERAL: YEAR '-' MONTH '-' DAY;
+DATE_TIME_LITERAL: DATE_LITERAL 'T' TIME_LITERAL;
 
 fragment MINUTES_SECOND: [0-5] [0-9];
 fragment HOUR: ('0' [0-9]) | ('1' [0-9]) | ('2' [0-3]);

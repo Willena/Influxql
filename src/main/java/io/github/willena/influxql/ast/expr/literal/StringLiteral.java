@@ -17,14 +17,12 @@
 
 package io.github.willena.influxql.ast.expr.literal;
 
-import io.github.willena.influxql.ast.Literal;
-
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 import static io.github.willena.influxql.ast.utils.Utils.quoteString;
 
-/**
- * Simple string literal
- */
+import io.github.willena.influxql.ast.Literal;
+
+/** Simple string literal */
 public class StringLiteral implements Literal<String> {
     private final String value;
 

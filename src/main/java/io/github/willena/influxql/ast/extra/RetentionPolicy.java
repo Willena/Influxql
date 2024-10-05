@@ -18,12 +18,11 @@
 package io.github.willena.influxql.ast.extra;
 
 import io.github.willena.influxql.ast.Buildable;
-
 import java.time.Duration;
 
 /**
- * Helper class to build retention policy object;
- * This one is not in the original AST but allow deduplication of member and easier builder based usage
+ * Helper class to build retention policy object; This one is not in the original AST but allow
+ * deduplication of member and easier builder based usage
  */
 public class RetentionPolicy {
     private final Duration retentionPolicyDuration;
@@ -74,20 +73,18 @@ public class RetentionPolicy {
         return retentionPolicyShardGroupDuration;
     }
 
-    /**
-     * {@code RetentionPolicy} builder static inner class.
-     */
+    /** {@code RetentionPolicy} builder static inner class. */
     public static final class Builder implements Buildable<RetentionPolicy> {
         private Duration retentionPolicyDuration;
         private Integer retentionPolicyReplication;
         private String retentionPolicyName;
         private Duration retentionPolicyShardGroupDuration;
 
-        public Builder() {
-        }
+        public Builder() {}
 
         /**
-         * Sets the {@code retentionPolicyDuration} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code retentionPolicyDuration} and returns a reference to this Builder enabling
+         * method chaining.
          *
          * @param retentionPolicyDuration the {@code retentionPolicyDuration} to set
          * @return a reference to this Builder
@@ -98,7 +95,8 @@ public class RetentionPolicy {
         }
 
         /**
-         * Sets the {@code retentionPolicyReplication} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code retentionPolicyReplication} and returns a reference to this Builder
+         * enabling method chaining.
          *
          * @param retentionPolicyReplication the {@code retentionPolicyReplication} to set
          * @return a reference to this Builder
@@ -109,7 +107,8 @@ public class RetentionPolicy {
         }
 
         /**
-         * Sets the {@code retentionPolicyName} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code retentionPolicyName} and returns a reference to this Builder enabling
+         * method chaining.
          *
          * @param retentionPolicyName the {@code retentionPolicyName} to set
          * @return a reference to this Builder
@@ -120,9 +119,11 @@ public class RetentionPolicy {
         }
 
         /**
-         * Sets the {@code retentionPolicyShardGroupDuration} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code retentionPolicyShardGroupDuration} and returns a reference to this
+         * Builder enabling method chaining.
          *
-         * @param retentionPolicyShardGroupDuration the {@code retentionPolicyShardGroupDuration} to set
+         * @param retentionPolicyShardGroupDuration the {@code retentionPolicyShardGroupDuration} to
+         *     set
          * @return a reference to this Builder
          */
         public Builder shardDuration(Duration retentionPolicyShardGroupDuration) {
@@ -133,7 +134,8 @@ public class RetentionPolicy {
         /**
          * Returns a {@code RetentionPolicy} built from the parameters previously set.
          *
-         * @return a {@code RetentionPolicy} built with parameters of this {@code RetentionPolicy.Builder}
+         * @return a {@code RetentionPolicy} built with parameters of this {@code
+         *     RetentionPolicy.Builder}
          */
         public RetentionPolicy build() {
             return new RetentionPolicy(this);

@@ -22,7 +22,6 @@ import io.github.willena.influxql.ast.Expression;
 import io.github.willena.influxql.ast.Source;
 import io.github.willena.influxql.ast.Statement;
 import io.github.willena.influxql.ast.source.Sources;
-
 import java.util.List;
 
 public class DropSeriesStatement implements Statement {
@@ -51,18 +50,16 @@ public class DropSeriesStatement implements Statement {
         return buf.toString();
     }
 
-    /**
-     * {@code DropSeriesStatement} builder static inner class.
-     */
+    /** {@code DropSeriesStatement} builder static inner class. */
     public static final class Builder implements Buildable<DropSeriesStatement> {
         private Sources sources;
         private Expression condition;
 
-        public Builder() {
-        }
+        public Builder() {}
 
         /**
-         * Sets the {@code sources} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code sources} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param sources the {@code sources} to set
          * @return a reference to this Builder
@@ -82,7 +79,8 @@ public class DropSeriesStatement implements Statement {
         }
 
         /**
-         * Sets the {@code condition} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code condition} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param condition the {@code condition} to set
          * @return a reference to this Builder
@@ -95,7 +93,8 @@ public class DropSeriesStatement implements Statement {
         /**
          * Returns a {@code DropSeriesStatement} built from the parameters previously set.
          *
-         * @return a {@code DropSeriesStatement} built with parameters of this {@code DropSeriesStatement.Builder}
+         * @return a {@code DropSeriesStatement} built with parameters of this {@code
+         *     DropSeriesStatement.Builder}
          */
         public DropSeriesStatement build() {
             return new DropSeriesStatement(this);

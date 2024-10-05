@@ -17,12 +17,11 @@
 
 package io.github.willena.influxql.ast.statement;
 
+import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
+
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Statement;
-
 import java.util.function.Function;
-
-import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 
 public class ExplainStatement implements Statement {
     private final SelectStatement statement;
@@ -50,19 +49,17 @@ public class ExplainStatement implements Statement {
         return buf.toString();
     }
 
-    /**
-     * {@code ExplainStatement} builder static inner class.
-     */
+    /** {@code ExplainStatement} builder static inner class. */
     public static final class Builder implements Buildable<ExplainStatement> {
         private SelectStatement statement;
         private boolean analyze;
         private boolean verbose;
 
-        public Builder() {
-        }
+        public Builder() {}
 
         /**
-         * Sets the {@code statement} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code statement} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param statement the {@code statement} to set
          * @return a reference to this Builder
@@ -77,7 +74,8 @@ public class ExplainStatement implements Statement {
         }
 
         /**
-         * Sets the {@code analyze} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code analyze} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param analyze the {@code analyze} to set
          * @return a reference to this Builder
@@ -92,7 +90,8 @@ public class ExplainStatement implements Statement {
         }
 
         /**
-         * Sets the {@code verbose} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code verbose} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param verbose the {@code verbose} to set
          * @return a reference to this Builder
@@ -109,7 +108,8 @@ public class ExplainStatement implements Statement {
         /**
          * Returns a {@code ExplainStatement} built from the parameters previously set.
          *
-         * @return a {@code ExplainStatement} built with parameters of this {@code ExplainStatement.Builder}
+         * @return a {@code ExplainStatement} built with parameters of this {@code
+         *     ExplainStatement.Builder}
          */
         public ExplainStatement build() {
             return new ExplainStatement(this);

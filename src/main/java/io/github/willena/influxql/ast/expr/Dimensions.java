@@ -18,12 +18,9 @@
 package io.github.willena.influxql.ast.expr;
 
 import io.github.willena.influxql.ast.utils.StringJoiningList;
-
 import java.util.List;
 
-/**
- * Dimensions list
- */
+/** Dimensions list */
 public class Dimensions extends StringJoiningList<Dimension> {
     /**
      * Create using initialized list
@@ -34,9 +31,7 @@ public class Dimensions extends StringJoiningList<Dimension> {
         super(list);
     }
 
-    /**
-     * Create empty list
-     */
+    /** Create empty list */
     public Dimensions() {
         super();
     }

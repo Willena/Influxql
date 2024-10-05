@@ -17,17 +17,16 @@
 
 package io.github.willena.influxql.ast.statement;
 
+import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
+import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
+
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Statement;
 import io.github.willena.influxql.ast.token.SubscriptionMode;
 import io.github.willena.influxql.ast.utils.Utils;
-
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
-import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
 public class CreateSubscriptionStatement implements Statement {
     private final String name;
@@ -52,21 +51,19 @@ public class CreateSubscriptionStatement implements Statement {
 
     @Override
     public String toString() {
-        return "CREATE SUBSCRIPTION " +
-                quoteIdentifier(name) +
-                " ON " +
-                quoteIdentifier(database) +
-                "." +
-                quoteIdentifier(retentionPolicy) +
-                " DESTINATIONS " +
-                mode +
-                " " +
-                destinations.stream().map(Utils::quoteString).collect(Collectors.joining(", "));
+        return "CREATE SUBSCRIPTION "
+                + quoteIdentifier(name)
+                + " ON "
+                + quoteIdentifier(database)
+                + "."
+                + quoteIdentifier(retentionPolicy)
+                + " DESTINATIONS "
+                + mode
+                + " "
+                + destinations.stream().map(Utils::quoteString).collect(Collectors.joining(", "));
     }
 
-    /**
-     * {@code CreateSubscriptionStatement} builder static inner class.
-     */
+    /** {@code CreateSubscriptionStatement} builder static inner class. */
     public static final class Builder implements Buildable<CreateSubscriptionStatement> {
         private String name;
         private String database;
@@ -74,8 +71,7 @@ public class CreateSubscriptionStatement implements Statement {
         private List<String> destinations;
         private SubscriptionMode mode;
 
-        public Builder() {
-        }
+        public Builder() {}
 
         /**
          * Sets the {@code name} and returns a reference to this Builder enabling method chaining.
@@ -89,7 +85,8 @@ public class CreateSubscriptionStatement implements Statement {
         }
 
         /**
-         * Sets the {@code database} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code database} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param database the {@code database} to set
          * @return a reference to this Builder
@@ -100,7 +97,8 @@ public class CreateSubscriptionStatement implements Statement {
         }
 
         /**
-         * Sets the {@code retentionPolicy} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code retentionPolicy} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param retentionPolicy the {@code retentionPolicy} to set
          * @return a reference to this Builder
@@ -111,7 +109,8 @@ public class CreateSubscriptionStatement implements Statement {
         }
 
         /**
-         * Sets the {@code destinations} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code destinations} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param destinations the {@code destinations} to set
          * @return a reference to this Builder
@@ -144,7 +143,8 @@ public class CreateSubscriptionStatement implements Statement {
         /**
          * Returns a {@code CreateSubscriptionStatement} built from the parameters previously set.
          *
-         * @return a {@code CreateSubscriptionStatement} built with parameters of this {@code CreateSubscriptionStatement.Builder}
+         * @return a {@code CreateSubscriptionStatement} built with parameters of this {@code
+         *     CreateSubscriptionStatement.Builder}
          */
         public CreateSubscriptionStatement build() {
             return new CreateSubscriptionStatement(this);

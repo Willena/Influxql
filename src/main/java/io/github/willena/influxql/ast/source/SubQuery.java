@@ -17,16 +17,13 @@
 
 package io.github.willena.influxql.ast.source;
 
-import io.github.willena.influxql.ast.Source;
-import io.github.willena.influxql.ast.statement.SelectStatement;
-
-import java.util.function.Function;
-
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 
-/**
- * Define a subquery containing a single {@link SelectStatement}
- */
+import io.github.willena.influxql.ast.Source;
+import io.github.willena.influxql.ast.statement.SelectStatement;
+import java.util.function.Function;
+
+/** Define a subquery containing a single {@link SelectStatement} */
 public class SubQuery implements Source {
     private final SelectStatement statement;
 
@@ -56,7 +53,8 @@ public class SubQuery implements Source {
      * @param statement select statement builder
      * @return the {@link SubQuery}
      */
-    public static SubQuery of(Function<SelectStatement.Builder, SelectStatement.Builder> statement) {
+    public static SubQuery of(
+            Function<SelectStatement.Builder, SelectStatement.Builder> statement) {
         return new SubQuery(statement.apply(new SelectStatement.Builder()).build());
     }
 

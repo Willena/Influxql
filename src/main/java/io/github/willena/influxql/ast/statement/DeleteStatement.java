@@ -17,12 +17,12 @@
 
 package io.github.willena.influxql.ast.statement;
 
+import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
+
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Expression;
 import io.github.willena.influxql.ast.Source;
 import io.github.willena.influxql.ast.Statement;
-
-import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 
 public class DeleteStatement implements Statement {
     private final Source source;
@@ -47,15 +47,12 @@ public class DeleteStatement implements Statement {
         return buf.toString();
     }
 
-    /**
-     * {@code DeleteStatement} builder static inner class.
-     */
+    /** {@code DeleteStatement} builder static inner class. */
     public static final class Builder implements Buildable<DeleteStatement> {
         private Source source;
         private Expression condition;
 
-        public Builder() {
-        }
+        public Builder() {}
 
         /**
          * Sets the {@code source} and returns a reference to this Builder enabling method chaining.
@@ -69,7 +66,8 @@ public class DeleteStatement implements Statement {
         }
 
         /**
-         * Sets the {@code condition} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code condition} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param condition the {@code condition} to set
          * @return a reference to this Builder
@@ -82,7 +80,8 @@ public class DeleteStatement implements Statement {
         /**
          * Returns a {@code DeleteStatement} built from the parameters previously set.
          *
-         * @return a {@code DeleteStatement} built with parameters of this {@code DeleteStatement.Builder}
+         * @return a {@code DeleteStatement} built with parameters of this {@code
+         *     DeleteStatement.Builder}
          */
         public DeleteStatement build() {
             return new DeleteStatement(this);

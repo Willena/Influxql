@@ -17,21 +17,17 @@
 
 package io.github.willena.influxql.ast.utils;
 
-import io.github.willena.influxql.ast.token.Keywords;
-
-import java.time.Duration;
-import java.util.concurrent.TimeUnit;
-
 import static io.github.willena.influxql.ast.utils.ParserUtils.isIdentChar;
 import static io.github.willena.influxql.ast.utils.ParserUtils.isIdentFirstChar;
 
-/**
- * Utility class for String and conversion utils
- */
+import io.github.willena.influxql.ast.token.Keywords;
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
+
+/** Utility class for String and conversion utils */
 public final class Utils {
 
-    private Utils() {
-    }
+    private Utils() {}
 
     /**
      * Escape the given string to be influxql compatible and safe.
@@ -40,9 +36,7 @@ public final class Utils {
      * @return the escaped string
      */
     public static String escapeString(String s) {
-        return s.replaceAll("\n", "\\\\n")
-                .replaceAll("\\\\", "\\\\\\\\")
-                .replaceAll("'", "\\\\'");
+        return s.replaceAll("\n", "\\\\n").replaceAll("\\\\", "\\\\\\\\").replaceAll("'", "\\\\'");
     }
 
     /**
@@ -56,7 +50,8 @@ public final class Utils {
     }
 
     /**
-     * Format a JavaDuration to an InfluxQL duration String. Only integer of the most précise unit available will be generated
+     * Format a JavaDuration to an InfluxQL duration String. Only integer of the most précise unit
+     * available will be generated
      *
      * @param duration the duration
      * @return an InfluxQL duration String
@@ -119,7 +114,6 @@ public final class Utils {
         }
     }
 
-
     /**
      * Returns a quoted identifier if required, from multiple bare identifiers.
      *
@@ -131,9 +125,13 @@ public final class Utils {
 
         for (int i = 0; i < segments.length; i++) {
             var segment = segments[i];
-            var needQuote = identNeedsQuotes(segment) ||
-                    ((i < segments.length - 1) && !segment.isEmpty()) || // not last segment && not ""
-                    ((i == 0 || i == segments.length - 1) && segment.isEmpty()); // the first or last segment and an empty string
+            var needQuote =
+                    identNeedsQuotes(segment)
+                            || ((i < segments.length - 1) && !segment.isEmpty())
+                            || // not last segment && not ""
+                            ((i == 0 || i == segments.length - 1)
+                                    && segment.isEmpty()); // the first or last segment and an empty
+            // string
 
             if (needQuote) {
                 buf.append('"');
@@ -153,11 +151,10 @@ public final class Utils {
         return buf.toString();
     }
 
-
     /**
      * Ensure the given value is not null and not blank
      *
-     * @param name  the value name (used to fill the exception)
+     * @param name the value name (used to fill the exception)
      * @param value the current value
      */
     public static void ensureDefined(String name, String value) {
@@ -169,7 +166,7 @@ public final class Utils {
     /**
      * Ensure the given value is not null
      *
-     * @param name  the value name (used to full the exception)
+     * @param name the value name (used to full the exception)
      * @param value the current value
      */
     public static void ensureDefined(String name, Object value) {
@@ -211,6 +208,5 @@ public final class Utils {
         return ident.replaceAll("\n", "\\\\n")
                 .replaceAll("\\\\", "\\\\\\\\")
                 .replaceAll("\"", "\\\\\"");
-
     }
 }

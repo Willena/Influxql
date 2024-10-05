@@ -21,10 +21,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Top level {@link Node} is a {@link Query}
- * Each query can contain multiple statements
- */
+/** Top level {@link Node} is a {@link Query} Each query can contain multiple statements */
 public class Query implements Node {
     private final List<Statement> statements;
 
@@ -40,7 +37,7 @@ public class Query implements Node {
     /**
      * Build a query based on provided statements (at least one)
      *
-     * @param statement  a statement
+     * @param statement a statement
      * @param statements other statements
      * @return a query with provided statements
      */

@@ -17,12 +17,11 @@
 
 package io.github.willena.influxql.ast.expr.literal;
 
-import org.junit.jupiter.api.Test;
-
-import java.time.Duration;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.time.Duration;
+import org.junit.jupiter.api.Test;
 
 class DurationLiteralTest {
     @Test

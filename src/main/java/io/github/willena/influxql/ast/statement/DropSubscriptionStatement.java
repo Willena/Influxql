@@ -17,17 +17,16 @@
 
 package io.github.willena.influxql.ast.statement;
 
-import io.github.willena.influxql.ast.Buildable;
-import io.github.willena.influxql.ast.Statement;
-
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
+
+import io.github.willena.influxql.ast.Buildable;
+import io.github.willena.influxql.ast.Statement;
 
 public class DropSubscriptionStatement implements Statement {
     private final String name;
     private final String database;
     private final String retentionPolicy;
-
 
     private DropSubscriptionStatement(Builder builder) {
         name = builder.name;
@@ -41,7 +40,12 @@ public class DropSubscriptionStatement implements Statement {
 
     @Override
     public String toString() {
-        return "DROP SUBSCRIPTION " + quoteIdentifier(name) + " ON " + quoteIdentifier(database) + "." + quoteIdentifier(retentionPolicy);
+        return "DROP SUBSCRIPTION "
+                + quoteIdentifier(name)
+                + " ON "
+                + quoteIdentifier(database)
+                + "."
+                + quoteIdentifier(retentionPolicy);
     }
 
     public static final class Builder implements Buildable<DropSubscriptionStatement> {
@@ -49,8 +53,7 @@ public class DropSubscriptionStatement implements Statement {
         private String database;
         private String retentionPolicy;
 
-        public Builder() {
-        }
+        public Builder() {}
 
         public Builder subscription(String name) {
             this.name = name;

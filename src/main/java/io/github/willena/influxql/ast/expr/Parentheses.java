@@ -17,13 +17,11 @@
 
 package io.github.willena.influxql.ast.expr;
 
-import io.github.willena.influxql.ast.Expression;
-
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 
-/**
- * Parenthesis expression
- */
+import io.github.willena.influxql.ast.Expression;
+
+/** Parenthesis expression */
 public class Parentheses implements Expression {
     private final Expression expression;
 

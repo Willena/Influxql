@@ -17,10 +17,10 @@
 
 package io.github.willena.influxql.ast.statement;
 
+import static io.github.willena.influxql.ast.utils.Utils.*;
+
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Statement;
-
-import static io.github.willena.influxql.ast.utils.Utils.*;
 
 public class CreateUserStatement implements Statement {
     private final String name;
@@ -49,16 +49,13 @@ public class CreateUserStatement implements Statement {
         return buf.toString();
     }
 
-    /**
-     * {@code CreateUserStatement} builder static inner class.
-     */
+    /** {@code CreateUserStatement} builder static inner class. */
     public static final class Builder implements Buildable<CreateUserStatement> {
         private String name;
         private String password;
         private boolean admin;
 
-        public Builder() {
-        }
+        public Builder() {}
 
         /**
          * Sets the {@code name} and returns a reference to this Builder enabling method chaining.
@@ -72,7 +69,8 @@ public class CreateUserStatement implements Statement {
         }
 
         /**
-         * Sets the {@code password} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code password} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param password the {@code password} to set
          * @return a reference to this Builder
@@ -100,7 +98,8 @@ public class CreateUserStatement implements Statement {
         /**
          * Returns a {@code CreateUserStatement} built from the parameters previously set.
          *
-         * @return a {@code CreateUserStatement} built with parameters of this {@code CreateUserStatement.Builder}
+         * @return a {@code CreateUserStatement} built with parameters of this {@code
+         *     CreateUserStatement.Builder}
          */
         public CreateUserStatement build() {
             return new CreateUserStatement(this);

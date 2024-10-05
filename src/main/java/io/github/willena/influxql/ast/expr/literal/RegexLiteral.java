@@ -17,15 +17,12 @@
 
 package io.github.willena.influxql.ast.expr.literal;
 
-import io.github.willena.influxql.ast.Literal;
-
-import java.util.regex.Pattern;
-
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 
-/**
- * Regex literal
- */
+import io.github.willena.influxql.ast.Literal;
+import java.util.regex.Pattern;
+
+/** Regex literal */
 public class RegexLiteral implements Literal<Pattern> {
     private final Pattern pattern;
 
@@ -40,7 +37,7 @@ public class RegexLiteral implements Literal<Pattern> {
     }
 
     /**
-     * Create regex literal using a  string pattern
+     * Create regex literal using a string pattern
      *
      * @param regex regex
      * @return RegexLiteral
@@ -66,8 +63,6 @@ public class RegexLiteral implements Literal<Pattern> {
 
     @Override
     public String toString() {
-        return "/" +
-                pattern.toString().replaceAll("/", "\\\\/") +
-                "/";
+        return "/" + pattern.toString().replaceAll("/", "\\\\/") + "/";
     }
 }

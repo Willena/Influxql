@@ -19,9 +19,7 @@ package io.github.willena.influxql.ast.expr.literal;
 
 import io.github.willena.influxql.ast.Literal;
 
-/**
- * Boolean literal
- */
+/** Boolean literal */
 public class BooleanLiteral implements Literal<Boolean> {
 
     private final boolean value;

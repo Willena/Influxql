@@ -17,10 +17,10 @@
 
 package io.github.willena.influxql.ast.statement;
 
+import static io.github.willena.influxql.ast.utils.Utils.quoteString;
+
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Statement;
-
-import static io.github.willena.influxql.ast.utils.Utils.quoteString;
 
 public class ShowStatsStatement implements Statement {
     private final String module;
@@ -43,8 +43,7 @@ public class ShowStatsStatement implements Statement {
     public static final class Builder implements Buildable<ShowStatsStatement> {
         private String module;
 
-        public Builder() {
-        }
+        public Builder() {}
 
         public Builder for_(String module) {
             this.module = module;

@@ -17,21 +17,21 @@
 
 package io.github.willena.influxql.ast.extra;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.Duration;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 class RetentionPolicyTest {
     @Test
     void retentionPolicy() {
-        RetentionPolicy rp = new RetentionPolicy.Builder()
-                .duration(Duration.ofSeconds(1))
-                .withRetentionPolicyName("test")
-                .shardDuration(Duration.ofHours(1))
-                .replication(10)
-                .build();
+        RetentionPolicy rp =
+                new RetentionPolicy.Builder()
+                        .duration(Duration.ofSeconds(1))
+                        .withRetentionPolicyName("test")
+                        .shardDuration(Duration.ofHours(1))
+                        .replication(10)
+                        .build();
 
         assertEquals("test", rp.getRetentionPolicyName());
         assertEquals(Duration.ofSeconds(1), rp.getRetentionPolicyDuration());

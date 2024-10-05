@@ -17,6 +17,9 @@
 
 package io.github.willena.influxql.ast.field;
 
+import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
+import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
+
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Expression;
 import io.github.willena.influxql.ast.Node;
@@ -24,12 +27,7 @@ import io.github.willena.influxql.ast.expr.DataType;
 import io.github.willena.influxql.ast.expr.VarRef;
 import io.github.willena.influxql.ast.expr.Wildcard;
 
-import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
-import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
-
-/**
- * Basic selection Field
- */
+/** Basic selection Field */
 public class Field implements Node {
     private final Expression expression;
     private final String alias;
@@ -61,7 +59,7 @@ public class Field implements Node {
     }
 
     /**
-     * Build  a field with name and datatype
+     * Build a field with name and datatype
      *
      * @param name name
      * @param type type
@@ -108,18 +106,13 @@ public class Field implements Node {
         return new Builder().withExpr(expression).build();
     }
 
-    /**
-     * {@code Field} builder static inner class.
-     */
+    /** {@code Field} builder static inner class. */
     public static final class Builder implements Buildable<Field> {
         private Expression expression;
         private String alias;
 
-        /**
-         * Create a new builder of Field
-         */
-        public Builder() {
-        }
+        /** Create a new builder of Field */
+        public Builder() {}
 
         /**
          * Sets the {@code expr} and returns a reference to this Builder enabling method chaining.

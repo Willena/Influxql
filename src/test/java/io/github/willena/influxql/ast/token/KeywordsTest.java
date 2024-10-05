@@ -17,12 +17,11 @@
 
 package io.github.willena.influxql.ast.token;
 
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-class KeywordsTest {
+import org.junit.jupiter.api.Test;
 
+class KeywordsTest {
 
     @Test
     void hasValue() {

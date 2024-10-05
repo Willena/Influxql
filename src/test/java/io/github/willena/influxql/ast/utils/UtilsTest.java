@@ -17,14 +17,12 @@
 
 package io.github.willena.influxql.ast.utils;
 
-import org.junit.jupiter.api.Test;
-
-import java.time.Duration;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-class UtilsTest {
+import java.time.Duration;
+import org.junit.jupiter.api.Test;
 
+class UtilsTest {
 
     @Test
     void escapeString() {
@@ -61,7 +59,6 @@ class UtilsTest {
         assertDoesNotThrow(() -> Utils.ensureDefined("value", new Object()));
         assertThrows(IllegalArgumentException.class, () -> Utils.ensureDefined("nullValue", null));
     }
-
 
     @Test
     void testFormatDuration() {

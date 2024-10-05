@@ -17,17 +17,14 @@
 
 package io.github.willena.influxql.ast.expr.literal;
 
+import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
+
 import io.github.willena.influxql.ast.Literal;
 import io.github.willena.influxql.ast.utils.StringJoiningList;
 import io.github.willena.influxql.ast.utils.Utils;
-
 import java.util.List;
 
-import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
-
-/**
- * List of string value literal
- */
+/** List of string value literal */
 public class ListLiteral implements Literal<List<String>> {
     private final List<String> values;
 

@@ -17,11 +17,11 @@
 
 package io.github.willena.influxql.ast.field;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import io.github.willena.influxql.ast.expr.DataType;
 import io.github.willena.influxql.ast.expr.VarRef;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class FieldTest {
     @Test
@@ -32,7 +32,13 @@ class FieldTest {
 
     @Test
     void fieldWithAlias() {
-        assertEquals("fieldAlias AS toto", new Field.Builder().withAlias("toto").withExpr(VarRef.of("fieldAlias")).build().toString());
+        assertEquals(
+                "fieldAlias AS toto",
+                new Field.Builder()
+                        .withAlias("toto")
+                        .withExpr(VarRef.of("fieldAlias"))
+                        .build()
+                        .toString());
     }
 
     @Test
@@ -41,6 +47,4 @@ class FieldTest {
         assertEquals("*::field", Field.wildcardFields().toString());
         assertEquals("*::tag", Field.wildcardTags().toString());
     }
-
-
 }

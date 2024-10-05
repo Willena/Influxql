@@ -23,7 +23,6 @@ import io.github.willena.influxql.ast.Statement;
 import io.github.willena.influxql.ast.field.SortField;
 import io.github.willena.influxql.ast.field.SortFields;
 import io.github.willena.influxql.ast.source.Measurement;
-
 import java.util.List;
 
 public class ShowMeasurementsStatement implements Statement {
@@ -54,7 +53,7 @@ public class ShowMeasurementsStatement implements Statement {
             buf.append(" ON ");
             buf.append(database);
 
-            if ("*" .equals(retentionPolicy)) {
+            if ("*".equals(retentionPolicy)) {
                 buf.append(".*");
             } else if (retentionPolicy != null && !retentionPolicy.isEmpty()) {
                 buf.append(".");
@@ -91,9 +90,7 @@ public class ShowMeasurementsStatement implements Statement {
         return buf.toString();
     }
 
-    /**
-     * {@code ShowMeasurementsStatement} builder static inner class.
-     */
+    /** {@code ShowMeasurementsStatement} builder static inner class. */
     public static final class Builder implements Buildable<ShowMeasurementsStatement> {
         private String database;
         private String retentionPolicy;
@@ -103,11 +100,11 @@ public class ShowMeasurementsStatement implements Statement {
         private int limit;
         private int offset;
 
-        public Builder() {
-        }
+        public Builder() {}
 
         /**
-         * Sets the {@code database} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code database} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param database the {@code database} to set
          * @return a reference to this Builder
@@ -118,7 +115,8 @@ public class ShowMeasurementsStatement implements Statement {
         }
 
         /**
-         * Sets the {@code retentionPolicy} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code retentionPolicy} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param retentionPolicy the {@code retentionPolicy} to set
          * @return a reference to this Builder
@@ -140,7 +138,8 @@ public class ShowMeasurementsStatement implements Statement {
         }
 
         /**
-         * Sets the {@code condition} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code condition} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param condition the {@code condition} to set
          * @return a reference to this Builder
@@ -151,7 +150,8 @@ public class ShowMeasurementsStatement implements Statement {
         }
 
         /**
-         * Sets the {@code sortFields} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code sortFields} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param sortFields the {@code sortFields} to set
          * @return a reference to this Builder
@@ -195,7 +195,8 @@ public class ShowMeasurementsStatement implements Statement {
         /**
          * Returns a {@code ShowMeasurementsStatement} built from the parameters previously set.
          *
-         * @return a {@code ShowMeasurementsStatement} built with parameters of this {@code ShowMeasurementsStatement.Builder}
+         * @return a {@code ShowMeasurementsStatement} built with parameters of this {@code
+         *     ShowMeasurementsStatement.Builder}
          */
         public ShowMeasurementsStatement build() {
             return new ShowMeasurementsStatement(this);

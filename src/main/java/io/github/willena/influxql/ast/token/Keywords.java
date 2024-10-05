@@ -21,9 +21,7 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * Well known InfluxQL keywords
- */
+/** Well known InfluxQL keywords */
 public enum Keywords {
     ALL("ALL"),
     ALTER("ALTER"),
@@ -103,7 +101,8 @@ public enum Keywords {
     WITH("WITH"),
     WRITE("WRITE");
 
-    private static final Set<String> KEYWORDS_VALUES = Arrays.stream(Keywords.values()).map(Keywords::toString).collect(Collectors.toSet());
+    private static final Set<String> KEYWORDS_VALUES =
+            Arrays.stream(Keywords.values()).map(Keywords::toString).collect(Collectors.toSet());
     private final String value;
 
     /**
@@ -144,5 +143,4 @@ public enum Keywords {
     public String toString() {
         return value;
     }
-
 }

@@ -18,12 +18,9 @@
 package io.github.willena.influxql.ast.field;
 
 import io.github.willena.influxql.ast.utils.StringJoiningList;
-
 import java.util.List;
 
-/**
- * List of fields
- */
+/** List of fields */
 public class Fields extends StringJoiningList<Field> {
     /**
      * Create initialized list of field
@@ -34,9 +31,7 @@ public class Fields extends StringJoiningList<Field> {
         super(list);
     }
 
-    /**
-     * Create empty list of fields
-     */
+    /** Create empty list of fields */
     public Fields() {
         super();
     }

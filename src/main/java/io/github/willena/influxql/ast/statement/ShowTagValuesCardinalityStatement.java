@@ -17,17 +17,16 @@
 
 package io.github.willena.influxql.ast.statement;
 
+import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
+import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
+
 import io.github.willena.influxql.ast.*;
 import io.github.willena.influxql.ast.expr.Dimension;
 import io.github.willena.influxql.ast.expr.Dimensions;
 import io.github.willena.influxql.ast.expr.literal.StringLiteral;
 import io.github.willena.influxql.ast.source.Sources;
 import io.github.willena.influxql.ast.token.Operator;
-
 import java.util.List;
-
-import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
-import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
 public class ShowTagValuesCardinalityStatement implements Statement {
     private final String database;
@@ -98,9 +97,7 @@ public class ShowTagValuesCardinalityStatement implements Statement {
         return buf.toString();
     }
 
-    /**
-     * {@code ShowTagValuesCardinalityStatement} builder static inner class.
-     */
+    /** {@code ShowTagValuesCardinalityStatement} builder static inner class. */
     public static final class Builder implements Buildable<ShowTagValuesCardinalityStatement> {
         private String database;
         private boolean exact;
@@ -112,11 +109,11 @@ public class ShowTagValuesCardinalityStatement implements Statement {
         private int limit;
         private int offset;
 
-        public Builder() {
-        }
+        public Builder() {}
 
         /**
-         * Sets the {@code database} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code database} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param database the {@code database} to set
          * @return a reference to this Builder
@@ -142,7 +139,8 @@ public class ShowTagValuesCardinalityStatement implements Statement {
         }
 
         /**
-         * Sets the {@code sources} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code sources} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param sources the {@code sources} to set
          * @return a reference to this Builder
@@ -162,7 +160,8 @@ public class ShowTagValuesCardinalityStatement implements Statement {
         }
 
         /**
-         * Sets the {@code tagKeyExpr} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code tagKeyExpr} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param tagKeyExpr the {@code tagKeyExpr} to set
          * @return a reference to this Builder
@@ -174,7 +173,8 @@ public class ShowTagValuesCardinalityStatement implements Statement {
         }
 
         /**
-         * Sets the {@code condition} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code condition} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param condition the {@code condition} to set
          * @return a reference to this Builder
@@ -185,7 +185,8 @@ public class ShowTagValuesCardinalityStatement implements Statement {
         }
 
         /**
-         * Sets the {@code dimensions} and returns a reference to this Builder enabling method chaining.
+         * Sets the {@code dimensions} and returns a reference to this Builder enabling method
+         * chaining.
          *
          * @param dimensions the {@code dimensions} to set
          * @return a reference to this Builder
@@ -203,7 +204,6 @@ public class ShowTagValuesCardinalityStatement implements Statement {
             this.dimensions.addAll(List.of(dimensions));
             return this;
         }
-
 
         /**
          * Sets the {@code limit} and returns a reference to this Builder enabling method chaining.
@@ -228,9 +228,11 @@ public class ShowTagValuesCardinalityStatement implements Statement {
         }
 
         /**
-         * Returns a {@code ShowTagValuesCardinalityStatement} built from the parameters previously set.
+         * Returns a {@code ShowTagValuesCardinalityStatement} built from the parameters previously
+         * set.
          *
-         * @return a {@code ShowTagValuesCardinalityStatement} built with parameters of this {@code ShowTagValuesCardinalityStatement.Builder}
+         * @return a {@code ShowTagValuesCardinalityStatement} built with parameters of this {@code
+         *     ShowTagValuesCardinalityStatement.Builder}
          */
         public ShowTagValuesCardinalityStatement build() {
             return new ShowTagValuesCardinalityStatement(this);

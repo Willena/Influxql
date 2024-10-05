@@ -17,16 +17,13 @@
 
 package io.github.willena.influxql.ast.expr;
 
-import io.github.willena.influxql.ast.Expression;
-import io.github.willena.influxql.ast.utils.StringJoiningList;
-
-import java.util.List;
-
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 
-/**
- * Function / Call expression
- */
+import io.github.willena.influxql.ast.Expression;
+import io.github.willena.influxql.ast.utils.StringJoiningList;
+import java.util.List;
+
+/** Function / Call expression */
 public class Call implements Expression {
     private final String name;
     private final StringJoiningList<Expression> args;
@@ -61,18 +58,13 @@ public class Call implements Expression {
         return name + "(" + args + ")";
     }
 
-    /**
-     * The type Builder.
-     */
+    /** The type Builder. */
     public static final class Builder {
         private String name;
         private StringJoiningList<Expression> args;
 
-        /**
-         * Instantiates a new Builder.
-         */
-        public Builder() {
-        }
+        /** Instantiates a new Builder. */
+        public Builder() {}
 
         /**
          * Function name builder.

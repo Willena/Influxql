@@ -24,8 +24,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * List that concat using the given delimiter and convertor when calling toString
- * ", " is the default delimiter
+ * List that concat using the given delimiter and convertor when calling toString ", " is the
+ * default delimiter
  *
  * @param <T> the type in the list
  */
@@ -36,7 +36,7 @@ public class StringJoiningList<T> extends LinkedList<T> {
     /**
      * Build a new list using a delimiter
      *
-     * @param list      the list
+     * @param list the list
      * @param delimiter delimiter
      */
     public StringJoiningList(List<T> list, String delimiter) {
@@ -46,7 +46,7 @@ public class StringJoiningList<T> extends LinkedList<T> {
     /**
      * Build a new list using a delimiter, a conversion function
      *
-     * @param list      the list
+     * @param list the list
      * @param delimiter the delimiter
      * @param converter the converter
      */
@@ -68,16 +68,14 @@ public class StringJoiningList<T> extends LinkedList<T> {
     /**
      * Build a list using default delimiter and custom converter
      *
-     * @param list      the list
+     * @param list the list
      * @param converter the converter
      */
     public StringJoiningList(List<T> list, Function<T, String> converter) {
         this(list, ", ", converter);
     }
 
-    /**
-     * Build an empty list
-     */
+    /** Build an empty list */
     public StringJoiningList() {
         this(Collections.emptyList());
     }
@@ -85,7 +83,8 @@ public class StringJoiningList<T> extends LinkedList<T> {
     /**
      * Converter content of the list as String
      *
-     * @return the list content converted using the provided converter and concatenated using the given delimiter.
+     * @return the list content converted using the provided converter and concatenated using the
+     *     given delimiter.
      */
     @Override
     public String toString() {

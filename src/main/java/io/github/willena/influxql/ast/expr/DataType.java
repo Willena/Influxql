@@ -17,9 +17,7 @@
 
 package io.github.willena.influxql.ast.expr;
 
-/**
- * InfluxQL / InfluxDB known types
- */
+/** InfluxQL / InfluxDB known types */
 public enum DataType {
     UNKNOWN("unknown"),
     // Float means the data type is a float.

@@ -17,9 +17,7 @@
 
 package io.github.willena.influxql.ast.token;
 
-/**
- * Known privileges
- */
+/** Known privileges */
 public enum Privilege {
     NO_PRIVILEGE("NO PRIVILEGES"),
     READ_PRIVILEGE("READ"),

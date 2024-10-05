@@ -17,12 +17,12 @@
 
 package io.github.willena.influxql.ast.statement;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Statement;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.FieldSource;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public abstract class GenericStatementTest<T extends Statement> {
 
@@ -70,8 +70,7 @@ public abstract class GenericStatementTest<T extends Statement> {
             private Buildable<T1> statement;
             private boolean shouldFail;
 
-            public Builder() {
-            }
+            public Builder() {}
 
             public TestBody<T1> build() {
                 return new TestBody<>(this);

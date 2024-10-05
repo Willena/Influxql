@@ -17,31 +17,29 @@
 
 package io.github.willena.influxql.ast.token;
 
-/**
- * InfluxQl well known Operators
- */
+/** InfluxQl well known Operators */
 public enum Operator {
     // ADD and the following are InfluxQL Operators
-    ADD("+"),      // +
-    SUB("-"),       // -
-    MUL("*"),        // *
-    DIV("/"),       // /
-    MOD("%"),      // %
+    ADD("+"), // +
+    SUB("-"), // -
+    MUL("*"), // *
+    DIV("/"), // /
+    MOD("%"), // %
     BITWISE_AND("&"), // &
     BITWISE_OR("|"), // |
     BITWISE_XOR("^"), // ^
 
     AND("AND"), // AND
-    OR("OR"),  // OR
+    OR("OR"), // OR
 
-    EQ("="),      // =
-    NEQ("!="),     // !=
-    EQREGEX("=~"),  // =~
+    EQ("="), // =
+    NEQ("!="), // !=
+    EQREGEX("=~"), // =~
     NEQREGEX("!~"), // !~
-    LT("<"),      // <
-    LTE("<="),     // <=
-    GT(">"),     // >
-    GTE(">=");     // >=
+    LT("<"), // <
+    LTE("<="), // <=
+    GT(">"), // >
+    GTE(">="); // >=
 
     private final String value;
 
