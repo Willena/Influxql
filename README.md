@@ -27,7 +27,7 @@ Relases can be found from Maven and as github artifacts.
 ```xml
 
 <dependency>
-    <groupId>io.github.willena.influx</groupId>
+    <groupId>io.github.willena</groupId>
     <artifactId>influxql</artifactId>
     <version>${version}</version>
 </dependency>
