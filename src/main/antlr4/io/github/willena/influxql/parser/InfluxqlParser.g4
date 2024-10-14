@@ -71,12 +71,12 @@ drop_database_stmt : DROP DATABASE db_name=IDENTIFIER;
 drop_measurement_stmt : DROP MEASUREMENT measurement;
 drop_retention_policy_stmt : DROP RETENTION POLICY policy_name=IDENTIFIER on_clause;
 drop_series_stmt : DROP SERIES ( from_clause | where_clause | from_clause where_clause );
-drop_shard_stmt : DROP SHARD ( shard_id=INTEGER_LITERAL );
+drop_shard_stmt : DROP SHARD ( shard_id=NUMERIC_LITERAL );
 drop_subscription_stmt : DROP SUBSCRIPTION subscription_name=IDENTIFIER ON db_name=IDENTIFIER DOT retention_policy=IDENTIFIER;
 drop_user_stmt : DROP USER user_name=IDENTIFIER ;
 explain_stmt : EXPLAIN ANALYZE? select_stmt;
 grant_stmt : GRANT privilege on_clause? to_clause;
-kill_query_statement : KILL QUERY query_id=INTEGER_LITERAL;
+kill_query_statement : KILL QUERY query_id=NUMERIC_LITERAL;
 show_continuous_queries_stmt : SHOW CONTINUOUS QUERIES;
 show_databases_stmt : SHOW DATABASES;
 show_field_keys_stmt : SHOW FIELD KEYS from_clause?;
@@ -105,7 +105,7 @@ dimension : expression;
 dimensions : dimension ( COMMA dimension )*;
 field: expression ( alias )?;
 fields: field ( COMMA field )*;
-fill_option: FILL_OPTION_STATIC | INTEGER_LITERAL | FLOAT_LITERAL;
+fill_option: NULL | NONE | PREVIOUS | LINEAR | NUMERIC_LITERAL;
 measurement: simple_measurement_name |  measurment_with_rp | measurement_with_rp_and_database;
 measurment_with_rp: policy_name=IDENTIFIER DOT simple_measurement_name;
 measurement_with_rp_and_database: db_name=IDENTIFIER (DOT policy_name=IDENTIFIER )? DOT simple_measurement_name;
@@ -115,7 +115,7 @@ privilege: ALL PRIVILEGES? | READ | WRITE;
 
 retention_policy_option : retention_policy_duration | retention_policy_replication | retention_policy_shard_group_duration | DEFAULT;
 retention_policy_duration : DURATION DURATION_LITERAL;
-retention_policy_replication : REPLICATION INTEGER_LITERAL;
+retention_policy_replication : REPLICATION NUMERIC_LITERAL;
 retention_policy_shard_group_duration : SHARD DURATION DURATION_LITERAL;
 retention_policy_name : NAME IDENTIFIER;
 
@@ -123,24 +123,24 @@ sort_field : field_key=IDENTIFIER ( ASC | DESC )?;
 sort_fields : sort_field ( COMMA sort_field )*;
 tag_keys : tag_key=IDENTIFIER ( COMMA tag_key=IDENTIFIER )*;
 var_ref : measurement;
-binary_op : PLUS | MINUS | STAR | DIV | MOD | AMP | PIPE | OR_EX | AND | OR | ASSIGN | NOT_EQ1 | NOT_EQ2 | LT | LT_EQ | GT | GT_EQ;
+binary_op : PLUS | MINUS | STAR | SLASH | MOD | AMP | PIPE | OR_EX | AND | OR | ASSIGN | NOT_EQ1 | NOT_EQ2 | LT | LT_EQ | GT | GT_EQ;
 
 expression : unary_expr ( binary_op unary_expr )*;
 unary_expr : group_expr | call | var_ref | literal_expr;
 group_expr: OPEN_PAR expression CLOSE_PAR;
-literal_expr: TIME_LITERAL | STRING_LITERAL | INTEGER_LITERAL | FLOAT_LITERAL | BOOL_LITERAL | DURATION_LITERAL | REGULAR_EXPRESSION_LITERAL;
+literal_expr: STRING_LITERAL | NUMERIC_LITERAL | TRUE | FALSE | DURATION_LITERAL;
 call: IDENTIFIER OPEN_PAR expression CLOSE_PAR;
 
 from_clause : FROM measurements;
 group_by_clause : GROUP BY dimensions fill_clause?;
 into_clause : INTO ( measurement | back_ref );
-limit_clause : LIMIT INTEGER_LITERAL;
-offset_clause : OFFSET INTEGER_LITERAL;
-slimit_clause : SLIMIT INTEGER_LITERAL;
-soffset_clause : SOFFSET INTEGER_LITERAL;
-timezone_clause : 'tz(' STRING_LITERAL ')';
+limit_clause : LIMIT NUMERIC_LITERAL;
+offset_clause : OFFSET NUMERIC_LITERAL;
+slimit_clause : SLIMIT NUMERIC_LITERAL;
+soffset_clause : SOFFSET NUMERIC_LITERAL;
+timezone_clause : TZ OPEN_PAR STRING_LITERAL CLOSE_PAR;
 on_clause : ON db_name=IDENTIFIER;
-fill_clause: 'fill(' fill_option ')';
+fill_clause: FILL OPEN_PAR fill_option CLOSE_PAR;
 order_by_clause: ORDER BY sort_fields;
 to_clause : TO user_name= IDENTIFIER ;
 where_clause : WHERE expression;
@@ -158,7 +158,7 @@ STAR : '*';
 PLUS : '+';
 MINUS : '-';
 TILDE : '~';
-DIV : '/';
+SLASH : '/';
 MOD : '%';
 LT2 : '<<';
 GT2 : '>>';
@@ -253,32 +253,30 @@ WHERE: 'WHERE';
 WITH: 'WITH';
 WRITE: 'WRITE';
 
-INTEGER_LITERAL: (PLUS | MINUS)? [1-9] DIGIT*;
-FLOAT_LITERAL: (PLUS | MINUS)? ( '.' DIGIT+ | DIGIT+ '.' DIGIT* ) ;
-STRING_LITERAL: '\'' UNICODE_CHAR* '\'';
+FILL: 'FILL';
+NULL: 'NULL';
+NONE: 'NONE';
+PREVIOUS: 'PREVIOUS';
+LINEAR: 'LINEAR';
+TZ: 'tz';
+TRUE: 'TRUE';
+FALSE: 'FALSE';
 
-DURATION_LITERAL: INTEGER_LITERAL+ DURATION_UNIT;
-DURATION_UNIT : 'u' | 'µ' | 'ms' | 's' | 'm' | 'h' | 'd' | 'w';
-FILL_OPTION_STATIC: 'null' | 'none' | 'previous' | 'linear';
-BOOL_LITERAL: 'TRUE' | 'FALSE';
+IDENTIFIER:
+    '"' (~'"' | '""')* '"'
+    | '`' (~'`' | '``')* '`'
+    | [A-Z_\u007F-\uFFFF] [A-Z_0-9\u007F-\uFFFF]*
+    ;
+
+NUMERIC_LITERAL: (DIGIT+ ('.' DIGIT*)?) | ('.' DIGIT+);
+STRING_LITERAL: '\'' ( ~'\'' | '\'\'')* '\'';
+
+DURATION_LITERAL: ([1-9] DIGIT*)+ ('u' | 'µ' | 'ms' | 's' | 'm' | 'h' | 'd' | 'w');
 REGULAR_EXPRESSION_LITERAL: '/' UNICODE_CHAR* '/';
 
-TIME_LITERAL: HOUR ':' MINUTES_SECOND ':' MINUTES_SECOND ('.' DIGIT DIGIT DIGIT DIGIT DIGIT DIGIT)? 'Z';
-DATE_LITERAL: YEAR '-' MONTH '-' DAY;
-DATE_TIME_LITERAL: DATE_LITERAL 'T' TIME_LITERAL;
-
-MINUTES_SECOND: [0-5] [0-9];
-HOUR: ('0' [0-9]) | ('1' [0-9]) | ('2' [0-3]);
-YEAR: DIGIT DIGIT DIGIT DIGIT;
-MONTH: ('0' [1-9]) | ('1' [0-2]);
-DAY: ('0' [1-9]) | ([1-2] [0-9]) | ('3' [0-1]);
-
-DIGIT : [0-9];
 UNICODE_CHAR: ~[ \t\r\n];
 
-UNQUOTED_IDENTIFIER : UNICODE_CHAR+;
+fragment DIGIT: [0-9];
 
-IDENTIFIER : UNQUOTED_IDENTIFIER | QUOTED_IDENTIER ;
-QUOTED_IDENTIER : QUOTE UNQUOTED_IDENTIFIER+ QUOTE ;
-
-WS: [ \t\r\n]+ -> skip;
+SPACES: [ \u000B\t\r\n] -> channel(HIDDEN);
+UNEXPECTED_CHAR: .;
