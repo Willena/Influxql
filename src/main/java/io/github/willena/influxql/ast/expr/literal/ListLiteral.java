@@ -25,16 +25,16 @@ import io.github.willena.influxql.ast.utils.Utils;
 import java.util.List;
 
 /** List of string value literal */
-public class ListLiteral implements Literal<List<String>> {
-    private final List<String> values;
+public class ListLiteral implements Literal<List<Literal<?>>> {
+    private final List<Literal<?>> values;
 
     /**
      * New list literal given an input list of string
      *
      * @param values list
      */
-    public ListLiteral(final List<String> values) {
-        this.values = new StringJoiningList<>(values, Utils::quoteIdentifier);
+    public ListLiteral(final List<Literal<?>> values) {
+        this.values = new StringJoiningList<>(values);
         ensureDefined("values", values);
     }
 
@@ -44,7 +44,7 @@ public class ListLiteral implements Literal<List<String>> {
      * @param values list
      * @return ListLiteral
      */
-    public static ListLiteral of(final List<String> values) {
+    public static ListLiteral of(final List<Literal<?>> values) {
         return new ListLiteral(values);
     }
 
@@ -54,12 +54,12 @@ public class ListLiteral implements Literal<List<String>> {
      * @param values list
      * @return ListLiteral
      */
-    public static ListLiteral of(String... values) {
+    public static ListLiteral of(Literal<?>... values) {
         return of(List.of(values));
     }
 
     @Override
-    public List<String> getValue() {
+    public List<Literal<?>> getValue() {
         return values;
     }
 

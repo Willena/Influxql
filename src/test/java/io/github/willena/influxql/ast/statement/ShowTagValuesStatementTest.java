@@ -46,7 +46,7 @@ class ShowTagValuesStatementTest extends GenericStatementTest<ShowTagValuesState
                                                     new Measurement.Builder()
                                                             .withName("name")
                                                             .build())
-                                            .orderBY(
+                                            .orderBy(
                                                     new SortField.Builder()
                                                             .ascending(false)
                                                             .field("field")

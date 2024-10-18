@@ -15,10 +15,7 @@
  * limitations under the License.
  */
 
-package io.github.willena.influxql.ast.token;
+package io.github.willena.influxql.parser;
 
-/** Subscription mode */
-public enum SubscriptionMode {
-    ANY,
-    ALL
+public class InfluxQlParseException {
 }

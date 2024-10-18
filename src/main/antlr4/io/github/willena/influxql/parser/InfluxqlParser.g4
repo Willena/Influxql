@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-grammar InfluxqlParser;
+parser grammar InfluxqlParser;
 
 options {
- caseInsensitive = true;
+    tokenVocab = InfluxqlLexer;
 }
 
 // ------------- PARSER ---------------------
@@ -54,7 +54,9 @@ statement : alter_retention_policy_stmt |
  show_shards_stmt |
  show_subscriptions_stmt|
  show_tag_keys_stmt |
+ show_tag_key_cardinality_stmt
  show_tag_values_stmt |
+ show_tag_values_cardinality_stmt
  show_users_stmt |
  revoke_stmt |
  select_stmt ;
@@ -64,32 +66,38 @@ create_continuous_query_stmt: CREATE CONTINUOUS QUERY query_name=IDENTIFIER on_c
 create_database_stmt: CREATE DATABASE db_name=IDENTIFIER ( WITH retention_policy_duration? retention_policy_replication? retention_policy_shard_group_duration? retention_policy_name? )?;
 create_retention_policy_stmt : CREATE RETENTION POLICY policy_name=IDENTIFIER on_clause retention_policy_duration retention_policy_replication ( retention_policy_shard_group_duration )? ( DEFAULT )?;
 create_subscription_stmt : CREATE SUBSCRIPTION subscription_name=IDENTIFIER ON db_name=IDENTIFIER DOT retention_policy=IDENTIFIER DESTINATIONS (ANY|ALL) host=STRING_LITERAL ( COMMA host=STRING_LITERAL)*;
-create_user_stmt : CREATE USER user_name=IDENTIFIER WITH PASSWORD password=STRING_LITERAL ( WITH ALL PRIVILEGES )?;
+create_user_stmt : CREATE USER user_name=IDENTIFIER WITH PASSWORD password=STRING_LITERAL (WITH ALL PRIVILEGES)?;
 delete_stmt : DELETE ( from_clause | where_clause | from_clause where_clause );
 drop_continuous_query_stmt : DROP CONTINUOUS QUERY query_name=IDENTIFIER on_clause;
 drop_database_stmt : DROP DATABASE db_name=IDENTIFIER;
-drop_measurement_stmt : DROP MEASUREMENT measurement;
+// Drop measurement does not currently support the full range of rules (limitation of influxdb) and has been updated
+// The described grammar on influx website should be:
+// drop_measurement_stmt : DROP MEASUREMENT measurement;
+drop_measurement_stmt : DROP MEASUREMENT measurement_value=IDENTIFIER;
 drop_retention_policy_stmt : DROP RETENTION POLICY policy_name=IDENTIFIER on_clause;
 drop_series_stmt : DROP SERIES ( from_clause | where_clause | from_clause where_clause );
-drop_shard_stmt : DROP SHARD ( shard_id=NUMERIC_LITERAL );
+drop_shard_stmt : DROP SHARD ( shard_id=INTEGER_LITERAL );
 drop_subscription_stmt : DROP SUBSCRIPTION subscription_name=IDENTIFIER ON db_name=IDENTIFIER DOT retention_policy=IDENTIFIER;
-drop_user_stmt : DROP USER user_name=IDENTIFIER ;
+drop_user_stmt : DROP USER user_name=IDENTIFIER;
 explain_stmt : EXPLAIN ANALYZE? select_stmt;
 grant_stmt : GRANT privilege on_clause? to_clause;
-kill_query_statement : KILL QUERY query_id=NUMERIC_LITERAL;
+// On host is only available for cluster installation of influxdb
+kill_query_statement : KILL QUERY query_id=INTEGER_LITERAL (ON host=STRING_LITERAL)?;
 show_continuous_queries_stmt : SHOW CONTINUOUS QUERIES;
 show_databases_stmt : SHOW DATABASES;
-show_field_keys_stmt : SHOW FIELD KEYS from_clause?;
-show_grants_stmt : SHOW GRANTS FOR user_name=IDENTIFIER ;
+show_field_keys_stmt : SHOW FIELD KEYS on_clause? from_clause? order_by_clause? limit_clause? offset_clause?;
+show_grants_stmt : SHOW GRANTS FOR user_name=IDENTIFIER;
 show_measurements_stmt : SHOW MEASUREMENTS on_clause? with_measurement_clause? where_clause? limit_clause? offset_clause?;
 show_queries_stmt : SHOW QUERIES;
 show_retention_policies : SHOW RETENTION POLICIES on_clause;
-show_series_stmt : SHOW SERIES from_clause? where_clause? limit_clause? offset_clause?;
+show_series_stmt : SHOW SERIES on_clause? from_clause? where_clause? limit_clause? offset_clause?;
 show_shard_groups_stmt : SHOW SHARD GROUPS;
 show_shards_stmt : SHOW SHARDS;
 show_subscriptions_stmt : SHOW SUBSCRIPTIONS;
-show_tag_keys_stmt : SHOW TAG KEYS from_clause? where_clause? group_by_clause? limit_clause? offset_clause?;
-show_tag_values_stmt : SHOW TAG VALUES from_clause? with_tag_clause where_clause? group_by_clause? limit_clause? offset_clause?;
+show_tag_keys_stmt : SHOW TAG KEYS on_clause? from_clause? where_clause? order_by_clause? limit_clause? offset_clause?;
+show_tag_key_cardinality_stmt: SHOW TAG KEY EXACT? CARDINALITY on_clause? from_clause? where_clause? group_by_clause? limit_clause? offset_clause?;
+show_tag_values_stmt : SHOW TAG VALUES on_clause? from_clause? with_tag_clause where_clause? limit_clause? offset_clause?;
+show_tag_values_cardinality_stmt: SHOW TAG VALUES EXACT? CARDINALITY on_clause? from_clause? where_clause? group_by_clause? limit_clause? offset_clause? with_tag_clause;
 show_users_stmt : SHOW USERS;
 revoke_stmt : REVOKE privilege on_clause? FROM user_name=IDENTIFIER ;
 select_stmt : SELECT fields from_clause into_clause? where_clause? group_by_clause? order_by_clause? limit_clause? offset_clause? slimit_clause? soffset_clause? timezone_clause?;
@@ -100,7 +108,7 @@ every_stmt: EVERY DURATION_LITERAL;
 for_stmt: FOR DURATION_LITERAL;
 
 alias: AS IDENTIFIER;
-back_ref: ( policy_name=IDENTIFIER '.:MEASUREMENT' ) | ( db_name=IDENTIFIER '.' ( policy_name=IDENTIFIER )? '.:MEASUREMENT' );
+back_ref: ( policy_name=IDENTIFIER MEASUREMENT_BACK_REF ) | ( db_name=IDENTIFIER DOT ( policy_name=IDENTIFIER )? MEASUREMENT_BACK_REF );
 dimension : expression;
 dimensions : dimension ( COMMA dimension )*;
 field: expression ( alias )?;
@@ -111,11 +119,11 @@ measurment_with_rp: policy_name=IDENTIFIER DOT simple_measurement_name;
 measurement_with_rp_and_database: db_name=IDENTIFIER (DOT policy_name=IDENTIFIER )? DOT simple_measurement_name;
 measurements: measurement ( COMMA measurement )*;
 simple_measurement_name : IDENTIFIER | REGULAR_EXPRESSION_LITERAL;
-privilege: ALL PRIVILEGES? | READ | WRITE;
+privilege: (ALL PRIVILEGES?) | READ | WRITE;
 
 retention_policy_option : retention_policy_duration | retention_policy_replication | retention_policy_shard_group_duration | DEFAULT;
 retention_policy_duration : DURATION DURATION_LITERAL;
-retention_policy_replication : REPLICATION NUMERIC_LITERAL;
+retention_policy_replication : REPLICATION INTEGER_LITERAL;
 retention_policy_shard_group_duration : SHARD DURATION DURATION_LITERAL;
 retention_policy_name : NAME IDENTIFIER;
 
@@ -123,160 +131,65 @@ sort_field : field_key=IDENTIFIER ( ASC | DESC )?;
 sort_fields : sort_field ( COMMA sort_field )*;
 tag_keys : tag_key=IDENTIFIER ( COMMA tag_key=IDENTIFIER )*;
 var_ref : measurement;
-binary_op : PLUS | MINUS | STAR | SLASH | MOD | AMP | PIPE | OR_EX | AND | OR | ASSIGN | NOT_EQ1 | NOT_EQ2 | LT | LT_EQ | GT | GT_EQ;
+//binary_op : PLUS | MINUS | STAR | SLASH | MOD | AMP | PIPE | OR_EX| AND | OR | ASSIGN | NOT_EQ1 | NOT_EQ2 | LT | LT_EQ | GT | GT_EQ;
 
-expression : unary_expr ( binary_op unary_expr )*;
-unary_expr : group_expr | call | var_ref | literal_expr;
+//expression : unary_expr ( binary_op unary_expr )*;
+//unary_expr : group_expr | call | var_ref | literal_expr;
 group_expr: OPEN_PAR expression CLOSE_PAR;
-literal_expr: STRING_LITERAL | NUMERIC_LITERAL | TRUE | FALSE | DURATION_LITERAL;
+//literal_expr: STRING_LITERAL | signed_number | TRUE | FALSE | DURATION_LITERAL;
+//signed_number: (PLUS|MINUS)? NUMERIC_LITERAL;
 call: IDENTIFIER OPEN_PAR expression CLOSE_PAR;
+
+unary_operator
+    : MINUS
+    | PLUS
+    | TILDE;
+
+expression
+    : literal_value
+    | unary_operator expression
+    | expression PIPE2 expression
+    | expression ( STAR | SLASH | MOD) expression
+    | expression ( PLUS | MINUS) expression
+    | expression ( LT2 | GT2 | AMP | PIPE | OR_EX) expression
+    | expression ( LT | LT_EQ | GT | GT_EQ) expression
+    | expression (
+        ASSIGN
+        | EQ
+        | NOT_EQ1
+        | NOT_EQ2
+    ) expression
+    | expression AND expression
+    | expression OR expression
+    | call
+    | group_expr
+    | var_ref
+    | STAR | START_FIELD | START_TAGS
+;
+
+literal_value
+    : INTEGER_LITERAL
+    | NUMERIC_LITERAL
+    | STRING_LITERAL
+    | DURATION_LITERAL
+    | NULL
+    | TRUE
+    | FALSE
+;
 
 from_clause : FROM measurements;
 group_by_clause : GROUP BY dimensions fill_clause?;
 into_clause : INTO ( measurement | back_ref );
-limit_clause : LIMIT NUMERIC_LITERAL;
-offset_clause : OFFSET NUMERIC_LITERAL;
-slimit_clause : SLIMIT NUMERIC_LITERAL;
-soffset_clause : SOFFSET NUMERIC_LITERAL;
+limit_clause : LIMIT INTEGER_LITERAL;
+offset_clause : OFFSET INTEGER_LITERAL;
+slimit_clause : SLIMIT INTEGER_LITERAL;
+soffset_clause : SOFFSET INTEGER_LITERAL;
 timezone_clause : TZ OPEN_PAR STRING_LITERAL CLOSE_PAR;
 on_clause : ON db_name=IDENTIFIER;
 fill_clause: FILL OPEN_PAR fill_option CLOSE_PAR;
 order_by_clause: ORDER BY sort_fields;
-to_clause : TO user_name= IDENTIFIER ;
+to_clause : TO user_name=IDENTIFIER ;
 where_clause : WHERE expression;
 with_measurement_clause : WITH MEASUREMENT ( EQ measurement | REG_MATCH REGULAR_EXPRESSION_LITERAL );
-with_tag_clause : WITH KEY ( ASSIGN tag_key=IDENTIFIER | NOT_EQ1 tag_key=IDENTIFIER | REG_MATCH REGULAR_EXPRESSION_LITERAL | IN OPEN_PAR tag_keys CLOSE_PAR );
+with_tag_clause : WITH KEY ( op=ASSIGN tag_key=IDENTIFIER | op=NOT_EQ1 tag_key=IDENTIFIER | op=REG_MATCH tag_key=REGULAR_EXPRESSION_LITERAL | op=IN OPEN_PAR tag_keys CLOSE_PAR );
 
-QUOTE: '"';
-SCOL : ';';
-DOT : '.';
-OPEN_PAR : '(';
-CLOSE_PAR : ')';
-COMMA : ',';
-ASSIGN : '=';
-STAR : '*';
-PLUS : '+';
-MINUS : '-';
-TILDE : '~';
-SLASH : '/';
-MOD : '%';
-LT2 : '<<';
-GT2 : '>>';
-AMP : '&';
-LT : '<';
-LT_EQ : '<=';
-GT : '>';
-GT_EQ : '>=';
-EQ : '==';
-NOT_EQ1 : '!=';
-NOT_EQ2 : '<>';
-REG_MATCH: '=~';
-OR_EX: '^';
-PIPE: '|';
-PIPE2: '||';
-
-// Keywords
-AND: 'AND';
-OR: 'OR';
-ALL: 'ALL';
-ALTER: 'ALTER';
-ANALYZE: 'ANALYZE';
-ANY: 'ANY';
-AS: 'AS';
-ASC: 'ASC';
-BEGIN: 'BEGIN';
-BY: 'BY';
-CREATE: 'CREATE';
-CONTINUOUS: 'CONTINUOUS';
-DATABASE: 'DATABASE';
-DATABASES: 'DATABASES';
-DEFAULT: 'DEFAULT';
-DELETE: 'DELETE';
-DESC: 'DESC';
-DESTINATIONS: 'DESTINATIONS';
-DIAGNOSTICS: 'DIAGNOSTICS';
-DISTINCT: 'DISTINCT';
-DROP: 'DROP';
-DURATION: 'DURATION';
-END: 'END';
-EVERY: 'EVERY';
-EXPLAIN: 'EXPLAIN';
-FIELD: 'FIELD';
-FOR: 'FOR';
-FROM: 'FROM';
-GRANT: 'GRANT';
-GRANTS: 'GRANTS';
-GROUP: 'GROUP';
-GROUPS: 'GROUPS';
-IN: 'IN';
-INF: 'INF';
-INSERT: 'INSERT';
-INTO: 'INTO';
-KEY: 'KEY';
-KEYS: 'KEYS';
-KILL: 'KILL';
-LIMIT: 'LIMIT';
-SHOW: 'SHOW';
-MEASUREMENT: 'MEASUREMENT';
-MEASUREMENTS: 'MEASUREMENTS';
-NAME: 'NAME';
-OFFSET: 'OFFSET';
-ON: 'ON';
-ORDER: 'ORDER';
-PASSWORD: 'PASSWORD';
-POLICY: 'POLICY';
-POLICIES: 'POLICIES';
-PRIVILEGES: 'PRIVILEGES';
-QUERIES: 'QUERIES';
-QUERY: 'QUERY';
-READ: 'READ';
-REPLICATION: 'REPLICATION';
-RESAMPLE: 'RESAMPLE';
-RETENTION: 'RETENTION';
-REVOKE: 'REVOKE';
-SELECT: 'SELECT';
-SERIES: 'SERIES';
-SET: 'SET';
-SHARD: 'SHARD';
-SHARDS: 'SHARDS';
-SLIMIT: 'SLIMIT';
-SOFFSET: 'SOFFSET';
-STATS: 'STATS';
-SUBSCRIPTION: 'SUBSCRIPTION';
-SUBSCRIPTIONS: 'SUBSCRIPTIONS';
-TAG: 'TAG';
-TO: 'TO';
-USER: 'USER';
-USERS: 'USERS';
-VALUES: 'VALUES';
-WHERE: 'WHERE';
-WITH: 'WITH';
-WRITE: 'WRITE';
-
-FILL: 'FILL';
-NULL: 'NULL';
-NONE: 'NONE';
-PREVIOUS: 'PREVIOUS';
-LINEAR: 'LINEAR';
-TZ: 'tz';
-TRUE: 'TRUE';
-FALSE: 'FALSE';
-
-IDENTIFIER:
-    '"' (~'"' | '""')* '"'
-    | '`' (~'`' | '``')* '`'
-    | [A-Z_\u007F-\uFFFF] [A-Z_0-9\u007F-\uFFFF]*
-    ;
-
-NUMERIC_LITERAL: (DIGIT+ ('.' DIGIT*)?) | ('.' DIGIT+);
-STRING_LITERAL: '\'' ( ~'\'' | '\'\'')* '\'';
-
-DURATION_LITERAL: ([1-9] DIGIT*)+ ('u' | 'µ' | 'ms' | 's' | 'm' | 'h' | 'd' | 'w');
-REGULAR_EXPRESSION_LITERAL: '/' UNICODE_CHAR* '/';
-
-UNICODE_CHAR: ~[ \t\r\n];
-
-fragment DIGIT: [0-9];
-
-SPACES: [ \u000B\t\r\n] -> channel(HIDDEN);
-UNEXPECTED_CHAR: .;

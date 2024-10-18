@@ -17,11 +17,12 @@
 
 package io.github.willena.influxql.ast.field;
 
+import io.github.willena.influxql.ast.Node;
 import io.github.willena.influxql.ast.utils.StringJoiningList;
 import java.util.List;
 
 /** List of fields */
-public class Fields extends StringJoiningList<Field> {
+public class Fields extends StringJoiningList<Field> implements Node {
     /**
      * Create initialized list of field
      *

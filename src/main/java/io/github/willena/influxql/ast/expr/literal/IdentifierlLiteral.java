@@ -15,35 +15,42 @@
  * limitations under the License.
  */
 
-package io.github.willena.influxql.ast.token;
+package io.github.willena.influxql.ast.expr.literal;
 
-import io.github.willena.influxql.ast.Node;
+import io.github.willena.influxql.ast.Literal;
 
-/** Known privileges */
-public enum Privilege implements Node {
-    NO_PRIVILEGE("NO PRIVILEGES"),
-    READ_PRIVILEGE("READ"),
-    WRITE_PRIVILEGE("WRITE"),
-    ALL_PRIVILEGES("ALL PRIVILEGES");
+import static io.github.willena.influxql.ast.utils.Utils.*;
 
-    private final String sql;
+public class IdentifierlLiteral implements Literal<String> {
+    private final String value;
 
     /**
-     * New privilege with influxQL String
+     * Build string literal
      *
-     * @param sql the InfluxQl representation
+     * @param value string
      */
-    Privilege(String sql) {
-        this.sql = sql;
+    public IdentifierlLiteral(String value) {
+        this.value = value;
+        ensureDefined("value", value);
     }
 
     /**
-     * Return the representation
+     * Create string literal
      *
-     * @return representation String
+     * @param value string
+     * @return literal
      */
+    public static IdentifierlLiteral of(String value) {
+        return new IdentifierlLiteral(value);
+    }
+
+    @Override
+    public String getValue() {
+        return value;
+    }
+
     @Override
     public String toString() {
-        return sql;
+        return quoteIdentifier(value);
     }
 }

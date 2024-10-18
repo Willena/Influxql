@@ -22,7 +22,7 @@ import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Statement;
-import io.github.willena.influxql.ast.token.SubscriptionMode;
+import io.github.willena.influxql.ast.token.DestinationMode;
 import io.github.willena.influxql.ast.utils.Utils;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,7 +33,7 @@ public class CreateSubscriptionStatement implements Statement {
     private final String database;
     private final String retentionPolicy;
     private final List<String> destinations;
-    private final SubscriptionMode mode;
+    private final DestinationMode mode;
 
     private CreateSubscriptionStatement(Builder builder) {
         name = builder.name;
@@ -69,7 +69,7 @@ public class CreateSubscriptionStatement implements Statement {
         private String database;
         private String retentionPolicyName;
         private List<String> destinations;
-        private SubscriptionMode mode;
+        private DestinationMode mode;
 
         public Builder() {}
 
@@ -135,7 +135,7 @@ public class CreateSubscriptionStatement implements Statement {
          * @param mode the {@code mode} to set
          * @return a reference to this Builder
          */
-        public Builder destinationMode(SubscriptionMode mode) {
+        public Builder destinationMode(DestinationMode mode) {
             this.mode = mode;
             return this;
         }

@@ -18,10 +18,11 @@
 package io.github.willena.influxql.ast.token;
 
 import io.github.willena.influxql.ast.Literal;
+import io.github.willena.influxql.ast.Node;
 import io.github.willena.influxql.ast.expr.literal.NumericLiteral;
 
 /** Fill options */
-public enum FillOption {
+public enum FillOption implements Node {
     /** Null fil option */
     NULL {
         @Override

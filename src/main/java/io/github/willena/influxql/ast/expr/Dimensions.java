@@ -17,11 +17,12 @@
 
 package io.github.willena.influxql.ast.expr;
 
+import io.github.willena.influxql.ast.Node;
 import io.github.willena.influxql.ast.utils.StringJoiningList;
 import java.util.List;
 
 /** Dimensions list */
-public class Dimensions extends StringJoiningList<Dimension> {
+public class Dimensions extends StringJoiningList<Dimension> implements Node {
     /**
      * Create using initialized list
      *

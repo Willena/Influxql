@@ -26,6 +26,7 @@ import io.github.willena.influxql.ast.field.SortField;
 import io.github.willena.influxql.ast.field.SortFields;
 import io.github.willena.influxql.ast.source.Sources;
 import io.github.willena.influxql.ast.token.Operator;
+
 import java.util.List;
 
 public class ShowTagValuesStatement implements Statement {
@@ -91,7 +92,9 @@ public class ShowTagValuesStatement implements Statement {
         return buf.toString();
     }
 
-    /** {@code ShowTagValuesStatement} builder static inner class. */
+    /**
+     * {@code ShowTagValuesStatement} builder static inner class.
+     */
     public static final class Builder implements Buildable<ShowTagValuesStatement> {
         private String database;
         private Sources sources;
@@ -102,7 +105,8 @@ public class ShowTagValuesStatement implements Statement {
         private int limit;
         private int offset;
 
-        public Builder() {}
+        public Builder() {
+        }
 
         /**
          * Sets the {@code database} and returns a reference to this Builder enabling method
@@ -168,13 +172,24 @@ public class ShowTagValuesStatement implements Statement {
          *
          * @param sortFields the {@code sortFields} to set
          * @return a reference to this Builder
+         * @deprecated Not allowed by the specification; Left for compatibility; Ignored by influxdb.
          */
-        public Builder orderBY(SortFields sortFields) {
+        @Deprecated()
+        public Builder orderBy(SortFields sortFields) {
             this.sortFields = sortFields;
             return this;
         }
 
-        public Builder orderBY(SortField sortField, SortField... sortFields) {
+        /**
+         * Sets the {@code sortFields} and returns a reference to this Builder enabling method
+         * chaining.
+         *
+         * @param sortFields the {@code sortFields} to set
+         * @return a reference to this Builder
+         * @deprecated Not allowed by the specification; Left for compatibility; Ignored by influxdb.
+         */
+        @Deprecated
+        public Builder orderBy(SortField sortField, SortField... sortFields) {
             if (this.sortFields == null) {
                 this.sortFields = new SortFields();
             }
@@ -209,7 +224,7 @@ public class ShowTagValuesStatement implements Statement {
          * Returns a {@code ShowTagValuesStatement} built from the parameters previously set.
          *
          * @return a {@code ShowTagValuesStatement} built with parameters of this {@code
-         *     ShowTagValuesStatement.Builder}
+         * ShowTagValuesStatement.Builder}
          */
         public ShowTagValuesStatement build() {
             return new ShowTagValuesStatement(this);

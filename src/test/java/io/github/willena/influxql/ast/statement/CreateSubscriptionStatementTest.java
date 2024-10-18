@@ -17,7 +17,7 @@
 
 package io.github.willena.influxql.ast.statement;
 
-import io.github.willena.influxql.ast.token.SubscriptionMode;
+import io.github.willena.influxql.ast.token.DestinationMode;
 import java.util.List;
 
 class CreateSubscriptionStatementTest extends GenericStatementTest<CreateSubscriptionStatement> {
@@ -29,7 +29,7 @@ class CreateSubscriptionStatementTest extends GenericStatementTest<CreateSubscri
                                             .name("Name")
                                             .on("db")
                                             .retentionPolicy("policy")
-                                            .destinationMode(SubscriptionMode.ALL)
+                                            .destinationMode(DestinationMode.ALL)
                                             .destinations("host1"))
                             .withExpectedSql(
                                     "CREATE SUBSCRIPTION \"Name\" ON db.\"policy\" DESTINATIONS ALL 'host1'")
@@ -40,7 +40,7 @@ class CreateSubscriptionStatementTest extends GenericStatementTest<CreateSubscri
                                             .name("Name")
                                             .on("db")
                                             .retentionPolicy("policy")
-                                            .destinationMode(SubscriptionMode.ANY)
+                                            .destinationMode(DestinationMode.ANY)
                                             .destinations("host1"))
                             .withExpectedSql(
                                     "CREATE SUBSCRIPTION \"Name\" ON db.\"policy\" DESTINATIONS ANY 'host1'")
@@ -51,7 +51,7 @@ class CreateSubscriptionStatementTest extends GenericStatementTest<CreateSubscri
                                             .name("Name")
                                             .on("db")
                                             .retentionPolicy("policy")
-                                            .destinationMode(SubscriptionMode.ANY)
+                                            .destinationMode(DestinationMode.ANY)
                                             .destinations("host1", "host2"))
                             .withExpectedSql(
                                     "CREATE SUBSCRIPTION \"Name\" ON db.\"policy\" DESTINATIONS ANY 'host1', 'host2'")

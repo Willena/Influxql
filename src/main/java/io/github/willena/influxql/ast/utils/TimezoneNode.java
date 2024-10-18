@@ -15,35 +15,24 @@
  * limitations under the License.
  */
 
-package io.github.willena.influxql.ast.field;
+package io.github.willena.influxql.ast.utils;
 
 import io.github.willena.influxql.ast.Node;
-import io.github.willena.influxql.ast.utils.StringJoiningList;
-import java.util.List;
 
-/** List of sort fields */
-public class SortFields extends StringJoiningList<SortField> implements Node {
-    /**
-     * Create initialized list
-     *
-     * @param list the list
-     */
-    public SortFields(List<SortField> list) {
-        super(list);
+import java.util.TimeZone;
+
+public class TimezoneNode implements Node {
+    private final TimeZone timeZone;
+
+    private TimezoneNode(TimeZone z){
+        this.timeZone = z;
     }
 
-    /** Create empty {@link SortField} list */
-    public SortFields() {
-        super();
+    public static TimezoneNode of(TimeZone timeZone){
+        return new TimezoneNode(timeZone);
     }
 
-    /**
-     * Create initialized sortField list
-     *
-     * @param sortFields elements to add
-     * @return the list
-     */
-    public static SortFields of(SortField... sortFields) {
-        return new SortFields(List.of(sortFields));
+    public TimeZone getTimeZone() {
+        return timeZone;
     }
 }
