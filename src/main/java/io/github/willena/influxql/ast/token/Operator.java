@@ -19,9 +19,7 @@ package io.github.willena.influxql.ast.token;
 
 import java.util.Arrays;
 
-/**
- * InfluxQl well known Operators
- */
+/** InfluxQl well known Operators */
 public enum Operator {
     // ADD and the following are InfluxQL Operators
     ADD("+"), // +
@@ -68,6 +66,10 @@ public enum Operator {
     }
 
     public static Operator fromValue(String value) {
-        return Arrays.stream(values()).filter(v -> v.value.equals(value)).findFirst().orElseThrow(() -> new IllegalArgumentException("Invalid operator value: " + value));
+        return Arrays.stream(values())
+                .filter(v -> v.value.equals(value))
+                .findFirst()
+                .orElseThrow(
+                        () -> new IllegalArgumentException("Invalid operator value: " + value));
     }
 }

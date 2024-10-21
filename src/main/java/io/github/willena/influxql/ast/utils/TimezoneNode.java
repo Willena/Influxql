@@ -18,17 +18,16 @@
 package io.github.willena.influxql.ast.utils;
 
 import io.github.willena.influxql.ast.Node;
-
 import java.util.TimeZone;
 
 public class TimezoneNode implements Node {
     private final TimeZone timeZone;
 
-    private TimezoneNode(TimeZone z){
+    private TimezoneNode(TimeZone z) {
         this.timeZone = z;
     }
 
-    public static TimezoneNode of(TimeZone timeZone){
+    public static TimezoneNode of(TimeZone timeZone) {
         return new TimezoneNode(timeZone);
     }
 

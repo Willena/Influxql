@@ -21,9 +21,7 @@ import io.github.willena.influxql.ast.Literal;
 
 public class NullLiteral implements Literal<Void> {
 
-    public NullLiteral() {
-
-    }
+    public NullLiteral() {}
 
     public static NullLiteral of() {
         return new NullLiteral();

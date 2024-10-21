@@ -21,7 +21,6 @@ import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 import static io.github.willena.influxql.ast.utils.Utils.quoteString;
 
 import io.github.willena.influxql.ast.Literal;
-
 import java.util.Objects;
 
 /** Simple string literal */

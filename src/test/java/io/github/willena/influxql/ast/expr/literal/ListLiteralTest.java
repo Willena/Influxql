@@ -20,14 +20,17 @@ package io.github.willena.influxql.ast.expr.literal;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
-
 import org.junit.jupiter.api.Test;
 
 class ListLiteralTest {
     @Test
     void listTest() {
         assertEquals("(A, B)", ListLiteral.of("A", "B").toString());
-        assertEquals(List.of(IdentifierlLiteral.of("A"), IdentifierlLiteral.of("B")), ListLiteral.of("A", "B").getValue());
-        assertEquals(List.of(StringLiteral.of("A"), StringLiteral.of("B")), ListLiteral.of(List.of(StringLiteral.of("A"), StringLiteral.of("B"))).getValue());
+        assertEquals(
+                List.of(IdentifierlLiteral.of("A"), IdentifierlLiteral.of("B")),
+                ListLiteral.of("A", "B").getValue());
+        assertEquals(
+                List.of(StringLiteral.of("A"), StringLiteral.of("B")),
+                ListLiteral.of(List.of(StringLiteral.of("A"), StringLiteral.of("B"))).getValue());
     }
 }

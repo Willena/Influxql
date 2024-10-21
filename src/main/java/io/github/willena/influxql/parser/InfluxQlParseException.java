@@ -17,5 +17,4 @@
 
 package io.github.willena.influxql.parser;
 
-public class InfluxQlParseException {
-}
+public class InfluxQlParseException {}

@@ -17,11 +17,10 @@
 
 package io.github.willena.influxql.ast.expr.literal;
 
-import io.github.willena.influxql.ast.Literal;
-
-import java.util.Objects;
-
 import static io.github.willena.influxql.ast.utils.Utils.*;
+
+import io.github.willena.influxql.ast.Literal;
+import java.util.Objects;
 
 public class IdentifierlLiteral implements Literal<String> {
     private final String value;

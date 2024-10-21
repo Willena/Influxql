@@ -19,12 +19,9 @@ package io.github.willena.influxql.ast.field;
 
 import io.github.willena.influxql.ast.Node;
 import io.github.willena.influxql.ast.utils.StringJoiningList;
-
 import java.util.List;
 
-/**
- * List of sort fields
- */
+/** List of sort fields */
 public class SortFields extends StringJoiningList<SortField> implements Node {
     /**
      * Create initialized list
@@ -35,9 +32,7 @@ public class SortFields extends StringJoiningList<SortField> implements Node {
         super(list);
     }
 
-    /**
-     * Create empty {@link SortField} list
-     */
+    /** Create empty {@link SortField} list */
     public SortFields() {
         super();
     }

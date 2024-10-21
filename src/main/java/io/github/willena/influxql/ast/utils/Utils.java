@@ -21,7 +21,6 @@ import static io.github.willena.influxql.ast.utils.ParserUtils.isIdentChar;
 import static io.github.willena.influxql.ast.utils.ParserUtils.isIdentFirstChar;
 
 import io.github.willena.influxql.ast.token.Keywords;
-
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
@@ -30,26 +29,24 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Utility class for String and conversion utils
- */
+/** Utility class for String and conversion utils */
 public final class Utils {
 
-    private static final Pattern DURATION_PATTERN = Pattern.compile("([1-9][0-9]*)(ns|u|µ|ms|s|m|h|d|w)");
-    private static final Map<String, ChronoUnit> UNITS_MAP = Map.ofEntries(
-            Map.entry("ns", ChronoUnit.NANOS),
-            Map.entry("u", ChronoUnit.MICROS),
-            Map.entry("µ", ChronoUnit.MICROS),
-            Map.entry("ms", ChronoUnit.MILLIS),
-            Map.entry("s", ChronoUnit.SECONDS),
-            Map.entry("m", ChronoUnit.MINUTES),
-            Map.entry("h", ChronoUnit.HOURS),
-            Map.entry("d", ChronoUnit.DAYS),
-            Map.entry("w", ChronoUnit.WEEKS)
-    );
+    private static final Pattern DURATION_PATTERN =
+            Pattern.compile("([1-9][0-9]*)(ns|u|µ|ms|s|m|h|d|w)");
+    private static final Map<String, ChronoUnit> UNITS_MAP =
+            Map.ofEntries(
+                    Map.entry("ns", ChronoUnit.NANOS),
+                    Map.entry("u", ChronoUnit.MICROS),
+                    Map.entry("µ", ChronoUnit.MICROS),
+                    Map.entry("ms", ChronoUnit.MILLIS),
+                    Map.entry("s", ChronoUnit.SECONDS),
+                    Map.entry("m", ChronoUnit.MINUTES),
+                    Map.entry("h", ChronoUnit.HOURS),
+                    Map.entry("d", ChronoUnit.DAYS),
+                    Map.entry("w", ChronoUnit.WEEKS));
 
-    private Utils() {
-    }
+    private Utils() {}
 
     /**
      * Escape the given string to be influxql compatible and safe.
@@ -139,7 +136,9 @@ public final class Utils {
     public static Duration parseDuration(String duration) {
         Matcher matcher = DURATION_PATTERN.matcher(duration);
         long intValue = Long.parseLong(matcher.group(0));
-        ChronoUnit unit = Optional.ofNullable(UNITS_MAP.get(matcher.group(1))).orElseThrow(() -> new UnsupportedOperationException("Unsupported unit"));
+        ChronoUnit unit =
+                Optional.ofNullable(UNITS_MAP.get(matcher.group(1)))
+                        .orElseThrow(() -> new UnsupportedOperationException("Unsupported unit"));
 
         return Duration.of(intValue, unit);
     }
@@ -184,7 +183,7 @@ public final class Utils {
     /**
      * Ensure the given value is not null and not blank
      *
-     * @param name  the value name (used to fill the exception)
+     * @param name the value name (used to fill the exception)
      * @param value the current value
      */
     public static void ensureDefined(String name, String value) {
@@ -196,7 +195,7 @@ public final class Utils {
     /**
      * Ensure the given value is not null
      *
-     * @param name  the value name (used to full the exception)
+     * @param name the value name (used to full the exception)
      * @param value the current value
      */
     public static void ensureDefined(String name, Object value) {

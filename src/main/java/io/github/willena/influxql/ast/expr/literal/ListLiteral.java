@@ -21,17 +21,13 @@ import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 
 import io.github.willena.influxql.ast.Literal;
 import io.github.willena.influxql.ast.utils.StringJoiningList;
-import io.github.willena.influxql.ast.utils.Utils;
-
 import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-/**
- * List of string value literal
- */
+/** List of string value literal */
 public class ListLiteral implements Literal<List<Literal<?>>> {
     private final List<Literal<?>> values;
 
