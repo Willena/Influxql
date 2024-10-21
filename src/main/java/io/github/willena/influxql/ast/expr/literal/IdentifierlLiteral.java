@@ -19,6 +19,8 @@ package io.github.willena.influxql.ast.expr.literal;
 
 import io.github.willena.influxql.ast.Literal;
 
+import java.util.Objects;
+
 import static io.github.willena.influxql.ast.utils.Utils.*;
 
 public class IdentifierlLiteral implements Literal<String> {
@@ -32,6 +34,19 @@ public class IdentifierlLiteral implements Literal<String> {
     public IdentifierlLiteral(String value) {
         this.value = value;
         ensureDefined("value", value);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        IdentifierlLiteral that = (IdentifierlLiteral) o;
+        return Objects.equals(value, that.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(value);
     }
 
     /**

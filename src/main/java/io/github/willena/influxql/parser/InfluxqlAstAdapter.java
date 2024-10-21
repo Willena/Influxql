@@ -18,29 +18,30 @@
 package io.github.willena.influxql.parser;
 
 import io.github.willena.influxql.ast.*;
-import io.github.willena.influxql.ast.expr.Dimension;
-import io.github.willena.influxql.ast.expr.Dimensions;
-import io.github.willena.influxql.ast.expr.literal.IdentifierlLiteral;
-import io.github.willena.influxql.ast.expr.literal.ListLiteral;
-import io.github.willena.influxql.ast.expr.literal.RegexLiteral;
+import io.github.willena.influxql.ast.expr.*;
+import io.github.willena.influxql.ast.expr.literal.*;
 import io.github.willena.influxql.ast.extra.RetentionPolicy;
 import io.github.willena.influxql.ast.field.Field;
 import io.github.willena.influxql.ast.field.Fields;
+import io.github.willena.influxql.ast.field.SortField;
 import io.github.willena.influxql.ast.field.SortFields;
 import io.github.willena.influxql.ast.source.Measurement;
 import io.github.willena.influxql.ast.source.Sources;
+import io.github.willena.influxql.ast.source.SubQuery;
 import io.github.willena.influxql.ast.source.Target;
 import io.github.willena.influxql.ast.statement.*;
 import io.github.willena.influxql.ast.token.DestinationMode;
 import io.github.willena.influxql.ast.token.FillOption;
 import io.github.willena.influxql.ast.token.Operator;
 import io.github.willena.influxql.ast.token.Privilege;
+import io.github.willena.influxql.ast.utils.StringJoiningList;
 import io.github.willena.influxql.ast.utils.TimezoneNode;
 import io.github.willena.influxql.ast.utils.Utils;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.util.Optional;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static io.github.willena.influxql.ast.utils.Utils.parseDuration;
@@ -106,8 +107,8 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
             return visitShow_measurements_stmt(ctx.show_measurements_stmt());
         } else if (ctx.show_queries_stmt() != null) {
             return visitShow_queries_stmt(ctx.show_queries_stmt());
-        } else if (ctx.show_retention_policies() != null) {
-            return visitShow_retention_policies(ctx.show_retention_policies());
+        } else if (ctx.show_retention_policies_stmt() != null) {
+            return visitShow_retention_policies_stmt(ctx.show_retention_policies_stmt());
         } else if (ctx.show_series_stmt() != null) {
             return visitShow_series_stmt(ctx.show_series_stmt());
         } else if (ctx.show_shard_groups_stmt() != null) {
@@ -118,8 +119,12 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
             return visitShow_subscriptions_stmt(ctx.show_subscriptions_stmt());
         } else if (ctx.show_tag_keys_stmt() != null) {
             return visitShow_tag_keys_stmt(ctx.show_tag_keys_stmt());
+        } else if (ctx.show_tag_key_cardinality_stmt() != null) {
+            return visitShow_tag_key_cardinality_stmt(ctx.show_tag_key_cardinality_stmt());
         } else if (ctx.show_tag_values_stmt() != null) {
             return visitShow_tag_values_stmt(ctx.show_tag_values_stmt());
+        } else if (ctx.show_tag_values_cardinality_stmt() != null) {
+            return visitShow_tag_values_cardinality_stmt(ctx.show_tag_values_cardinality_stmt());
         } else if (ctx.show_users_stmt() != null) {
             return visitShow_users_stmt(ctx.show_users_stmt());
         } else if (ctx.revoke_stmt() != null) {
@@ -381,11 +386,12 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
     }
 
     @Override
-    public ShowRetentionPoliciesStatement visitShow_retention_policies(InfluxqlParser.Show_retention_policiesContext ctx) {
+    public ShowRetentionPoliciesStatement visitShow_retention_policies_stmt(InfluxqlParser.Show_retention_policies_stmtContext ctx) {
         return new ShowRetentionPoliciesStatement.Builder()
                 .on(ctx.on_clause().db_name.getText())
                 .build();
     }
+
 
     @Override
     public ShowSeriesStatement visitShow_series_stmt(InfluxqlParser.Show_series_stmtContext ctx) {
@@ -499,12 +505,24 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
 
     @Override
     public SelectStatement visitSelect_stmt(InfluxqlParser.Select_stmtContext ctx) {
+
+        Optional<InfluxqlParser.Group_by_clauseContext> groupByClause = Optional.ofNullable(ctx.group_by_clause());
+        Optional<InfluxqlParser.Fill_clauseContext> fillClause = groupByClause.map(InfluxqlParser.Group_by_clauseContext::fill_clause);
+        Optional<FillOption> fillOption = fillClause.map(m -> visitFill_option(m.fill_option()));
+
+        Optional<NumberLiteral> fillValue = fillClause
+                .map(InfluxqlParser.Fill_clauseContext::fill_option)
+                .map(InfluxqlParser.Fill_optionContext::NUMERIC_LITERAL)
+                .map(m -> NumberLiteral.of(Double.parseDouble(m.getText())));
+
         return new SelectStatement.Builder()
                 .select(visitFields(ctx.fields()))
                 .from(visitFrom_clause(ctx.from_clause()))
                 .into(Optional.ofNullable(ctx.into_clause()).map(this::visitInto_clause).orElse(null))
                 .where(Optional.ofNullable(ctx.where_clause()).map(this::visitWhere_clause).orElse(null))
-                .groupBy(Optional.ofNullable(ctx.group_by_clause()).map(this::visitGroup_by_clause).orElse(null))
+                .groupBy(groupByClause.map(this::visitGroup_by_clause).orElse(null))
+                .fill(fillOption.orElse(null))
+                .fillValue(fillValue.orElse(null))
                 .orderBy(Optional.ofNullable(ctx.order_by_clause()).map(this::visitOrder_by_clause).orElse(null))
                 .limit(Optional.ofNullable(ctx.limit_clause()).map(l -> Integer.parseInt(l.INTEGER_LITERAL().getText())).orElse(0))
                 .offset(Optional.ofNullable(ctx.offset_clause()).map(o -> Integer.parseInt(o.INTEGER_LITERAL().getText())).orElse(0))
@@ -527,37 +545,112 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
 
     @Override
     public Dimension visitDimension(InfluxqlParser.DimensionContext ctx) {
-        return null;
+        return Dimension.of(visitExpression(ctx.expression()));
     }
 
     @Override
     public Dimensions visitDimensions(InfluxqlParser.DimensionsContext ctx) {
-        return null;
+        return Dimensions.of(ctx.dimension().stream().map(this::visitDimension).collect(Collectors.toList()));
     }
 
     @Override
     public Field visitField(InfluxqlParser.FieldContext ctx) {
-        return null;
+        return new Field.Builder()
+                .withAlias(Optional.ofNullable(ctx.alias()).map(m -> m.IDENTIFIER().getText()).orElse(null))
+                .withExpr(visitExpression(ctx.expression()))
+                .build();
     }
 
     @Override
     public Fields visitFields(InfluxqlParser.FieldsContext ctx) {
-        return null;
+        return Fields.of(ctx.field().stream().map(this::visitField).collect(Collectors.toList()));
     }
 
     @Override
     public FillOption visitFill_option(InfluxqlParser.Fill_optionContext ctx) {
-        return null;
+        if (ctx.LINEAR() != null) {
+            return FillOption.LINEAR;
+        } else if (ctx.NULL() != null) {
+            return FillOption.NULL;
+        } else if (ctx.NONE() != null) {
+            return FillOption.NONE;
+        } else if (ctx.PREVIOUS() != null) {
+            return FillOption.PREVIOUS;
+        } else if (ctx.NUMERIC_LITERAL() != null) {
+            return FillOption.NUMBER;
+        }
+        throw new UnsupportedOperationException("Unsupported Fill Option. Is grammar and code synchronized ?");
+    }
+
+    @Override
+    public Measurement visitMeasurement_with_rp_and_database(InfluxqlParser.Measurement_with_rp_and_databaseContext ctx) {
+        Measurement.Builder builder = new Measurement.Builder();
+        builder.withRetentionPolicy(ctx.policy_name.getText());
+        builder.withDatabase(ctx.db_name.getText());
+        setSimpleMeasurement(builder, ctx.simple_measurement_name());
+        return builder.build();
+    }
+
+    @Override
+    public Measurement visitMeasurment_with_rp(InfluxqlParser.Measurment_with_rpContext ctx) {
+        Measurement.Builder builder = new Measurement.Builder();
+        builder.withRetentionPolicy(ctx.policy_name.getText());
+        setSimpleMeasurement(builder, ctx.simple_measurement_name());
+        return builder.build();
+    }
+
+    private void setSimpleMeasurement(Measurement.Builder builder, InfluxqlParser.Simple_measurement_nameContext ctx) {
+        if (ctx.IDENTIFIER() != null) {
+            builder.withName(ctx.IDENTIFIER().getText());
+        }
+
+        if (ctx.REGULAR_EXPRESSION_LITERAL() != null) {
+            builder.withRegex(Pattern.compile(ctx.REGULAR_EXPRESSION_LITERAL().getText()));
+        }
+    }
+
+    @Override
+    public Measurement visitSimple_measurement_name(InfluxqlParser.Simple_measurement_nameContext ctx) {
+        Measurement.Builder builder = new Measurement.Builder();
+        setSimpleMeasurement(builder, ctx);
+        return builder.build();
     }
 
     @Override
     public Measurement visitMeasurement(InfluxqlParser.MeasurementContext ctx) {
-        return null;
+
+        if (ctx.measurement_with_rp_and_database() != null) {
+            return visitMeasurement_with_rp_and_database(ctx.measurement_with_rp_and_database());
+        }
+        if (ctx.measurment_with_rp() != null) {
+            return visitMeasurment_with_rp(ctx.measurment_with_rp());
+        }
+        if (ctx.simple_measurement_name() != null) {
+            return visitSimple_measurement_name(ctx.simple_measurement_name());
+        }
+
+        throw new UnsupportedOperationException("Could not read Measurement. Ensure grammar is in sync with code");
     }
 
     @Override
-    public Sources visitMeasurements(InfluxqlParser.MeasurementsContext ctx) {
-        return null;
+    public SubQuery visitSub_query(InfluxqlParser.Sub_queryContext ctx) {
+        return new SubQuery(visitSelect_stmt(ctx.select_stmt()));
+    }
+
+    @Override
+    public Source visitSource(InfluxqlParser.SourceContext ctx) {
+        if (ctx.sub_query() != null) {
+            return visitSub_query(ctx.sub_query());
+        }
+        if (ctx.measurement() != null) {
+            return visitMeasurement(ctx.measurement());
+        }
+        throw new UnsupportedOperationException("Unknown source type. Make sure Grammar is in sync with code");
+    }
+
+    @Override
+    public Sources visitSources(InfluxqlParser.SourcesContext ctx) {
+        return Sources.of(ctx.source().stream().map(this::visitSource).collect(Collectors.toList()));
     }
 
     @Override
@@ -574,44 +667,25 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
         throw new IllegalArgumentException("Unsupported privilege");
     }
 
+
     @Override
-    public Node visitRetention_policy_option(InfluxqlParser.Retention_policy_optionContext ctx) {
-        return null;
+    public SortField visitSort_field(InfluxqlParser.Sort_fieldContext ctx) {
+        SortField.Builder builder = new SortField.Builder();
+
+        if (ctx.ASC() != null) {
+            builder.ascending(true);
+        }
+
+        if (ctx.DESC() != null) {
+            builder.ascending(false);
+        }
+
+        return builder.field(ctx.field_key.getText()).build();
     }
 
     @Override
-    public Node visitRetention_policy_duration(InfluxqlParser.Retention_policy_durationContext ctx) {
-        return null;
-    }
-
-    @Override
-    public Node visitRetention_policy_replication(InfluxqlParser.Retention_policy_replicationContext ctx) {
-        return null;
-    }
-
-    @Override
-    public Node visitRetention_policy_shard_group_duration(InfluxqlParser.Retention_policy_shard_group_durationContext ctx) {
-        return null;
-    }
-
-    @Override
-    public Node visitRetention_policy_name(InfluxqlParser.Retention_policy_nameContext ctx) {
-        return null;
-    }
-
-    @Override
-    public Node visitSort_field(InfluxqlParser.Sort_fieldContext ctx) {
-        return null;
-    }
-
-    @Override
-    public Node visitSort_fields(InfluxqlParser.Sort_fieldsContext ctx) {
-        return null;
-    }
-
-    @Override
-    public Node visitTag_keys(InfluxqlParser.Tag_keysContext ctx) {
-        return null;
+    public SortFields visitSort_fields(InfluxqlParser.Sort_fieldsContext ctx) {
+        return SortFields.of(ctx.sort_field().stream().map(this::visitSort_field).collect(Collectors.toList()));
     }
 
     @Override
@@ -621,12 +695,18 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
 
     @Override
     public Node visitGroup_expr(InfluxqlParser.Group_exprContext ctx) {
-        return null;
+        return Parentheses.of(visitExpression(ctx.expression()));
     }
 
     @Override
     public Node visitCall(InfluxqlParser.CallContext ctx) {
-        return null;
+        return new Call.Builder()
+                .function(ctx.IDENTIFIER().getText())
+                .withArguments(ctx.expression().stream()
+                        .map(this::visitExpression)
+                        .collect(Collectors.toCollection(StringJoiningList::new))
+                )
+                .build();
     }
 
     @Override
@@ -635,18 +715,33 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
     }
 
     @Override
-    public Node visitExpression(InfluxqlParser.ExpressionContext ctx) {
+    public Expression visitExpression(InfluxqlParser.ExpressionContext ctx) {
         return null;
     }
 
     @Override
     public Node visitLiteral_value(InfluxqlParser.Literal_valueContext ctx) {
-        return null;
+        if (ctx.INTEGER_LITERAL() != null) {
+            return IntegerLiteral.of(Integer.parseInt(ctx.INTEGER_LITERAL().getText()));
+        } else if (ctx.NUMERIC_LITERAL() != null) {
+            return NumberLiteral.of(Double.parseDouble(ctx.NUMERIC_LITERAL().getText()));
+        } else if (ctx.STRING_LITERAL() != null) {
+            return StringLiteral.of(ctx.STRING_LITERAL().toString());
+        } else if (ctx.DURATION_LITERAL() != null) {
+            return DurationLiteral.of(parseDuration(ctx.DURATION_LITERAL().getText()));
+        } else if (ctx.TRUE() != null) {
+            return BooleanLiteral.of(true);
+        } else if (ctx.FALSE() != null) {
+            return BooleanLiteral.of(false);
+        } else if (ctx.NULL() != null) {
+            return NullLiteral.of();
+        }
+        throw new UnsupportedOperationException("Unsupported literal; Check grammar and code sync");
     }
 
     @Override
     public Sources visitFrom_clause(InfluxqlParser.From_clauseContext ctx) {
-        return null;
+        return visitSources(ctx.sources());
     }
 
     @Override
@@ -659,25 +754,6 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
         return null;
     }
 
-    @Override
-    public Node visitLimit_clause(InfluxqlParser.Limit_clauseContext ctx) {
-        return null;
-    }
-
-    @Override
-    public Node visitOffset_clause(InfluxqlParser.Offset_clauseContext ctx) {
-        return null;
-    }
-
-    @Override
-    public Node visitSlimit_clause(InfluxqlParser.Slimit_clauseContext ctx) {
-        return null;
-    }
-
-    @Override
-    public Node visitSoffset_clause(InfluxqlParser.Soffset_clauseContext ctx) {
-        return null;
-    }
 
     @Override
     public TimezoneNode visitTimezone_clause(InfluxqlParser.Timezone_clauseContext ctx) {

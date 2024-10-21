@@ -22,6 +22,8 @@ import static io.github.willena.influxql.ast.utils.Utils.quoteString;
 
 import io.github.willena.influxql.ast.Literal;
 
+import java.util.Objects;
+
 /** Simple string literal */
 public class StringLiteral implements Literal<String> {
     private final String value;
@@ -34,6 +36,19 @@ public class StringLiteral implements Literal<String> {
     public StringLiteral(String value) {
         this.value = value;
         ensureDefined("value", value);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        StringLiteral that = (StringLiteral) o;
+        return Objects.equals(value, that.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(value);
     }
 
     /**

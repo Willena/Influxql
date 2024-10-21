@@ -137,10 +137,11 @@ STRING_LITERAL: '\'' ( ~'\'' | '\'\'')* '\'';
 DURATION_LITERAL: INTEGER_LITERAL ('ns' | 'u' | 'µ' | 'ms' | 's' | 'm' | 'h' | 'd' | 'w');
 
 REGULAR_EXPRESSION_LITERAL: '/' UNICODE_CHAR* '/';
-
 UNICODE_CHAR: ~[ \t\r\n];
 
 fragment DIGIT: [0-9];
 
+SINGLE_LINE_COMMENT: '--' ~[\r\n]* (('\r'? '\n') | EOF) -> channel(HIDDEN);
+MULTILINE_COMMENT: '/*' .*? '*/' -> channel(HIDDEN);
 SPACES: [ \u000B\t\r\n] -> channel(HIDDEN);
 UNEXPECTED_CHAR: .;

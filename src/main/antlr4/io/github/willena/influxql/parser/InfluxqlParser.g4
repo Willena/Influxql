@@ -48,7 +48,7 @@ statement : alter_retention_policy_stmt |
  show_grants_stmt |
  show_measurements_stmt |
  show_queries_stmt |
- show_retention_policies |
+ show_retention_policies_stmt |
  show_series_stmt |
  show_shard_groups_stmt |
  show_shards_stmt |
@@ -64,8 +64,8 @@ statement : alter_retention_policy_stmt |
 alter_retention_policy_stmt: ALTER RETENTION POLICY policy_name=IDENTIFIER on_clause retention_policy_option retention_policy_option? retention_policy_option? retention_policy_option?;
 create_continuous_query_stmt: CREATE CONTINUOUS QUERY query_name=IDENTIFIER on_clause ( RESAMPLE resample_opts )? BEGIN select_stmt END;
 create_database_stmt: CREATE DATABASE db_name=IDENTIFIER ( WITH retention_policy_duration? retention_policy_replication? retention_policy_shard_group_duration? retention_policy_name? )?;
-create_retention_policy_stmt : CREATE RETENTION POLICY policy_name=IDENTIFIER on_clause retention_policy_duration retention_policy_replication ( retention_policy_shard_group_duration )? ( DEFAULT )?;
-create_subscription_stmt : CREATE SUBSCRIPTION subscription_name=IDENTIFIER ON db_name=IDENTIFIER DOT retention_policy=IDENTIFIER DESTINATIONS (ANY|ALL) host=STRING_LITERAL ( COMMA host=STRING_LITERAL)*;
+create_retention_policy_stmt : CREATE RETENTION POLICY policy_name=IDENTIFIER on_clause retention_policy_duration retention_policy_replication retention_policy_shard_group_duration? DEFAULT?;
+create_subscription_stmt : CREATE SUBSCRIPTION subscription_name=IDENTIFIER ON db_name=IDENTIFIER DOT retention_policy=IDENTIFIER DESTINATIONS (ANY|ALL) host=STRING_LITERAL (COMMA host=STRING_LITERAL)*;
 create_user_stmt : CREATE USER user_name=IDENTIFIER WITH PASSWORD password=STRING_LITERAL (WITH ALL PRIVILEGES)?;
 delete_stmt : DELETE ( from_clause | where_clause | from_clause where_clause );
 drop_continuous_query_stmt : DROP CONTINUOUS QUERY query_name=IDENTIFIER on_clause;
@@ -89,7 +89,7 @@ show_field_keys_stmt : SHOW FIELD KEYS on_clause? from_clause? order_by_clause? 
 show_grants_stmt : SHOW GRANTS FOR user_name=IDENTIFIER;
 show_measurements_stmt : SHOW MEASUREMENTS on_clause? with_measurement_clause? where_clause? limit_clause? offset_clause?;
 show_queries_stmt : SHOW QUERIES;
-show_retention_policies : SHOW RETENTION POLICIES on_clause;
+show_retention_policies_stmt : SHOW RETENTION POLICIES on_clause;
 show_series_stmt : SHOW SERIES on_clause? from_clause? where_clause? limit_clause? offset_clause?;
 show_shard_groups_stmt : SHOW SHARD GROUPS;
 show_shards_stmt : SHOW SHARDS;
@@ -111,15 +111,17 @@ alias: AS IDENTIFIER;
 back_ref: ( policy_name=IDENTIFIER MEASUREMENT_BACK_REF ) | ( db_name=IDENTIFIER DOT ( policy_name=IDENTIFIER )? MEASUREMENT_BACK_REF );
 dimension : expression;
 dimensions : dimension ( COMMA dimension )*;
-field: expression ( alias )?;
+field: expression alias?;
 fields: field ( COMMA field )*;
 fill_option: NULL | NONE | PREVIOUS | LINEAR | NUMERIC_LITERAL;
 measurement: simple_measurement_name |  measurment_with_rp | measurement_with_rp_and_database;
-measurment_with_rp: policy_name=IDENTIFIER DOT simple_measurement_name;
-measurement_with_rp_and_database: db_name=IDENTIFIER (DOT policy_name=IDENTIFIER )? DOT simple_measurement_name;
-measurements: measurement ( COMMA measurement )*;
 simple_measurement_name : IDENTIFIER | REGULAR_EXPRESSION_LITERAL;
+measurment_with_rp: policy_name=IDENTIFIER DOT simple_measurement_name;
+measurement_with_rp_and_database: db_name=IDENTIFIER (DOT policy_name=IDENTIFIER)? DOT simple_measurement_name;
+source: measurement | sub_query;
+sources: source ( COMMA source )*;
 privilege: (ALL PRIVILEGES?) | READ | WRITE;
+sub_query: OPEN_PAR select_stmt CLOSE_PAR;
 
 retention_policy_option : retention_policy_duration | retention_policy_replication | retention_policy_shard_group_duration | DEFAULT;
 retention_policy_duration : DURATION DURATION_LITERAL;
@@ -138,7 +140,7 @@ var_ref : measurement;
 group_expr: OPEN_PAR expression CLOSE_PAR;
 //literal_expr: STRING_LITERAL | signed_number | TRUE | FALSE | DURATION_LITERAL;
 //signed_number: (PLUS|MINUS)? NUMERIC_LITERAL;
-call: IDENTIFIER OPEN_PAR expression CLOSE_PAR;
+call: IDENTIFIER OPEN_PAR expression? (COMMA expression)* CLOSE_PAR;
 
 unary_operator
     : MINUS
@@ -177,7 +179,7 @@ literal_value
     | FALSE
 ;
 
-from_clause : FROM measurements;
+from_clause : FROM sources;
 group_by_clause : GROUP BY dimensions fill_clause?;
 into_clause : INTO ( measurement | back_ref );
 limit_clause : LIMIT INTEGER_LITERAL;

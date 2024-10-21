@@ -20,10 +20,13 @@ package io.github.willena.influxql.ast.source;
 import io.github.willena.influxql.ast.Node;
 import io.github.willena.influxql.ast.Source;
 import io.github.willena.influxql.ast.utils.StringJoiningList;
+
 import java.util.Arrays;
 import java.util.List;
 
-/** List of {@link Source} */
+/**
+ * List of {@link Source}
+ */
 public class Sources extends StringJoiningList<Source> implements Node {
     /**
      * Source list initialized with base
@@ -34,7 +37,9 @@ public class Sources extends StringJoiningList<Source> implements Node {
         super(sources);
     }
 
-    /** New uninitialized list */
+    /**
+     * New uninitialized list
+     */
     public Sources() {
         super();
     }
@@ -47,5 +52,9 @@ public class Sources extends StringJoiningList<Source> implements Node {
      */
     public static Sources of(Source... sources) {
         return new Sources(Arrays.asList(sources));
+    }
+
+    public static Sources of(List<Source> sources) {
+        return new Sources(sources);
     }
 }

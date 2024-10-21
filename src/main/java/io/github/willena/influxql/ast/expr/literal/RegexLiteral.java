@@ -20,6 +20,8 @@ package io.github.willena.influxql.ast.expr.literal;
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 
 import io.github.willena.influxql.ast.Literal;
+
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 /** Regex literal */
@@ -34,6 +36,19 @@ public class RegexLiteral implements Literal<Pattern> {
     public RegexLiteral(Pattern pattern) {
         this.pattern = pattern;
         ensureDefined("pattern", pattern);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RegexLiteral that = (RegexLiteral) o;
+        return Objects.equals(pattern, that.pattern);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(pattern);
     }
 
     /**

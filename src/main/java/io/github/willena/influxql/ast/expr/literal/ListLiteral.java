@@ -22,9 +22,16 @@ import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 import io.github.willena.influxql.ast.Literal;
 import io.github.willena.influxql.ast.utils.StringJoiningList;
 import io.github.willena.influxql.ast.utils.Utils;
-import java.util.List;
 
-/** List of string value literal */
+import java.time.Duration;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+/**
+ * List of string value literal
+ */
 public class ListLiteral implements Literal<List<Literal<?>>> {
     private final List<Literal<?>> values;
 
@@ -36,6 +43,19 @@ public class ListLiteral implements Literal<List<Literal<?>>> {
     public ListLiteral(final List<Literal<?>> values) {
         this.values = new StringJoiningList<>(values);
         ensureDefined("values", values);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ListLiteral that = (ListLiteral) o;
+        return Objects.equals(values, that.values);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(values);
     }
 
     /**
@@ -56,6 +76,18 @@ public class ListLiteral implements Literal<List<Literal<?>>> {
      */
     public static ListLiteral of(Literal<?>... values) {
         return of(List.of(values));
+    }
+
+    public static ListLiteral of(String... values) {
+        return of(Stream.of(values).map(IdentifierlLiteral::of).collect(Collectors.toList()));
+    }
+
+    public static ListLiteral of(Duration... values) {
+        return of(Stream.of(values).map(DurationLiteral::of).collect(Collectors.toList()));
+    }
+
+    public static ListLiteral of(Number... values) {
+        return of(Stream.of(values).map(NumberLiteral::of).collect(Collectors.toList()));
     }
 
     @Override

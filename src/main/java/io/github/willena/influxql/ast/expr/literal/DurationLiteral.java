@@ -22,6 +22,7 @@ import static io.github.willena.influxql.ast.utils.Utils.formatDuration;
 
 import io.github.willena.influxql.ast.Literal;
 import java.time.Duration;
+import java.util.Objects;
 
 /** Duration literal */
 public class DurationLiteral implements Literal<Duration> {
@@ -35,6 +36,19 @@ public class DurationLiteral implements Literal<Duration> {
     public DurationLiteral(final Duration value) {
         this.value = value;
         ensureDefined("value", value);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DurationLiteral that = (DurationLiteral) o;
+        return Objects.equals(value, that.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(value);
     }
 
     /**

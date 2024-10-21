@@ -21,6 +21,8 @@ import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 
 import io.github.willena.influxql.ast.Literal;
 
+import java.util.Objects;
+
 /** Integer literal */
 public class IntegerLiteral implements Literal<Long>, NumericLiteral {
     private final Long value;
@@ -33,6 +35,19 @@ public class IntegerLiteral implements Literal<Long>, NumericLiteral {
     public IntegerLiteral(Long value) {
         ensureDefined("value", value);
         this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        IntegerLiteral that = (IntegerLiteral) o;
+        return Objects.equals(value, that.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(value);
     }
 
     /**

@@ -21,6 +21,8 @@ import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 
 import io.github.willena.influxql.ast.Literal;
 
+import java.util.Objects;
+
 /** Floating number literal */
 public class NumberLiteral implements Literal<Double>, NumericLiteral {
     private final Double value;
@@ -33,6 +35,19 @@ public class NumberLiteral implements Literal<Double>, NumericLiteral {
     public NumberLiteral(Double value) {
         this.value = value;
         ensureDefined("value", value);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NumberLiteral that = (NumberLiteral) o;
+        return Objects.equals(value, that.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(value);
     }
 
     /**

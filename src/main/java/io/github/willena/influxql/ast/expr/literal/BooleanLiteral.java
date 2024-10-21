@@ -19,7 +19,11 @@ package io.github.willena.influxql.ast.expr.literal;
 
 import io.github.willena.influxql.ast.Literal;
 
-/** Boolean literal */
+import java.util.Objects;
+
+/**
+ * Boolean literal
+ */
 public class BooleanLiteral implements Literal<Boolean> {
 
     private final boolean value;
@@ -31,6 +35,19 @@ public class BooleanLiteral implements Literal<Boolean> {
      */
     public BooleanLiteral(boolean value) {
         this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BooleanLiteral that = (BooleanLiteral) o;
+        return value == that.value;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(value);
     }
 
     /**

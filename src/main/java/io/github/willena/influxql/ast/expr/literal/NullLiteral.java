@@ -17,17 +17,25 @@
 
 package io.github.willena.influxql.ast.expr.literal;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import io.github.willena.influxql.ast.Literal;
 
-import java.util.List;
+public class NullLiteral implements Literal<Void> {
 
-import org.junit.jupiter.api.Test;
+    public NullLiteral() {
 
-class ListLiteralTest {
-    @Test
-    void listTest() {
-        assertEquals("(A, B)", ListLiteral.of("A", "B").toString());
-        assertEquals(List.of(IdentifierlLiteral.of("A"), IdentifierlLiteral.of("B")), ListLiteral.of("A", "B").getValue());
-        assertEquals(List.of(StringLiteral.of("A"), StringLiteral.of("B")), ListLiteral.of(List.of(StringLiteral.of("A"), StringLiteral.of("B"))).getValue());
+    }
+
+    public static NullLiteral of() {
+        return new NullLiteral();
+    }
+
+    @Override
+    public Void getValue() {
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        return "null";
     }
 }

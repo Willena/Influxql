@@ -21,6 +21,7 @@ import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 
 import io.github.willena.influxql.ast.Literal;
 import java.time.Instant;
+import java.util.Objects;
 
 /** Time / Timestamp literal */
 public class TimestampLiteral implements Literal<Instant> {
@@ -34,6 +35,19 @@ public class TimestampLiteral implements Literal<Instant> {
     public TimestampLiteral(Instant value) {
         this.value = value;
         ensureDefined("value", value);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TimestampLiteral that = (TimestampLiteral) o;
+        return Objects.equals(value, that.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(value);
     }
 
     /**
