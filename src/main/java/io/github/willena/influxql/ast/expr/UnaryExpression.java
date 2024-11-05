@@ -20,9 +20,12 @@ package io.github.willena.influxql.ast.expr;
 import io.github.willena.influxql.ast.Expression;
 import io.github.willena.influxql.ast.token.Operator;
 
+import java.util.Set;
+
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 
 public class UnaryExpression implements Expression {
+    private static final Set<Operator> ALLOWED_OPERATORS = Set.of(Operator.ADD, Operator.SUB, Operator.NOT);
     private final Expression expression;
     private final Operator operator;
 
@@ -31,11 +34,14 @@ public class UnaryExpression implements Expression {
         operator = builder.operator;
         ensureDefined("expression", expression);
         ensureDefined("op", operator);
+        if (!ALLOWED_OPERATORS.contains(operator)) {
+            throw new IllegalArgumentException("operator is not allowed: " + operator + "; Allowed operators are: " + ALLOWED_OPERATORS);
+        }
     }
 
     @Override
     public String toString() {
-        return expression.toString() + " " + operator.toString();
+        return operator.toString() + expression.toString();
     }
 
     public static UnaryExpression plus(Expression expression) {

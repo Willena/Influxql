@@ -65,15 +65,6 @@ public class StringJoiningList<T> extends LinkedList<T> {
         this(list, ", ");
     }
 
-    /**
-     * Build a list using default delimiter and custom converter
-     *
-     * @param list the list
-     * @param converter the converter
-     */
-    public StringJoiningList(List<T> list, Function<T, String> converter) {
-        this(list, ", ", converter);
-    }
 
     /** Build an empty list */
     public StringJoiningList() {

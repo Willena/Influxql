@@ -15,31 +15,20 @@
  * limitations under the License.
  */
 
-package io.github.willena.influxql.ast.expr;
+package io.github.willena.influxql.ast.utils;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
+import java.util.TimeZone;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
-class DimensionsTest {
+class TimezoneNodeTest {
     @Test
-    void testDimensionsEmpty() {
-        assertEquals(0, new Dimensions().size());
+    void ofTimezone() {
+        TimeZone utcTimezone = TimeZone.getTimeZone("UTC");
+        TimezoneNode node = assertDoesNotThrow(() -> TimezoneNode.of(utcTimezone));
+        assertEquals(utcTimezone, node.getTimeZone());
     }
 
-    @Test
-    void testDimensions() {
-        Dimensions dimensions = Dimensions.of(Dimension.of(VarRef.of("jjj")));
-        assertEquals(1, dimensions.size());
-        assertEquals("jjj", dimensions.toString());
-    }
-
-    @Test
-    void of() {
-        Dimensions dimensions = Dimensions.of(List.of(Dimension.of(VarRef.of("jjj"))));
-        assertEquals(1, dimensions.size());
-        assertEquals("jjj", dimensions.toString());
-    }
 }

@@ -17,9 +17,11 @@
 
 package io.github.willena.influxql.ast.field;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class SortFieldsTest {
 
@@ -30,5 +32,10 @@ class SortFieldsTest {
         assertEquals(
                 "\"name\" ASC, another DESC",
                 SortFields.of(SortField.asc("name"), SortField.desc("another")).toString());
+    }
+
+    @Test
+    void of() {
+        assertEquals(1, SortFields.of(List.of(SortField.asc("abc"))).size());
     }
 }

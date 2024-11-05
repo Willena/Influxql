@@ -15,31 +15,21 @@
  * limitations under the License.
  */
 
-package io.github.willena.influxql.ast.expr;
+package io.github.willena.influxql.ast.token;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-class DimensionsTest {
-    @Test
-    void testDimensionsEmpty() {
-        assertEquals(0, new Dimensions().size());
-    }
+class OperatorTest {
 
     @Test
-    void testDimensions() {
-        Dimensions dimensions = Dimensions.of(Dimension.of(VarRef.of("jjj")));
-        assertEquals(1, dimensions.size());
-        assertEquals("jjj", dimensions.toString());
-    }
+    void fromValue() {
+        assertEquals(Operator.AND, Operator.fromValue("AND"));
+        assertEquals(Operator.AND, Operator.fromValue("and"));
 
-    @Test
-    void of() {
-        Dimensions dimensions = Dimensions.of(List.of(Dimension.of(VarRef.of("jjj"))));
-        assertEquals(1, dimensions.size());
-        assertEquals("jjj", dimensions.toString());
+        assertEquals(Operator.NEQ, Operator.fromValue("!="));
+        assertThrows(IllegalArgumentException.class, () -> Operator.fromValue(null));
+        assertThrows(IllegalArgumentException.class, () -> Operator.fromValue("OperatorNotFound"));
     }
 }

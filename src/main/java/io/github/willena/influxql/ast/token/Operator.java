@@ -71,7 +71,7 @@ public enum Operator implements Node {
 
     public static Operator fromValue(String value) {
         return Arrays.stream(values())
-                .filter(v -> v.value.equals(value))
+                .filter(v -> v.value.equalsIgnoreCase(value))
                 .findFirst()
                 .orElseThrow(
                         () -> new IllegalArgumentException("Invalid operator value: " + value));
