@@ -75,4 +75,10 @@ class UtilsTest {
         assertEquals("531351350u", Utils.formatDuration(Duration.ofNanos(531351350000L)));
         assertEquals("53135135ms", Utils.formatDuration(Duration.ofNanos(53135135000000L)));
     }
+
+    @Test
+    void parseDuration() {
+        assertThrows(IllegalArgumentException.class, () -> Utils.parseDuration("10djzs"));
+        assertEquals(Duration.ofHours(1), Utils.parseDuration("1h"));
+    }
 }

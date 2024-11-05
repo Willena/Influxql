@@ -31,8 +31,8 @@ REG_MATCH: '=~';
 OR_EX: '^';
 PIPE: '|';
 PIPE2: '||';
-START_TAGS: STAR '::tag';
-START_FIELD: STAR '::field';
+STAR_TAGS: STAR '::tag';
+STAR_FIELD: STAR '::field';
 
 // Keywords
 AND: 'AND';
@@ -131,7 +131,7 @@ IDENTIFIER:
     ;
 
 INTEGER_LITERAL: DIGIT+;
-NUMERIC_LITERAL: (DIGIT+ ('.' DIGIT*)? | '.' DIGIT+);
+NUMERIC_LITERAL: (DIGIT+ ('.' DIGIT*)?) | ('.' DIGIT+);
 STRING_LITERAL: '\'' ( ~'\'' | '\'\'')* '\'';
 
 DURATION_LITERAL: INTEGER_LITERAL ('ns' | 'u' | 'µ' | 'ms' | 's' | 'm' | 'h' | 'd' | 'w');

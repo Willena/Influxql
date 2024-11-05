@@ -17,11 +17,17 @@
 
 package io.github.willena.influxql.ast;
 
+import io.github.willena.influxql.parser.DefaultParser;
+import io.github.willena.influxql.parser.InfluxqlAstAdapter;
+import io.github.willena.influxql.parser.InfluxqlParser;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/** Top level {@link Node} is a {@link Query} Each query can contain multiple statements */
+/**
+ * Top level {@link Node} is a {@link Query} Each query can contain multiple statements
+ */
 public class Query implements Node {
     private final List<Statement> statements;
 
@@ -34,10 +40,14 @@ public class Query implements Node {
         this.statements = statements;
     }
 
+    public List<Statement> getStatements() {
+        return statements;
+    }
+
     /**
      * Build a query based on provided statements (at least one)
      *
-     * @param statement a statement
+     * @param statement  a statement
      * @param statements other statements
      * @return a query with provided statements
      */
@@ -46,6 +56,10 @@ public class Query implements Node {
         list.add(statement);
         list.addAll(List.of(statements));
         return new Query(list);
+    }
+
+    public static Query parse(String sql) {
+        return DefaultParser.parseFrom(InfluxqlParser::query, (c, a) -> a.visitQuery(c), sql);
     }
 
     @Override

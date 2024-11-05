@@ -1,0 +1,11 @@
+-- Set default retention policy for mydb to 1h.cpu.
+ALTER RETENTION POLICY "1h.cpu" ON "mydb" DEFAULT;
+
+-- Change duration and replication factor.
+-- REPLICATION (replication factor) not valid for OSS instances.
+ALTER RETENTION POLICY "policy1" ON "somedb" DURATION 1h REPLICATION 4;
+
+-- Create a database called foo
+CREATE DATABASE "foo";
+
+SHOW USERS;

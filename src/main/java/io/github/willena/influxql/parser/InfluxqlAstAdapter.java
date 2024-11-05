@@ -17,8 +17,6 @@
 
 package io.github.willena.influxql.parser;
 
-import static io.github.willena.influxql.ast.utils.Utils.parseDuration;
-
 import io.github.willena.influxql.ast.*;
 import io.github.willena.influxql.ast.expr.*;
 import io.github.willena.influxql.ast.expr.literal.*;
@@ -39,13 +37,22 @@ import io.github.willena.influxql.ast.token.Privilege;
 import io.github.willena.influxql.ast.utils.StringJoiningList;
 import io.github.willena.influxql.ast.utils.TimezoneNode;
 import io.github.willena.influxql.ast.utils.Utils;
-import java.util.Optional;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 
+import java.util.Optional;
+import java.util.TimeZone;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+import static io.github.willena.influxql.ast.utils.Utils.parseDuration;
+
 public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
+
+    protected InfluxqlAstAdapter() {
+        // Empty
+    }
+
     @Override
     public Query visitQuery(InfluxqlParser.QueryContext ctx) {
         return new Query(
@@ -133,6 +140,9 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
                     "Code does not reflect grammar. Please update code / grammar");
         }
     }
+
+    //TODO: visitShowDiagnostics
+
 
     @Override
     public AlterRetentionPolicyStatement visitAlter_retention_policy_stmt(
@@ -685,7 +695,7 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
         Optional<NumberLiteral> fillValue =
                 fillClause
                         .map(InfluxqlParser.Fill_clauseContext::fill_option)
-                        .map(InfluxqlParser.Fill_optionContext::NUMERIC_LITERAL)
+                        .map(InfluxqlParser.Fill_optionContext::number_literal)
                         .map(m -> NumberLiteral.of(Double.parseDouble(m.getText())));
 
         return new SelectStatement.Builder()
@@ -777,7 +787,7 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
             return FillOption.NONE;
         } else if (ctx.PREVIOUS() != null) {
             return FillOption.PREVIOUS;
-        } else if (ctx.NUMERIC_LITERAL() != null) {
+        } else if (ctx.number_literal() != null) {
             return FillOption.NUMBER;
         }
         throw new UnsupportedOperationException(
@@ -897,17 +907,17 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
     }
 
     @Override
-    public Node visitVar_ref(InfluxqlParser.Var_refContext ctx) {
-        return null;
+    public VarRef visitVar_ref(InfluxqlParser.Var_refContext ctx) {
+        return VarRef.of(ctx.measurement().getText());
     }
 
     @Override
-    public Node visitGroup_expr(InfluxqlParser.Group_exprContext ctx) {
+    public Parentheses visitGroup_expr(InfluxqlParser.Group_exprContext ctx) {
         return Parentheses.of(visitExpression(ctx.expression()));
     }
 
     @Override
-    public Node visitCall(InfluxqlParser.CallContext ctx) {
+    public Call visitCall(InfluxqlParser.CallContext ctx) {
         return new Call.Builder()
                 .function(ctx.IDENTIFIER().getText())
                 .withArguments(
@@ -918,17 +928,50 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
     }
 
     @Override
-    public Node visitUnary_operator(InfluxqlParser.Unary_operatorContext ctx) {
-        return null;
+    public Operator visitUnary_operator(InfluxqlParser.Unary_operatorContext ctx) {
+        return Operator.fromValue(ctx.getText());
+    }
+
+    @Override
+    public Operator visitBinary_operator(InfluxqlParser.Binary_operatorContext ctx) {
+        return Operator.fromValue(ctx.getText());
     }
 
     @Override
     public Expression visitExpression(InfluxqlParser.ExpressionContext ctx) {
-        return null;
+
+        if (ctx.literal_value() != null) {
+            return visitLiteral_value(ctx.literal_value());
+        } else if (ctx.unary_operator() != null) {
+            return new UnaryExpression.Builder()
+                    .withOperator(visitUnary_operator(ctx.unary_operator()))
+                    .withExpression(visitExpression(ctx.expression(0)))
+                    .build();
+        } else if (ctx.call() != null) {
+            return visitCall(ctx.call());
+        } else if (ctx.group_expr() != null) {
+            return visitGroup_expr(ctx.group_expr());
+        } else if (ctx.var_ref() != null) {
+            return visitVar_ref(ctx.var_ref());
+        } else if (ctx.STAR() != null) {
+            return Wildcard.wildcard();
+        } else if (ctx.STAR_FIELD() != null) {
+            return Wildcard.wildcardFields();
+        } else if (ctx.STAR_TAGS() != null) {
+            return Wildcard.wildcardTags();
+        } else if (ctx.expression() != null && ctx.expression().size() == 2) {
+            return BinaryExpression.of(
+                    visitExpression(ctx.expression(0)),
+                    visitExpression(ctx.expression(1)),
+                    visitBinary_operator(ctx.binary_operator())
+            );
+        }
+
+        throw new IllegalStateException("Unsupported case. Grammar is not in sync with code");
     }
 
     @Override
-    public Node visitLiteral_value(InfluxqlParser.Literal_valueContext ctx) {
+    public Literal<?> visitLiteral_value(InfluxqlParser.Literal_valueContext ctx) {
         if (ctx.INTEGER_LITERAL() != null) {
             return IntegerLiteral.of(Integer.parseInt(ctx.INTEGER_LITERAL().getText()));
         } else if (ctx.NUMERIC_LITERAL() != null) {
@@ -954,7 +997,7 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
 
     @Override
     public Dimensions visitGroup_by_clause(InfluxqlParser.Group_by_clauseContext ctx) {
-        return null;
+        return visitDimensions(ctx.dimensions());
     }
 
     @Override
@@ -964,42 +1007,30 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
 
     @Override
     public TimezoneNode visitTimezone_clause(InfluxqlParser.Timezone_clauseContext ctx) {
-        return null;
+        return TimezoneNode.of(TimeZone.getTimeZone(ctx.STRING_LITERAL().getText()));
     }
 
-    @Override
-    public Node visitOn_clause(InfluxqlParser.On_clauseContext ctx) {
-        return null;
-    }
-
-    @Override
-    public Node visitFill_clause(InfluxqlParser.Fill_clauseContext ctx) {
-        return null;
-    }
 
     @Override
     public SortFields visitOrder_by_clause(InfluxqlParser.Order_by_clauseContext ctx) {
-        return null;
-    }
-
-    @Override
-    public Node visitTo_clause(InfluxqlParser.To_clauseContext ctx) {
-        return null;
+        return visitSort_fields(ctx.sort_fields());
     }
 
     @Override
     public Expression visitWhere_clause(InfluxqlParser.Where_clauseContext ctx) {
-        return null;
+        return visitExpression(ctx.expression());
     }
 
     @Override
     public Measurement visitWith_measurement_clause(
             InfluxqlParser.With_measurement_clauseContext ctx) {
-        return null;
-    }
 
-    @Override
-    public Node visitWith_tag_clause(InfluxqlParser.With_tag_clauseContext ctx) {
-        return null;
+        if (ctx.measurement() != null) {
+            return visitMeasurement(ctx.measurement());
+        } else if (ctx.REGULAR_EXPRESSION_LITERAL() != null) {
+            return Measurement.measurements(ctx.REGULAR_EXPRESSION_LITERAL().getText());
+        }
+
+        throw new IllegalStateException("Unsupported case. Grammar is not in sync with code");
     }
 }

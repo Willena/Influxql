@@ -18,10 +18,17 @@
 package io.github.willena.influxql.ast;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import io.github.willena.influxql.ast.statement.ShowDatabasesStatement;
 import io.github.willena.influxql.ast.statement.ShowMeasurementsStatement;
 import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Objects;
 
 class QueryTest {
 
@@ -32,5 +39,13 @@ class QueryTest {
                         new ShowDatabasesStatement(),
                         new ShowMeasurementsStatement.Builder().build());
         assertEquals("SHOW DATABASES; SHOW MEASUREMENTS", q.toString());
+    }
+
+    @Test
+    void parse_multiple_statements() throws URISyntaxException, IOException {
+        String str = Files.readString(Paths.get(Objects.requireNonNull(getClass().getResource("query_many.influxql")).toURI()));
+        Query q = Query.parse(str);
+        assertNotNull(q);
+        assertEquals(4, q.getStatements().size());
     }
 }

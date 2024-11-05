@@ -135,9 +135,12 @@ public final class Utils {
 
     public static Duration parseDuration(String duration) {
         Matcher matcher = DURATION_PATTERN.matcher(duration);
-        long intValue = Long.parseLong(matcher.group(0));
+        if (!matcher.matches()){
+            throw new IllegalArgumentException("Invalid duration: " + duration);
+        }
+        long intValue = Long.parseLong(matcher.group(1));
         ChronoUnit unit =
-                Optional.ofNullable(UNITS_MAP.get(matcher.group(1)))
+                Optional.ofNullable(UNITS_MAP.get(matcher.group(2)))
                         .orElseThrow(() -> new UnsupportedOperationException("Unsupported unit"));
 
         return Duration.of(intValue, unit);

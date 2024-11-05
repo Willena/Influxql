@@ -17,10 +17,12 @@
 
 package io.github.willena.influxql.ast.token;
 
+import io.github.willena.influxql.ast.Node;
+
 import java.util.Arrays;
 
 /** InfluxQl well known Operators */
-public enum Operator {
+public enum Operator implements Node {
     // ADD and the following are InfluxQL Operators
     ADD("+"), // +
     SUB("-"), // -
@@ -42,7 +44,9 @@ public enum Operator {
     LT("<"), // <
     LTE("<="), // <=
     GT(">"), // >
-    GTE(">="); // >=
+    GTE(">="),
+
+    NOT("~"); // >=
 
     private final String value;
 

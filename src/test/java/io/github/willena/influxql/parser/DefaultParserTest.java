@@ -17,4 +17,15 @@
 
 package io.github.willena.influxql.parser;
 
-public class InfluxQlParseException {}
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class DefaultParserTest {
+
+    @Test
+    void parseFrom() {
+        assertThrows(IllegalArgumentException.class, () -> DefaultParser.parseFrom(InfluxqlParser::query, (queryContext, adapter) -> adapter.visitQuery(queryContext), "SELEKT invalid"));
+        assertDoesNotThrow(() -> DefaultParser.parseFrom(InfluxqlParser::query, (queryContext, adapter) -> adapter.visitQuery(queryContext), "SELECT myField FROM myDatabase"));
+    }
+}

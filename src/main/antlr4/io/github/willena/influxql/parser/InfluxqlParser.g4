@@ -22,7 +22,7 @@ options {
 }
 
 // ------------- PARSER ---------------------
-query: statement ( SCOL statement )* EOF;
+query: statement ( SCOL statement )* SCOL? EOF;
 
 statement : alter_retention_policy_stmt |
  create_continuous_query_stmt |
@@ -54,10 +54,11 @@ statement : alter_retention_policy_stmt |
  show_shards_stmt |
  show_subscriptions_stmt|
  show_tag_keys_stmt |
- show_tag_key_cardinality_stmt
+ show_tag_key_cardinality_stmt |
  show_tag_values_stmt |
- show_tag_values_cardinality_stmt
+ show_tag_values_cardinality_stmt |
  show_users_stmt |
+ show_diagnostics_stmt |
  revoke_stmt |
  select_stmt ;
 
@@ -99,8 +100,9 @@ show_tag_key_cardinality_stmt: SHOW TAG KEY EXACT? CARDINALITY on_clause? from_c
 show_tag_values_stmt : SHOW TAG VALUES on_clause? from_clause? with_tag_clause where_clause? limit_clause? offset_clause?;
 show_tag_values_cardinality_stmt: SHOW TAG VALUES EXACT? CARDINALITY on_clause? from_clause? where_clause? group_by_clause? limit_clause? offset_clause? with_tag_clause;
 show_users_stmt : SHOW USERS;
+show_diagnostics_stmt: SHOW DIAGNOSTICS;
 revoke_stmt : REVOKE privilege on_clause? FROM user_name=IDENTIFIER ;
-select_stmt : SELECT fields from_clause into_clause? where_clause? group_by_clause? order_by_clause? limit_clause? offset_clause? slimit_clause? soffset_clause? timezone_clause?;
+select_stmt : SELECT fields into_clause? from_clause  where_clause? group_by_clause? order_by_clause? limit_clause? offset_clause? slimit_clause? soffset_clause? timezone_clause?;
 
 //query_name: identifier;
 resample_opts: (every_stmt for_stmt | every_stmt | for_stmt);
@@ -113,7 +115,7 @@ dimension : expression;
 dimensions : dimension ( COMMA dimension )*;
 field: expression alias?;
 fields: field ( COMMA field )*;
-fill_option: NULL | NONE | PREVIOUS | LINEAR | NUMERIC_LITERAL;
+fill_option: NULL | NONE | PREVIOUS | LINEAR | number_literal;
 measurement: simple_measurement_name |  measurment_with_rp | measurement_with_rp_and_database;
 simple_measurement_name : IDENTIFIER | REGULAR_EXPRESSION_LITERAL;
 measurment_with_rp: policy_name=IDENTIFIER DOT simple_measurement_name;
@@ -142,32 +144,41 @@ group_expr: OPEN_PAR expression CLOSE_PAR;
 //signed_number: (PLUS|MINUS)? NUMERIC_LITERAL;
 call: IDENTIFIER OPEN_PAR expression? (COMMA expression)* CLOSE_PAR;
 
-unary_operator
-    : MINUS
-    | PLUS
-    | TILDE;
+unary_operator: MINUS | PLUS | TILDE;
+
+binary_operator: PIPE2
+| STAR
+| SLASH
+| MOD
+| PLUS
+| MINUS
+| LT2
+| GT2
+| AMP
+| PIPE
+| OR_EX
+| LT
+| LT_EQ
+| GT
+| GT_EQ
+| ASSIGN
+| EQ
+| NOT_EQ1
+| NOT_EQ2
+| AND
+| OR;
+
 
 expression
     : literal_value
     | unary_operator expression
-    | expression PIPE2 expression
-    | expression ( STAR | SLASH | MOD) expression
-    | expression ( PLUS | MINUS) expression
-    | expression ( LT2 | GT2 | AMP | PIPE | OR_EX) expression
-    | expression ( LT | LT_EQ | GT | GT_EQ) expression
-    | expression (
-        ASSIGN
-        | EQ
-        | NOT_EQ1
-        | NOT_EQ2
-    ) expression
-    | expression AND expression
-    | expression OR expression
+    | expression binary_operator expression
     | call
     | group_expr
     | var_ref
-    | STAR | START_FIELD | START_TAGS
-;
+    | STAR | STAR_FIELD | STAR_TAGS;
+
+number_literal: INTEGER_LITERAL | NUMERIC_LITERAL;
 
 literal_value
     : INTEGER_LITERAL

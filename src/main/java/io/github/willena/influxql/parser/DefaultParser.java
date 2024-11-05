@@ -18,15 +18,17 @@
 package io.github.willena.influxql.parser;
 
 import io.github.willena.influxql.ast.Node;
+import org.antlr.v4.runtime.*;
+
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import org.antlr.v4.runtime.*;
 
 public class DefaultParser {
 
     private static class ErrorListener extends BaseErrorListener {
 
-        public ErrorListener() {}
+        public ErrorListener() {
+        }
 
         @Override
         public void syntaxError(
@@ -40,9 +42,9 @@ public class DefaultParser {
         }
     }
 
-    public static <TREE> Node parseFrom(
+    public static <TREE, T extends Node> T parseFrom(
             Function<InfluxqlParser, TREE> entryPoint,
-            BiFunction<TREE, InfluxqlAstAdapter, Node> adapterFunction,
+            BiFunction<TREE, InfluxqlAstAdapter, T> adapterFunction,
             String influxql) {
         ErrorListener errorListener = new ErrorListener();
         InfluxqlLexer lexer = new InfluxqlLexer(CharStreams.fromString(influxql));
@@ -53,7 +55,6 @@ public class DefaultParser {
         parser.addErrorListener(errorListener);
 
         InfluxqlAstAdapter adapter = new InfluxqlAstAdapter();
-
         TREE ctx = entryPoint.apply(parser);
 
         return adapterFunction.apply(ctx, adapter);
