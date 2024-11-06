@@ -17,12 +17,12 @@
 
 package io.github.willena.influxql.ast.statement;
 
-import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
-import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
-
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Statement;
 import io.github.willena.influxql.ast.token.Privilege;
+
+import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
+import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
 public class RevokeStatement implements Statement {
     private final Privilege privilege;
@@ -34,18 +34,24 @@ public class RevokeStatement implements Statement {
         database = builder.database;
         username = builder.username;
         ensureDefined("privilege", privilege);
-        ensureDefined("database", database);
         ensureDefined("username", username);
     }
 
     @Override
     public String toString() {
-        return "REVOKE "
-                + privilege.toString()
-                + " ON "
-                + quoteIdentifier(database)
-                + " FROM "
-                + quoteIdentifier(username);
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("REVOKE ");
+        builder.append(privilege);
+
+        if (database != null) {
+            builder.append(" ON ");
+            builder.append(quoteIdentifier(database));
+        }
+
+        builder.append(" FROM ");
+        builder.append(quoteIdentifier(username));
+        return builder.toString();
     }
 
     public static final class Builder implements Buildable<RevokeStatement> {
@@ -53,7 +59,8 @@ public class RevokeStatement implements Statement {
         private String database;
         private String username;
 
-        public Builder() {}
+        public Builder() {
+        }
 
         public Builder privilege(Privilege privilege) {
             this.privilege = privilege;

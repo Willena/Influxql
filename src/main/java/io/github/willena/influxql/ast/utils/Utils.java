@@ -52,13 +52,6 @@ public final class Utils {
     private Utils() {
     }
 
-    public static String trimIdentifierQuotes(String identifier) {
-        if (identifier.startsWith("\"") && identifier.endsWith("\"")) {
-            return identifier.substring(1, identifier.length() - 1);
-        }
-        return identifier;
-    }
-
     /**
      * Escape the given string to be influxql compatible and safe.
      *
@@ -252,4 +245,6 @@ public final class Utils {
                 .replaceAll("\\\\", "\\\\\\\\")
                 .replaceAll("\"", "\\\\\"");
     }
+
+
 }

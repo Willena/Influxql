@@ -19,15 +19,13 @@ package io.github.willena.influxql.ast.expr.literal;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
-class StringLiteralTest {
+class IdentifierlLiteralTest {
+
     @Test
-    void testStringLiteral() {
-        assertEquals("abc", StringLiteral.of("abc").getValue());
-        assertEquals("'abc'", StringLiteral.of("abc").toString());
-        assertEquals("'\\'abc\\''", StringLiteral.of("'abc'").toString());
-        assertThrows(IllegalArgumentException.class, () -> StringLiteral.of(null));
+    void of() {
+        assertEquals("id", IdentifierlLiteral.of("id").getValue());
+        assertEquals("\"\\\"identifier\\\"\"", IdentifierlLiteral.of("\"identifier\"").toString());
     }
 }

@@ -18,7 +18,6 @@
 package io.github.willena.influxql.ast.expr.literal;
 
 import io.github.willena.influxql.ast.Literal;
-import io.github.willena.influxql.ast.utils.Utils;
 
 import java.util.Objects;
 
@@ -35,7 +34,7 @@ public class IdentifierlLiteral implements Literal<String> {
      */
     public IdentifierlLiteral(String value) {
         ensureDefined("value", value);
-        this.value = Utils.trimIdentifierQuotes(value);
+        this.value = value;
     }
 
     @Override

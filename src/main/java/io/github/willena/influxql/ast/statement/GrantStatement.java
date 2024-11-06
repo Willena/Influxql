@@ -17,12 +17,12 @@
 
 package io.github.willena.influxql.ast.statement;
 
-import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
-import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
-
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Statement;
 import io.github.willena.influxql.ast.token.Privilege;
+
+import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
+import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
 public class GrantStatement implements Statement {
     private final Privilege privilege;
@@ -35,17 +35,23 @@ public class GrantStatement implements Statement {
         username = builder.username;
         ensureDefined("privilege", privilege);
         ensureDefined("user", username);
-        ensureDefined("database", database);
     }
 
     @Override
     public String toString() {
-        return "GRANT "
-                + privilege.toString()
-                + " ON "
-                + quoteIdentifier(database)
-                + " TO "
-                + quoteIdentifier(username);
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("GRANT ");
+        builder.append(privilege);
+
+        if (database != null) {
+            builder.append(" ON ");
+            builder.append(quoteIdentifier(database));
+        }
+
+        builder.append(" TO ");
+        builder.append(quoteIdentifier(username));
+        return builder.toString();
     }
 
     public static final class Builder implements Buildable<GrantStatement> {
@@ -53,7 +59,8 @@ public class GrantStatement implements Statement {
         private String database;
         private String username;
 
-        public Builder() {}
+        public Builder() {
+        }
 
         public Builder privilege(Privilege privilege) {
             this.privilege = privilege;

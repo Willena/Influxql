@@ -24,11 +24,6 @@ import io.github.willena.influxql.ast.Statement;
 import io.github.willena.influxql.ast.source.Sources;
 import java.util.List;
 
-/**
- * This class is deprecated due to the fact that it is like {@link DeleteStatement} and seams unsued
- * in InfluxQL ast. Until further notice the statement will stay in here.
- */
-@Deprecated()
 public class DeleteSeriesStatement implements Statement {
     private final Sources sources;
     private final Expression condition;

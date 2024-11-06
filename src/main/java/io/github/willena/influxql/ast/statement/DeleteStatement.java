@@ -17,13 +17,18 @@
 
 package io.github.willena.influxql.ast.statement;
 
-import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
-
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Expression;
 import io.github.willena.influxql.ast.Source;
 import io.github.willena.influxql.ast.Statement;
 
+/**
+ * @deprecated use {@link DeleteSeriesStatement}
+ * For some reason, this is included in the Golang package.
+ * Implemented it, but it is useless.
+ * Many things are invalid given the samples from the documentation and the parser syntax.
+ */
+@Deprecated(forRemoval = true)
 public class DeleteStatement implements Statement {
     private final Source source;
     private final Expression condition;
@@ -31,8 +36,6 @@ public class DeleteStatement implements Statement {
     private DeleteStatement(Builder builder) {
         source = builder.source;
         condition = builder.condition;
-
-        ensureDefined("source", source);
     }
 
     @Override
@@ -47,12 +50,18 @@ public class DeleteStatement implements Statement {
         return buf.toString();
     }
 
-    /** {@code DeleteStatement} builder static inner class. */
+    /**
+     * {@code DeleteStatement} builder static inner class.
+     *
+     * @deprecated use {@link DeleteSeriesStatement.Builder}
+     */
+    @Deprecated(forRemoval = true)
     public static final class Builder implements Buildable<DeleteStatement> {
         private Source source;
         private Expression condition;
 
-        public Builder() {}
+        public Builder() {
+        }
 
         /**
          * Sets the {@code source} and returns a reference to this Builder enabling method chaining.
@@ -81,7 +90,7 @@ public class DeleteStatement implements Statement {
          * Returns a {@code DeleteStatement} built from the parameters previously set.
          *
          * @return a {@code DeleteStatement} built with parameters of this {@code
-         *     DeleteStatement.Builder}
+         * DeleteStatement.Builder}
          */
         public DeleteStatement build() {
             return new DeleteStatement(this);

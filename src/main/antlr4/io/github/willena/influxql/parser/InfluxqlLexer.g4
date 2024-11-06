@@ -132,7 +132,7 @@ IDENTIFIER:
 
 INTEGER_LITERAL: DIGIT+;
 NUMERIC_LITERAL: (DIGIT+ ('.' DIGIT*)?) | ('.' DIGIT+);
-STRING_LITERAL: '\'' ( ~'\'' | '\'\'')* '\'';
+STRING_LITERAL: '\'' ( ~'\'' | '\\\'')* '\'';
 
 DURATION_LITERAL: INTEGER_LITERAL ('ns' | 'u' | 'µ' | 'ms' | 's' | 'm' | 'h' | 'd' | 'w');
 
