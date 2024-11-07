@@ -17,10 +17,10 @@
 
 package io.github.willena.influxql.ast.expr;
 
+import io.github.willena.influxql.ast.Expression;
+
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
-
-import io.github.willena.influxql.ast.Expression;
 
 /** Reference to variable of name of field / alias */
 public class VarRef implements Expression {

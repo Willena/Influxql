@@ -17,5 +17,7 @@
 
 package io.github.willena.influxql.ast.expr.literal;
 
+import io.github.willena.influxql.ast.Literal;
+
 /** Marker interface for all number based literals */
-public interface NumericLiteral {}
+public interface NumericLiteral extends Literal<Number> {}

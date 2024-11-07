@@ -18,6 +18,7 @@
 package io.github.willena.influxql.ast.extra;
 
 import io.github.willena.influxql.ast.Buildable;
+
 import java.time.Duration;
 
 /**
@@ -35,6 +36,13 @@ public class RetentionPolicy {
         retentionPolicyReplication = builder.retentionPolicyReplication;
         retentionPolicyName = builder.retentionPolicyName;
         retentionPolicyShardGroupDuration = builder.retentionPolicyShardGroupDuration;
+    }
+
+    public boolean isEmpty() {
+        return retentionPolicyName == null &&
+                retentionPolicyDuration == null &&
+                retentionPolicyReplication == null &&
+                retentionPolicyShardGroupDuration == null;
     }
 
     /**
@@ -73,14 +81,17 @@ public class RetentionPolicy {
         return retentionPolicyShardGroupDuration;
     }
 
-    /** {@code RetentionPolicy} builder static inner class. */
+    /**
+     * {@code RetentionPolicy} builder static inner class.
+     */
     public static final class Builder implements Buildable<RetentionPolicy> {
         private Duration retentionPolicyDuration;
         private Integer retentionPolicyReplication;
         private String retentionPolicyName;
         private Duration retentionPolicyShardGroupDuration;
 
-        public Builder() {}
+        public Builder() {
+        }
 
         /**
          * Sets the {@code retentionPolicyDuration} and returns a reference to this Builder enabling
@@ -123,7 +134,7 @@ public class RetentionPolicy {
          * Builder enabling method chaining.
          *
          * @param retentionPolicyShardGroupDuration the {@code retentionPolicyShardGroupDuration} to
-         *     set
+         *                                          set
          * @return a reference to this Builder
          */
         public Builder shardDuration(Duration retentionPolicyShardGroupDuration) {
@@ -135,7 +146,7 @@ public class RetentionPolicy {
          * Returns a {@code RetentionPolicy} built from the parameters previously set.
          *
          * @return a {@code RetentionPolicy} built with parameters of this {@code
-         *     RetentionPolicy.Builder}
+         * RetentionPolicy.Builder}
          */
         public RetentionPolicy build() {
             return new RetentionPolicy(this);

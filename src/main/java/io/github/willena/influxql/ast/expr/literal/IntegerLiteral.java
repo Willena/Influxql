@@ -17,13 +17,12 @@
 
 package io.github.willena.influxql.ast.expr.literal;
 
-import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
-
-import io.github.willena.influxql.ast.Literal;
 import java.util.Objects;
 
+import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
+
 /** Integer literal */
-public class IntegerLiteral implements Literal<Long>, NumericLiteral {
+public class IntegerLiteral implements NumericLiteral {
     private final Long value;
 
     /**

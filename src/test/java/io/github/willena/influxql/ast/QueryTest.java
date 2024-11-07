@@ -64,15 +64,15 @@ class QueryTest {
             ),
             Map.entry(
                     "CREATE CONTINUOUS QUERY \"10m_event_count\" ON \"db_name\" BEGIN SELECT count(\"value\") INTO \"6_months\".\"events\" FROM \"events\" GROUP BY (10m) END",
-                    "CREATE CONTINUOUS QUERY \"10m_event_count\" ON db_name BEGIN SELECT count(\"value\") INTO \"6_months\".\"events\" FROM events GROUP BY (10m) END"
+                    "CREATE CONTINUOUS QUERY \"10m_event_count\" ON db_name BEGIN SELECT count(value) INTO \"6_months\".events FROM events GROUP BY (10m) END"
             ),
             Map.entry(
                     "CREATE CONTINUOUS QUERY \"1h_event_count\" ON \"db_name\" BEGIN SELECT sum(\"count\") as \"count\" INTO \"2_years\".\"events\" FROM \"6_months\".\"events\" GROUP BY time(1h) END",
-                    "CREATE CONTINUOUS QUERY \"1h_event_count\" ON db_name BEGIN SELECT sum(\"count\") AS count INTO \"2_years\".\"events\" FROM \"6_months\".\"events\" GROUP BY time(1h) END"
+                    "CREATE CONTINUOUS QUERY \"1h_event_count\" ON db_name BEGIN SELECT sum(count) AS count INTO \"2_years\".events FROM \"6_months\".events GROUP BY time(1h) END"
             ),
             Map.entry(
                     "CREATE CONTINUOUS QUERY \"cpu_mean\" ON \"db_name\" RESAMPLE EVERY 10s FOR 2m BEGIN SELECT mean(\"value\") INTO \"cpu_mean\" FROM \"cpu\" GROUP BY time(1m) END",
-                    "CREATE CONTINUOUS QUERY \"cpu_mean\" ON db_name RESAMPLE EVERY 10s FOR 2m BEGIN SELECT mean(\"value\") INTO cpu_mean FROM cpu GROUP BY time(1m) END"
+                    "CREATE CONTINUOUS QUERY cpu_mean ON db_name RESAMPLE EVERY 10s FOR 2m BEGIN SELECT mean(value) INTO cpu_mean FROM cpu GROUP BY time(1m) END"
 
             ),
             Map.entry(
@@ -201,7 +201,7 @@ class QueryTest {
             ),
             Map.entry(
                     "SELECT mean(\"value\") FROM \"cpu\" GROUP BY region, time(1d) fill(0) tz('America/Chicago')",
-                    "SELECT mean(value) FROM cpu GROUP BY region, time(1d) fill(0) tz('America/Chicago')"
+                    "SELECT mean(value) FROM cpu GROUP BY region, time(1d) fill(0) TZ('America/Chicago')"
             ),
             Map.entry(
                     "SHOW CONTINUOUS QUERIES",
@@ -265,7 +265,7 @@ class QueryTest {
             ),
             Map.entry(
                     "SHOW SERIES FROM \"telegraf\".\"autogen\".\"cpu\" WHERE cpu = 'cpu8'",
-                    "SHOW SERIES FROM \"telegraf\".\"autogen\".\"cpu\" WHERE cpu = 'cpu8'"
+                    "SHOW SERIES FROM telegraf.autogen.cpu WHERE cpu = 'cpu8'"
             ),
             Map.entry(
                     "SHOW SERIES CARDINALITY",

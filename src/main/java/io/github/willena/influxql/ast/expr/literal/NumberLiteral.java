@@ -17,13 +17,14 @@
 
 package io.github.willena.influxql.ast.expr.literal;
 
-import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
-
-import io.github.willena.influxql.ast.Literal;
 import java.util.Objects;
 
-/** Floating number literal */
-public class NumberLiteral implements Literal<Double>, NumericLiteral {
+import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
+
+/**
+ * Floating number literal
+ */
+public class NumberLiteral implements NumericLiteral {
     private final Double value;
 
     /**

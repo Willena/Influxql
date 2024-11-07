@@ -67,6 +67,13 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
         return identifier;
     }
 
+    private static String trimRegexChars(String regex) {
+        if (regex.startsWith("/") && regex.endsWith("/")) {
+            return regex.substring(1, regex.length() - 1);
+        }
+        return regex;
+    }
+
     @Override
     public Query visitQuery(InfluxqlParser.QueryContext ctx) {
         return new Query(
@@ -629,9 +636,9 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
                                     .map(IdentifierlLiteral::of)
                                     .collect(Collectors.toList()));
         } else if (op == Operator.EQREGEX) {
-            literal = RegexLiteral.of(ctx.with_tag_clause().tag_key.getText());
+            literal = RegexLiteral.of(trimRegexChars(ctx.with_tag_clause().tag_key.getText()));
         } else {
-            literal = IdentifierlLiteral.of(ctx.with_tag_clause().tag_key.getText());
+            literal = IdentifierlLiteral.of(trimIdentifierQuotes(ctx.with_tag_clause().tag_key.getText()));
         }
 
         return new ShowTagValuesStatement.Builder()
@@ -674,7 +681,7 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
                                     .map(IdentifierlLiteral::of)
                                     .collect(Collectors.toList()));
         } else if (op == Operator.EQREGEX) {
-            literal = RegexLiteral.of(ctx.with_tag_clause().tag_key.getText());
+            literal = RegexLiteral.of(trimRegexChars(ctx.with_tag_clause().tag_key.getText()));
         } else {
             literal = IdentifierlLiteral.of(trimIdentifierQuotes(ctx.with_tag_clause().tag_key.getText()));
         }
@@ -726,6 +733,15 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
     }
 
     @Override
+    public NumericLiteral visitNumber_literal(InfluxqlParser.Number_literalContext ctx) {
+        if (ctx.INTEGER_LITERAL() != null) {
+            return IntegerLiteral.of(Long.parseLong(ctx.INTEGER_LITERAL().getText()));
+        } else {
+            return NumberLiteral.of(Double.parseDouble(ctx.NUMERIC_LITERAL().getText()));
+        }
+    }
+
+    @Override
     public SelectStatement visitSelect_stmt(InfluxqlParser.Select_stmtContext ctx) {
 
         Optional<InfluxqlParser.Group_by_clauseContext> groupByClause =
@@ -734,11 +750,11 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
                 groupByClause.map(InfluxqlParser.Group_by_clauseContext::fill_clause);
         Optional<FillOption> fillOption = fillClause.map(m -> visitFill_option(m.fill_option()));
 
-        Optional<NumberLiteral> fillValue =
+        Optional<NumericLiteral> fillValue =
                 fillClause
                         .map(InfluxqlParser.Fill_clauseContext::fill_option)
                         .map(InfluxqlParser.Fill_optionContext::number_literal)
-                        .map(m -> NumberLiteral.of(Double.parseDouble(m.getText())));
+                        .map(this::visitNumber_literal);
 
         return new SelectStatement.Builder()
                 .select(visitFields(ctx.fields()))
@@ -866,7 +882,7 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
         }
 
         if (ctx.REGULAR_EXPRESSION_LITERAL() != null) {
-            builder.withRegex(Pattern.compile(ctx.REGULAR_EXPRESSION_LITERAL().getText()));
+            builder.withRegex(Pattern.compile(trimRegexChars(ctx.REGULAR_EXPRESSION_LITERAL().getText())));
         }
     }
 
@@ -956,7 +972,9 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
 
     @Override
     public VarRef visitVar_ref(InfluxqlParser.Var_refContext ctx) {
-        return VarRef.of(ctx.measurement().getText());
+        // I'm not a huge fan of this.
+        // VarRef only defines
+        return VarRef.of(visitMeasurement(ctx.measurement()).toString());
     }
 
     @Override
@@ -1050,12 +1068,12 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
 
     @Override
     public Target visitInto_clause(InfluxqlParser.Into_clauseContext ctx) {
-        return null;
+        return Target.of(visitMeasurement(ctx.measurement()));
     }
 
     @Override
     public TimezoneNode visitTimezone_clause(InfluxqlParser.Timezone_clauseContext ctx) {
-        return TimezoneNode.of(TimeZone.getTimeZone(ctx.STRING_LITERAL().getText()));
+        return TimezoneNode.of(TimeZone.getTimeZone(trimStringQuotes(ctx.STRING_LITERAL().getText())));
     }
 
 
@@ -1076,7 +1094,7 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
         if (ctx.measurement() != null) {
             return visitMeasurement(ctx.measurement());
         } else if (ctx.REGULAR_EXPRESSION_LITERAL() != null) {
-            return Measurement.measurements(ctx.REGULAR_EXPRESSION_LITERAL().getText());
+            return Measurement.measurements(trimRegexChars(ctx.REGULAR_EXPRESSION_LITERAL().getText()));
         }
 
         throw new IllegalStateException("Unsupported case. Grammar is not in sync with code");

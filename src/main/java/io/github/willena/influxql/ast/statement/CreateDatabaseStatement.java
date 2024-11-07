@@ -32,7 +32,6 @@ public class CreateDatabaseStatement implements Statement {
     private CreateDatabaseStatement(Builder builder) {
         name = builder.name;
         retentionPolicy = builder.retentionPolicy;
-
         ensureDefined("name", name);
     }
 
@@ -41,7 +40,7 @@ public class CreateDatabaseStatement implements Statement {
         StringBuilder buf = new StringBuilder();
         buf.append("CREATE DATABASE ");
         buf.append(quoteIdentifier(name));
-        if (retentionPolicy != null) {
+        if (retentionPolicy != null && !retentionPolicy.isEmpty()) {
             buf.append(" WITH");
             if (retentionPolicy.getRetentionPolicyDuration() != null) {
                 buf.append(" DURATION ");
