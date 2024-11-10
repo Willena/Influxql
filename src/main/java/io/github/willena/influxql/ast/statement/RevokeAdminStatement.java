@@ -17,15 +17,13 @@
 
 package io.github.willena.influxql.ast.statement;
 
-import io.github.willena.influxql.ast.Buildable;
-import io.github.willena.influxql.ast.Statement;
-
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
-/**
- * Use {@link RevokeStatement}
- */
+import io.github.willena.influxql.ast.Buildable;
+import io.github.willena.influxql.ast.Statement;
+
+/** Use {@link RevokeStatement} */
 @Deprecated(forRemoval = true)
 public class RevokeAdminStatement implements Statement {
     private final String user;
@@ -40,9 +38,7 @@ public class RevokeAdminStatement implements Statement {
         return "REVOKE ALL PRIVILEGES FROM " + quoteIdentifier(user);
     }
 
-    /**
-     * Use {@link RevokeStatement.Builder}
-     */
+    /** Use {@link RevokeStatement.Builder} */
     @Deprecated(forRemoval = true)
     public static final class Builder implements Buildable<RevokeAdminStatement> {
         private String user;

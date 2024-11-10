@@ -17,11 +17,10 @@
 
 package io.github.willena.influxql.ast.utils;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.TimeZone;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 class TimezoneNodeTest {
     @Test
@@ -30,5 +29,4 @@ class TimezoneNodeTest {
         TimezoneNode node = assertDoesNotThrow(() -> TimezoneNode.of(utcTimezone));
         assertEquals(utcTimezone, node.getTimeZone());
     }
-
 }

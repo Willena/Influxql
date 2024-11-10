@@ -47,9 +47,11 @@ statement : alter_retention_policy_stmt |
  show_field_keys_stmt |
  show_grants_stmt |
  show_measurements_stmt |
+ show_measurement_cardinality_stmt |
  show_queries_stmt |
  show_retention_policies_stmt |
  show_series_stmt |
+ show_series_cardinality_stmt |
  show_shard_groups_stmt |
  show_shards_stmt |
  show_subscriptions_stmt|
@@ -57,8 +59,10 @@ statement : alter_retention_policy_stmt |
  show_tag_key_cardinality_stmt |
  show_tag_values_stmt |
  show_tag_values_cardinality_stmt |
+ show_field_key_cardinality_stmt |
  show_users_stmt |
  show_diagnostics_stmt |
+ show_stats_stmt |
  revoke_stmt |
  select_stmt ;
 
@@ -87,20 +91,24 @@ kill_query_statement : KILL QUERY query_id=INTEGER_LITERAL (ON host=STRING_LITER
 show_continuous_queries_stmt : SHOW CONTINUOUS QUERIES;
 show_databases_stmt : SHOW DATABASES;
 show_field_keys_stmt : SHOW FIELD KEYS on_clause? from_clause? order_by_clause? limit_clause? offset_clause?;
+show_field_key_cardinality_stmt: SHOW FIELD KEY EXACT? CARDINALITY on_clause? from_clause? where_clause? group_by_clause? limit_clause? offset_clause?;
 show_grants_stmt : SHOW GRANTS FOR user_name=IDENTIFIER;
 show_measurements_stmt : SHOW MEASUREMENTS on_clause? with_measurement_clause? where_clause? limit_clause? offset_clause?;
+show_measurement_cardinality_stmt: SHOW MEASUREMENT EXACT? CARDINALITY on_clause? from_clause? where_clause? group_by_clause? limit_clause? offset_clause?;
 show_queries_stmt : SHOW QUERIES;
 show_retention_policies_stmt : SHOW RETENTION POLICIES on_clause;
 show_series_stmt : SHOW SERIES on_clause? from_clause? where_clause? limit_clause? offset_clause?;
+show_series_cardinality_stmt: SHOW SERIES EXACT? CARDINALITY on_clause? from_clause? where_clause? group_by_clause? limit_clause? offset_clause?;
 show_shard_groups_stmt : SHOW SHARD GROUPS;
 show_shards_stmt : SHOW SHARDS;
 show_subscriptions_stmt : SHOW SUBSCRIPTIONS;
-show_tag_keys_stmt : SHOW TAG KEYS on_clause? from_clause? where_clause? order_by_clause? limit_clause? offset_clause?;
+show_tag_keys_stmt : SHOW TAG KEYS on_clause? with_tag_clause? from_clause? where_clause? order_by_clause? limit_clause? offset_clause?;
 show_tag_key_cardinality_stmt: SHOW TAG KEY EXACT? CARDINALITY on_clause? from_clause? where_clause? group_by_clause? limit_clause? offset_clause?;
 show_tag_values_stmt : SHOW TAG VALUES on_clause? from_clause? with_tag_clause where_clause? limit_clause? offset_clause?;
 show_tag_values_cardinality_stmt: SHOW TAG VALUES EXACT? CARDINALITY on_clause? from_clause? where_clause? group_by_clause? limit_clause? offset_clause? with_tag_clause;
 show_users_stmt : SHOW USERS;
-show_diagnostics_stmt: SHOW DIAGNOSTICS;
+show_diagnostics_stmt: SHOW DIAGNOSTICS (FOR STRING_LITERAL)?;
+show_stats_stmt: SHOW STATS (FOR STRING_LITERAL)?;
 revoke_stmt : REVOKE privilege on_clause? FROM user_name=IDENTIFIER ;
 select_stmt : SELECT fields into_clause? from_clause  where_clause? group_by_clause? order_by_clause? limit_clause? offset_clause? slimit_clause? soffset_clause? timezone_clause?;
 
@@ -204,5 +212,5 @@ order_by_clause: ORDER BY sort_fields;
 to_clause : TO user_name=IDENTIFIER ;
 where_clause : WHERE expression;
 with_measurement_clause : WITH MEASUREMENT ( EQ measurement | REG_MATCH REGULAR_EXPRESSION_LITERAL );
-with_tag_clause : WITH KEY ( op=ASSIGN tag_key=IDENTIFIER | op=NOT_EQ1 tag_key=IDENTIFIER | op=REG_MATCH tag_key=REGULAR_EXPRESSION_LITERAL | op=IN OPEN_PAR tag_keys CLOSE_PAR );
+with_tag_clause : WITH KEY ( op=ASSIGN tag_key=IDENTIFIER | op=NOT_EQ1 tag_key=IDENTIFIER | op=(REG_MATCH|REG_NMATCH) tag_key=REGULAR_EXPRESSION_LITERAL | op=IN OPEN_PAR tag_keys CLOSE_PAR );
 

@@ -65,7 +65,6 @@ public class StringJoiningList<T> extends LinkedList<T> {
         this(list, ", ");
     }
 
-
     /** Build an empty list */
     public StringJoiningList() {
         this(Collections.emptyList());

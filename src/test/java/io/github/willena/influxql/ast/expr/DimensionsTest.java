@@ -17,11 +17,10 @@
 
 package io.github.willena.influxql.ast.expr;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 class DimensionsTest {
     @Test

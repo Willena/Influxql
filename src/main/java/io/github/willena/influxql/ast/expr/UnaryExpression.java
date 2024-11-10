@@ -17,15 +17,15 @@
 
 package io.github.willena.influxql.ast.expr;
 
-import io.github.willena.influxql.ast.Expression;
-import io.github.willena.influxql.ast.token.Operator;
-
-import java.util.Set;
-
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 
+import io.github.willena.influxql.ast.Expression;
+import io.github.willena.influxql.ast.token.Operator;
+import java.util.Set;
+
 public class UnaryExpression implements Expression {
-    private static final Set<Operator> ALLOWED_OPERATORS = Set.of(Operator.ADD, Operator.SUB, Operator.NOT);
+    private static final Set<Operator> ALLOWED_OPERATORS =
+            Set.of(Operator.ADD, Operator.SUB, Operator.NOT);
     private final Expression expression;
     private final Operator operator;
 
@@ -35,7 +35,11 @@ public class UnaryExpression implements Expression {
         ensureDefined("expression", expression);
         ensureDefined("op", operator);
         if (!ALLOWED_OPERATORS.contains(operator)) {
-            throw new IllegalArgumentException("operator is not allowed: " + operator + "; Allowed operators are: " + ALLOWED_OPERATORS);
+            throw new IllegalArgumentException(
+                    "operator is not allowed: "
+                            + operator
+                            + "; Allowed operators are: "
+                            + ALLOWED_OPERATORS);
         }
     }
 
@@ -60,8 +64,7 @@ public class UnaryExpression implements Expression {
         private Expression expression;
         private Operator operator;
 
-        public Builder() {
-        }
+        public Builder() {}
 
         public Builder withExpression(Expression expression) {
             this.expression = expression;

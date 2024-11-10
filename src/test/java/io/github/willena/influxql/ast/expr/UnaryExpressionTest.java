@@ -17,12 +17,12 @@
 
 package io.github.willena.influxql.ast.expr;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import io.github.willena.influxql.ast.expr.literal.IntegerLiteral;
 import io.github.willena.influxql.ast.expr.literal.NumberLiteral;
 import io.github.willena.influxql.ast.token.Operator;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class UnaryExpressionTest {
     @Test
@@ -46,9 +46,22 @@ class UnaryExpressionTest {
     @Test
     void builderTest() {
         assertThrows(IllegalArgumentException.class, () -> new UnaryExpression.Builder().build());
-        assertThrows(IllegalArgumentException.class, () -> new UnaryExpression.Builder().withExpression(IntegerLiteral.of(10)).build());
-        assertThrows(IllegalArgumentException.class, () -> new UnaryExpression.Builder().withExpression(IntegerLiteral.of(10)).withOperator(Operator.EQ).build());
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new UnaryExpression.Builder().withExpression(IntegerLiteral.of(10)).build());
+        assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        new UnaryExpression.Builder()
+                                .withExpression(IntegerLiteral.of(10))
+                                .withOperator(Operator.EQ)
+                                .build());
 
-        assertDoesNotThrow(() -> new UnaryExpression.Builder().withExpression(IntegerLiteral.of(10)).withOperator(Operator.SUB).build());
+        assertDoesNotThrow(
+                () ->
+                        new UnaryExpression.Builder()
+                                .withExpression(IntegerLiteral.of(10))
+                                .withOperator(Operator.SUB)
+                                .build());
     }
 }

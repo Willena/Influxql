@@ -28,6 +28,7 @@ EQ : '==';
 NOT_EQ1 : '!=';
 NOT_EQ2 : '<>';
 REG_MATCH: '=~';
+REG_NMATCH: '!~';
 OR_EX: '^';
 PIPE: '|';
 PIPE2: '||';

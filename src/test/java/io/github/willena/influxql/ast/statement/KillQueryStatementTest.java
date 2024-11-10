@@ -29,6 +29,6 @@ class KillQueryStatementTest extends GenericStatementTest<KillQueryStatement> {
                     new TestBody.Builder<KillQueryStatement>()
                             .withStatement(
                                     new KillQueryStatement.Builder().queryId(1L).on("hostname"))
-                            .withExpectedSql("KILL QUERY 1 ON hostname")
+                            .withExpectedSql("KILL QUERY 1 ON 'hostname'")
                             .build());
 }

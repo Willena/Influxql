@@ -17,12 +17,12 @@
 
 package io.github.willena.influxql.ast.token;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import io.github.willena.influxql.ast.expr.literal.IntegerLiteral;
 import io.github.willena.influxql.ast.expr.literal.NumberLiteral;
 import io.github.willena.influxql.ast.expr.literal.StringLiteral;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class FillOptionTest {
 
@@ -38,6 +38,8 @@ class FillOptionTest {
     void requireValue_getSqlForValue() {
         assertEquals("fill(10)", FillOption.NUMBER.getSqlForValue(IntegerLiteral.of(10)));
         assertEquals("fill(10.33)", FillOption.NUMBER.getSqlForValue(NumberLiteral.of(10.33)));
-        assertThrows(IllegalArgumentException.class, () -> FillOption.NUMBER.getSqlForValue(StringLiteral.of("toto")));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> FillOption.NUMBER.getSqlForValue(StringLiteral.of("toto")));
     }
 }

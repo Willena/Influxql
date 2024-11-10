@@ -19,17 +19,18 @@ package io.github.willena.influxql.ast.statement;
 
 import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
-import io.github.willena.influxql.ast.Buildable;
-import io.github.willena.influxql.ast.Expression;
-import io.github.willena.influxql.ast.Source;
-import io.github.willena.influxql.ast.Statement;
+import io.github.willena.influxql.ast.*;
+import io.github.willena.influxql.ast.expr.literal.StringLiteral;
 import io.github.willena.influxql.ast.field.SortField;
 import io.github.willena.influxql.ast.field.SortFields;
 import io.github.willena.influxql.ast.source.Sources;
+import io.github.willena.influxql.ast.token.Operator;
 import java.util.List;
 
 public class ShowTagKeysStatement implements Statement {
     private final String database;
+    private final Operator op;
+    private final Literal<?> tagKeyExpr;
     private final Sources sources;
     private final Expression condition;
     private final SortFields sortFields;
@@ -40,6 +41,8 @@ public class ShowTagKeysStatement implements Statement {
 
     private ShowTagKeysStatement(Builder builder) {
         database = builder.database;
+        op = builder.op;
+        tagKeyExpr = builder.tagKeyExpr;
         sources = builder.sources;
         condition = builder.condition;
         sortFields = builder.sortFields;
@@ -58,6 +61,18 @@ public class ShowTagKeysStatement implements Statement {
             buf.append(" ON ");
             buf.append(quoteIdentifier(database));
         }
+
+        if (op != null && tagKeyExpr != null) {
+            buf.append(" WITH KEY ");
+            buf.append(op);
+            buf.append(" ");
+            if (tagKeyExpr instanceof StringLiteral) {
+                buf.append(quoteIdentifier(((StringLiteral) tagKeyExpr).getValue()));
+            } else {
+                buf.append(tagKeyExpr);
+            }
+        }
+
         if (sources != null) {
             buf.append(" FROM ");
             buf.append(sources);
@@ -92,6 +107,8 @@ public class ShowTagKeysStatement implements Statement {
     /** {@code ShowTagKeysStatement} builder static inner class. */
     public static final class Builder implements Buildable<ShowTagKeysStatement> {
         private String database;
+        private Operator op;
+        private Literal<?> tagKeyExpr;
         private Sources sources;
         private Expression condition;
         private SortFields sortFields;
@@ -111,6 +128,19 @@ public class ShowTagKeysStatement implements Statement {
          */
         public Builder on(String database) {
             this.database = database;
+            return this;
+        }
+
+        /**
+         * Sets the {@code tagKeyExpr} and returns a reference to this Builder enabling method
+         * chaining.
+         *
+         * @param tagKeyExpr the {@code tagKeyExpr} to set
+         * @return a reference to this Builder
+         */
+        public Builder withKey(Operator op, Literal<?> tagKeyExpr) {
+            this.tagKeyExpr = tagKeyExpr;
+            this.op = op;
             return this;
         }
 

@@ -18,17 +18,15 @@
 package io.github.willena.influxql.parser;
 
 import io.github.willena.influxql.ast.Node;
-import org.antlr.v4.runtime.*;
-
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import org.antlr.v4.runtime.*;
 
 public class DefaultParser {
 
     private static class ErrorListener extends BaseErrorListener {
 
-        public ErrorListener() {
-        }
+        public ErrorListener() {}
 
         @Override
         public void syntaxError(

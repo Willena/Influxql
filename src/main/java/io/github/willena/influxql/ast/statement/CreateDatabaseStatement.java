@@ -17,13 +17,12 @@
 
 package io.github.willena.influxql.ast.statement;
 
+import static io.github.willena.influxql.ast.utils.Utils.*;
+
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Statement;
 import io.github.willena.influxql.ast.extra.RetentionPolicy;
-
 import java.time.Duration;
-
-import static io.github.willena.influxql.ast.utils.Utils.*;
 
 public class CreateDatabaseStatement implements Statement {
     private final String name;
@@ -50,8 +49,11 @@ public class CreateDatabaseStatement implements Statement {
                 buf.append(" REPLICATION ");
                 buf.append(retentionPolicy.getRetentionPolicyReplication());
             }
-            if (retentionPolicy.getRetentionPolicyShardGroupDuration() != null && retentionPolicy.getRetentionPolicyShardGroupDuration().compareTo(Duration.ZERO)
-                    > 0) {
+            if (retentionPolicy.getRetentionPolicyShardGroupDuration() != null
+                    && retentionPolicy
+                                    .getRetentionPolicyShardGroupDuration()
+                                    .compareTo(Duration.ZERO)
+                            > 0) {
                 buf.append(" SHARD DURATION ");
                 buf.append(formatDuration(retentionPolicy.getRetentionPolicyShardGroupDuration()));
             }

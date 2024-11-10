@@ -17,12 +17,12 @@
 
 package io.github.willena.influxql.ast.statement;
 
+import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
+import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
+
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Statement;
 import io.github.willena.influxql.ast.token.Privilege;
-
-import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
-import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
 public class RevokeStatement implements Statement {
     private final Privilege privilege;
@@ -59,8 +59,7 @@ public class RevokeStatement implements Statement {
         private String database;
         private String username;
 
-        public Builder() {
-        }
+        public Builder() {}
 
         public Builder privilege(Privilege privilege) {
             this.privilege = privilege;

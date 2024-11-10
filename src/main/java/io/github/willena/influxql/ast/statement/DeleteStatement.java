@@ -23,10 +23,9 @@ import io.github.willena.influxql.ast.Source;
 import io.github.willena.influxql.ast.Statement;
 
 /**
- * @deprecated use {@link DeleteSeriesStatement}
- * For some reason, this is included in the Golang package.
- * Implemented it, but it is useless.
- * Many things are invalid given the samples from the documentation and the parser syntax.
+ * @deprecated use {@link DeleteSeriesStatement} For some reason, this is included in the Golang
+ *     package. Implemented it, but it is useless. Many things are invalid given the samples from
+ *     the documentation and the parser syntax.
  */
 @Deprecated(forRemoval = true)
 public class DeleteStatement implements Statement {
@@ -60,8 +59,7 @@ public class DeleteStatement implements Statement {
         private Source source;
         private Expression condition;
 
-        public Builder() {
-        }
+        public Builder() {}
 
         /**
          * Sets the {@code source} and returns a reference to this Builder enabling method chaining.
@@ -90,7 +88,7 @@ public class DeleteStatement implements Statement {
          * Returns a {@code DeleteStatement} built from the parameters previously set.
          *
          * @return a {@code DeleteStatement} built with parameters of this {@code
-         * DeleteStatement.Builder}
+         *     DeleteStatement.Builder}
          */
         public DeleteStatement build() {
             return new DeleteStatement(this);

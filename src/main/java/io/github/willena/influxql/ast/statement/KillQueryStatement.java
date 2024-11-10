@@ -17,11 +17,11 @@
 
 package io.github.willena.influxql.ast.statement;
 
-import io.github.willena.influxql.ast.Buildable;
-import io.github.willena.influxql.ast.Statement;
-
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 import static io.github.willena.influxql.ast.utils.Utils.quoteString;
+
+import io.github.willena.influxql.ast.Buildable;
+import io.github.willena.influxql.ast.Statement;
 
 public class KillQueryStatement implements Statement {
     private final Long queryId;

@@ -17,9 +17,9 @@
 
 package io.github.willena.influxql.ast.expr.literal;
 
-import java.util.Objects;
-
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
+
+import java.util.Objects;
 
 /** Integer literal */
 public class IntegerLiteral implements NumericLiteral {

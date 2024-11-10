@@ -17,6 +17,8 @@
 
 package io.github.willena.influxql.parser;
 
+import static io.github.willena.influxql.ast.utils.Utils.parseDuration;
+
 import io.github.willena.influxql.ast.*;
 import io.github.willena.influxql.ast.expr.*;
 import io.github.willena.influxql.ast.expr.literal.*;
@@ -37,15 +39,12 @@ import io.github.willena.influxql.ast.token.Privilege;
 import io.github.willena.influxql.ast.utils.StringJoiningList;
 import io.github.willena.influxql.ast.utils.TimezoneNode;
 import io.github.willena.influxql.ast.utils.Utils;
-import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.tree.ParseTree;
-
 import java.util.Optional;
 import java.util.TimeZone;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
-import static io.github.willena.influxql.ast.utils.Utils.parseDuration;
+import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.ParseTree;
 
 public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
 
@@ -130,12 +129,16 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
             return visitShow_grants_stmt(ctx.show_grants_stmt());
         } else if (ctx.show_measurements_stmt() != null) {
             return visitShow_measurements_stmt(ctx.show_measurements_stmt());
+        } else if (ctx.show_measurement_cardinality_stmt() != null) {
+            return visitShow_measurement_cardinality_stmt(ctx.show_measurement_cardinality_stmt());
         } else if (ctx.show_queries_stmt() != null) {
             return visitShow_queries_stmt(ctx.show_queries_stmt());
         } else if (ctx.show_retention_policies_stmt() != null) {
             return visitShow_retention_policies_stmt(ctx.show_retention_policies_stmt());
         } else if (ctx.show_series_stmt() != null) {
             return visitShow_series_stmt(ctx.show_series_stmt());
+        } else if (ctx.show_series_cardinality_stmt() != null) {
+            return visitShow_series_cardinality_stmt(ctx.show_series_cardinality_stmt());
         } else if (ctx.show_shard_groups_stmt() != null) {
             return visitShow_shard_groups_stmt(ctx.show_shard_groups_stmt());
         } else if (ctx.show_shards_stmt() != null) {
@@ -150,8 +153,14 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
             return visitShow_tag_values_stmt(ctx.show_tag_values_stmt());
         } else if (ctx.show_tag_values_cardinality_stmt() != null) {
             return visitShow_tag_values_cardinality_stmt(ctx.show_tag_values_cardinality_stmt());
+        } else if (ctx.show_field_key_cardinality_stmt() != null) {
+            return visitShow_field_key_cardinality_stmt(ctx.show_field_key_cardinality_stmt());
         } else if (ctx.show_users_stmt() != null) {
             return visitShow_users_stmt(ctx.show_users_stmt());
+        } else if (ctx.show_diagnostics_stmt() != null) {
+            return visitShow_diagnostics_stmt(ctx.show_diagnostics_stmt());
+        } else if (ctx.show_stats_stmt() != null) {
+            return visitShow_stats_stmt(ctx.show_stats_stmt());
         } else if (ctx.revoke_stmt() != null) {
             return visitRevoke_stmt(ctx.revoke_stmt());
         } else if (ctx.select_stmt() != null) {
@@ -162,8 +171,121 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
         }
     }
 
-    //TODO: visitShowDiagnostics
+    @Override
+    public ShowStatsStatement visitShow_stats_stmt(InfluxqlParser.Show_stats_stmtContext ctx) {
+        return new ShowStatsStatement.Builder()
+                .for_(
+                        Optional.ofNullable(ctx.STRING_LITERAL())
+                                .map(ParseTree::getText)
+                                .map(InfluxqlAstAdapter::trimStringQuotes)
+                                .orElse(null))
+                .build();
+    }
 
+    @Override
+    public ShowSeriesCardinalityStatement visitShow_series_cardinality_stmt(
+            InfluxqlParser.Show_series_cardinality_stmtContext ctx) {
+        return new ShowSeriesCardinalityStatement.Builder()
+                .exact(Optional.ofNullable(ctx.EXACT()).isPresent())
+                .on(Optional.ofNullable(ctx.on_clause()).map(c -> c.db_name.getText()).orElse(null))
+                .from(
+                        Optional.ofNullable(ctx.from_clause())
+                                .map(this::visitFrom_clause)
+                                .orElse(null))
+                .where(
+                        Optional.ofNullable(ctx.where_clause())
+                                .map(this::visitWhere_clause)
+                                .orElse(null))
+                .groupBy(
+                        Optional.ofNullable(ctx.group_by_clause())
+                                .map(this::visitGroup_by_clause)
+                                .orElse(null))
+                .limit(
+                        Optional.ofNullable(ctx.limit_clause())
+                                .map(l -> l.INTEGER_LITERAL().getText())
+                                .map(Integer::parseInt)
+                                .orElse(0))
+                .offset(
+                        Optional.ofNullable(ctx.offset_clause())
+                                .map(l -> l.INTEGER_LITERAL().getText())
+                                .map(Integer::parseInt)
+                                .orElse(0))
+                .build();
+    }
+
+    @Override
+    public ShowMeasurementCardinalityStatement visitShow_measurement_cardinality_stmt(
+            InfluxqlParser.Show_measurement_cardinality_stmtContext ctx) {
+        return new ShowMeasurementCardinalityStatement.Builder()
+                .exact(Optional.ofNullable(ctx.EXACT()).isPresent())
+                .on(Optional.ofNullable(ctx.on_clause()).map(c -> c.db_name.getText()).orElse(null))
+                .from(
+                        Optional.ofNullable(ctx.from_clause())
+                                .map(this::visitFrom_clause)
+                                .orElse(null))
+                .where(
+                        Optional.ofNullable(ctx.where_clause())
+                                .map(this::visitWhere_clause)
+                                .orElse(null))
+                .groupBy(
+                        Optional.ofNullable(ctx.group_by_clause())
+                                .map(this::visitGroup_by_clause)
+                                .orElse(null))
+                .limit(
+                        Optional.ofNullable(ctx.limit_clause())
+                                .map(l -> l.INTEGER_LITERAL().getText())
+                                .map(Integer::parseInt)
+                                .orElse(0))
+                .offset(
+                        Optional.ofNullable(ctx.offset_clause())
+                                .map(l -> l.INTEGER_LITERAL().getText())
+                                .map(Integer::parseInt)
+                                .orElse(0))
+                .build();
+    }
+
+    @Override
+    public ShowFieldKeyCardinalityStatement visitShow_field_key_cardinality_stmt(
+            InfluxqlParser.Show_field_key_cardinality_stmtContext ctx) {
+        return new ShowFieldKeyCardinalityStatement.Builder()
+                .exact(Optional.ofNullable(ctx.EXACT()).isPresent())
+                .on(Optional.ofNullable(ctx.on_clause()).map(c -> c.db_name.getText()).orElse(null))
+                .from(
+                        Optional.ofNullable(ctx.from_clause())
+                                .map(this::visitFrom_clause)
+                                .orElse(null))
+                .where(
+                        Optional.ofNullable(ctx.where_clause())
+                                .map(this::visitWhere_clause)
+                                .orElse(null))
+                .groupBy(
+                        Optional.ofNullable(ctx.group_by_clause())
+                                .map(this::visitGroup_by_clause)
+                                .orElse(null))
+                .limit(
+                        Optional.ofNullable(ctx.limit_clause())
+                                .map(l -> l.INTEGER_LITERAL().getText())
+                                .map(Integer::parseInt)
+                                .orElse(0))
+                .offset(
+                        Optional.ofNullable(ctx.offset_clause())
+                                .map(l -> l.INTEGER_LITERAL().getText())
+                                .map(Integer::parseInt)
+                                .orElse(0))
+                .build();
+    }
+
+    @Override
+    public ShowDiagnosticsStatement visitShow_diagnostics_stmt(
+            InfluxqlParser.Show_diagnostics_stmtContext ctx) {
+        return new ShowDiagnosticsStatement.Builder()
+                .for_(
+                        Optional.ofNullable(ctx.STRING_LITERAL())
+                                .map(ParseTree::getText)
+                                .map(InfluxqlAstAdapter::trimStringQuotes)
+                                .orElse(null))
+                .build();
+    }
 
     @Override
     public AlterRetentionPolicyStatement visitAlter_retention_policy_stmt(
@@ -241,23 +363,29 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
                                         .orElse(null))
                         .duration(
                                 Optional.ofNullable(ctx.retention_policy_duration())
-                                        .map(e -> ctx.retention_policy_duration()
-                                                .DURATION_LITERAL()
-                                                .getText())
+                                        .map(
+                                                e ->
+                                                        ctx.retention_policy_duration()
+                                                                .DURATION_LITERAL()
+                                                                .getText())
                                         .map(Utils::parseDuration)
                                         .orElse(null))
                         .shardDuration(
                                 Optional.ofNullable(ctx.retention_policy_shard_group_duration())
-                                        .map(e -> ctx.retention_policy_shard_group_duration()
-                                                .DURATION_LITERAL()
-                                                .getText())
+                                        .map(
+                                                e ->
+                                                        ctx.retention_policy_shard_group_duration()
+                                                                .DURATION_LITERAL()
+                                                                .getText())
                                         .map(Utils::parseDuration)
                                         .orElse(null))
                         .replication(
                                 Optional.ofNullable(ctx.retention_policy_replication())
-                                        .map(e -> ctx.retention_policy_replication()
-                                                .INTEGER_LITERAL()
-                                                .getText())
+                                        .map(
+                                                e ->
+                                                        ctx.retention_policy_replication()
+                                                                .INTEGER_LITERAL()
+                                                                .getText())
                                         .map(Integer::parseInt)
                                         .orElse(null))
                         .build();
@@ -330,8 +458,14 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
     @Override
     public DeleteSeriesStatement visitDelete_stmt(InfluxqlParser.Delete_stmtContext ctx) {
         return new DeleteSeriesStatement.Builder()
-                .from(Optional.ofNullable(ctx.from_clause()).map(this::visitFrom_clause).orElse(null))
-                .where(Optional.ofNullable(ctx.where_clause()).map(this::visitWhere_clause).orElse(null))
+                .from(
+                        Optional.ofNullable(ctx.from_clause())
+                                .map(this::visitFrom_clause)
+                                .orElse(null))
+                .where(
+                        Optional.ofNullable(ctx.where_clause())
+                                .map(this::visitWhere_clause)
+                                .orElse(null))
                 .build();
     }
 
@@ -347,7 +481,9 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
     @Override
     public DropDatabaseStatement visitDrop_database_stmt(
             InfluxqlParser.Drop_database_stmtContext ctx) {
-        return new DropDatabaseStatement.Builder().database(trimIdentifierQuotes(ctx.db_name.getText())).build();
+        return new DropDatabaseStatement.Builder()
+                .database(trimIdentifierQuotes(ctx.db_name.getText()))
+                .build();
     }
 
     @Override
@@ -395,7 +531,9 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
 
     @Override
     public DropUserStatement visitDrop_user_stmt(InfluxqlParser.Drop_user_stmtContext ctx) {
-        return new DropUserStatement.Builder().username(trimIdentifierQuotes(ctx.user_name.getText())).build();
+        return new DropUserStatement.Builder()
+                .username(trimIdentifierQuotes(ctx.user_name.getText()))
+                .build();
     }
 
     @Override
@@ -424,7 +562,11 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
             InfluxqlParser.Kill_query_statementContext ctx) {
         return new KillQueryStatement.Builder()
                 .queryId(Long.parseLong(ctx.INTEGER_LITERAL().getText()))
-                .on(Optional.ofNullable(ctx.host).map(Token::getText).map(InfluxqlAstAdapter::trimStringQuotes).orElse(null))
+                .on(
+                        Optional.ofNullable(ctx.host)
+                                .map(Token::getText)
+                                .map(InfluxqlAstAdapter::trimStringQuotes)
+                                .orElse(null))
                 .build();
     }
 
@@ -444,11 +586,15 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
     public ShowFieldKeysStatement visitShow_field_keys_stmt(
             InfluxqlParser.Show_field_keys_stmtContext ctx) {
         return new ShowFieldKeysStatement.Builder()
-                .on(Optional.ofNullable(ctx.on_clause())
-                        .map(c -> c.db_name.getText())
-                        .map(InfluxqlAstAdapter::trimIdentifierQuotes)
-                        .orElse(null))
-                .from(visitFrom_clause(ctx.from_clause()))
+                .on(
+                        Optional.ofNullable(ctx.on_clause())
+                                .map(c -> c.db_name.getText())
+                                .map(InfluxqlAstAdapter::trimIdentifierQuotes)
+                                .orElse(null))
+                .from(
+                        Optional.ofNullable(ctx.from_clause())
+                                .map(this::visitFrom_clause)
+                                .orElse(null))
                 .limit(
                         Optional.ofNullable(ctx.limit_clause())
                                 .map(l -> Integer.parseInt(l.INTEGER_LITERAL().getText()))
@@ -467,17 +613,20 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
     @Override
     public ShowGrantsForUserStatement visitShow_grants_stmt(
             InfluxqlParser.Show_grants_stmtContext ctx) {
-        return new ShowGrantsForUserStatement.Builder().for_(trimIdentifierQuotes(ctx.user_name.getText())).build();
+        return new ShowGrantsForUserStatement.Builder()
+                .for_(trimIdentifierQuotes(ctx.user_name.getText()))
+                .build();
     }
 
     @Override
     public ShowMeasurementsStatement visitShow_measurements_stmt(
             InfluxqlParser.Show_measurements_stmtContext ctx) {
         return new ShowMeasurementsStatement.Builder()
-                .on(Optional.ofNullable(ctx.on_clause())
-                        .map(o -> o.db_name.getText())
-                        .map(InfluxqlAstAdapter::trimIdentifierQuotes)
-                        .orElse(null))
+                .on(
+                        Optional.ofNullable(ctx.on_clause())
+                                .map(o -> o.db_name.getText())
+                                .map(InfluxqlAstAdapter::trimIdentifierQuotes)
+                                .orElse(null))
                 .limit(
                         Optional.ofNullable(ctx.limit_clause())
                                 .map(l -> Integer.parseInt(l.INTEGER_LITERAL().getText()))
@@ -507,19 +656,18 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
     public ShowRetentionPoliciesStatement visitShow_retention_policies_stmt(
             InfluxqlParser.Show_retention_policies_stmtContext ctx) {
         return new ShowRetentionPoliciesStatement.Builder()
-                .on(trimIdentifierQuotes
-                        (ctx.on_clause().db_name.getText()))
+                .on(trimIdentifierQuotes(ctx.on_clause().db_name.getText()))
                 .build();
     }
 
     @Override
     public ShowSeriesStatement visitShow_series_stmt(InfluxqlParser.Show_series_stmtContext ctx) {
         return new ShowSeriesStatement.Builder()
-                .on(Optional.ofNullable(ctx.on_clause())
-                        .map(c -> c.db_name.getText())
-                        .map(InfluxqlAstAdapter::trimIdentifierQuotes
-                        )
-                        .orElse(null))
+                .on(
+                        Optional.ofNullable(ctx.on_clause())
+                                .map(c -> c.db_name.getText())
+                                .map(InfluxqlAstAdapter::trimIdentifierQuotes)
+                                .orElse(null))
                 .from(
                         Optional.ofNullable(ctx.from_clause())
                                 .map(this::visitFrom_clause)
@@ -559,12 +707,33 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
     @Override
     public ShowTagKeysStatement visitShow_tag_keys_stmt(
             InfluxqlParser.Show_tag_keys_stmtContext ctx) {
-        return new ShowTagKeysStatement.Builder()
-                .on(Optional.ofNullable(ctx.on_clause())
-                        .map(c -> c.db_name.getText())
-                        .map(InfluxqlAstAdapter::trimIdentifierQuotes
-                        )
-                        .orElse(null))
+        ShowTagKeysStatement.Builder builder = new ShowTagKeysStatement.Builder();
+        if (ctx.with_tag_clause() != null) {
+            Operator op = Operator.fromValue(ctx.with_tag_clause().op.getText());
+            Literal<?> literal;
+            if (op == Operator.IN) {
+                literal =
+                        ListLiteral.of(
+                                ctx.with_tag_clause().tag_keys().IDENTIFIER().stream()
+                                        .map(ParseTree::getText)
+                                        .map(InfluxqlAstAdapter::trimIdentifierQuotes)
+                                        .map(IdentifierlLiteral::of)
+                                        .collect(Collectors.toList()));
+            } else if (op == Operator.EQREGEX || op == Operator.NEQREGEX) {
+                literal = RegexLiteral.of(trimRegexChars(ctx.with_tag_clause().tag_key.getText()));
+            } else {
+                literal =
+                        IdentifierlLiteral.of(
+                                trimIdentifierQuotes(ctx.with_tag_clause().tag_key.getText()));
+            }
+            builder.withKey(op, literal);
+        }
+
+        return builder.on(
+                        Optional.ofNullable(ctx.on_clause())
+                                .map(c -> c.db_name.getText())
+                                .map(InfluxqlAstAdapter::trimIdentifierQuotes)
+                                .orElse(null))
                 .from(
                         Optional.ofNullable(ctx.from_clause())
                                 .map(this::visitFrom_clause)
@@ -592,11 +761,11 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
     public Node visitShow_tag_key_cardinality_stmt(
             InfluxqlParser.Show_tag_key_cardinality_stmtContext ctx) {
         return new ShowTagKeyCardinalityStatement.Builder()
-                .on(Optional.ofNullable(ctx.on_clause())
-                        .map(c -> c.db_name.getText())
-                        .map(InfluxqlAstAdapter::trimIdentifierQuotes
-                        )
-                        .orElse(null))
+                .on(
+                        Optional.ofNullable(ctx.on_clause())
+                                .map(c -> c.db_name.getText())
+                                .map(InfluxqlAstAdapter::trimIdentifierQuotes)
+                                .orElse(null))
                 .from(
                         Optional.ofNullable(ctx.from_clause())
                                 .map(this::visitFrom_clause)
@@ -631,22 +800,23 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
                     ListLiteral.of(
                             ctx.with_tag_clause().tag_keys().IDENTIFIER().stream()
                                     .map(ParseTree::getText)
-                                    .map(InfluxqlAstAdapter::trimIdentifierQuotes
-                                    )
+                                    .map(InfluxqlAstAdapter::trimIdentifierQuotes)
                                     .map(IdentifierlLiteral::of)
                                     .collect(Collectors.toList()));
-        } else if (op == Operator.EQREGEX) {
+        } else if (op == Operator.EQREGEX || op == Operator.NEQREGEX) {
             literal = RegexLiteral.of(trimRegexChars(ctx.with_tag_clause().tag_key.getText()));
         } else {
-            literal = IdentifierlLiteral.of(trimIdentifierQuotes(ctx.with_tag_clause().tag_key.getText()));
+            literal =
+                    IdentifierlLiteral.of(
+                            trimIdentifierQuotes(ctx.with_tag_clause().tag_key.getText()));
         }
 
         return new ShowTagValuesStatement.Builder()
-                .on(Optional.ofNullable(ctx.on_clause())
-                        .map(c -> c.db_name.getText())
-                        .map(InfluxqlAstAdapter::trimIdentifierQuotes
-                        )
-                        .orElse(null))
+                .on(
+                        Optional.ofNullable(ctx.on_clause())
+                                .map(c -> c.db_name.getText())
+                                .map(InfluxqlAstAdapter::trimIdentifierQuotes)
+                                .orElse(null))
                 .from(
                         Optional.ofNullable(ctx.from_clause())
                                 .map(this::visitFrom_clause)
@@ -680,16 +850,19 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
                                     .map(InfluxqlAstAdapter::trimIdentifierQuotes)
                                     .map(IdentifierlLiteral::of)
                                     .collect(Collectors.toList()));
-        } else if (op == Operator.EQREGEX) {
+        } else if (op == Operator.EQREGEX || op == Operator.NEQREGEX) {
             literal = RegexLiteral.of(trimRegexChars(ctx.with_tag_clause().tag_key.getText()));
         } else {
-            literal = IdentifierlLiteral.of(trimIdentifierQuotes(ctx.with_tag_clause().tag_key.getText()));
+            literal =
+                    IdentifierlLiteral.of(
+                            trimIdentifierQuotes(ctx.with_tag_clause().tag_key.getText()));
         }
         return new ShowTagValuesCardinalityStatement.Builder()
-                .on(Optional.ofNullable(ctx.on_clause())
-                        .map(c -> c.db_name.getText())
-                        .map(InfluxqlAstAdapter::trimIdentifierQuotes)
-                        .orElse(null))
+                .on(
+                        Optional.ofNullable(ctx.on_clause())
+                                .map(c -> c.db_name.getText())
+                                .map(InfluxqlAstAdapter::trimIdentifierQuotes)
+                                .orElse(null))
                 .from(
                         Optional.ofNullable(ctx.from_clause())
                                 .map(this::visitFrom_clause)
@@ -724,10 +897,11 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
     public RevokeStatement visitRevoke_stmt(InfluxqlParser.Revoke_stmtContext ctx) {
         return new RevokeStatement.Builder()
                 .privilege(visitPrivilege(ctx.privilege()))
-                .on(Optional.ofNullable(ctx.on_clause())
-                        .map(c -> c.db_name.getText())
-                        .map(InfluxqlAstAdapter::trimIdentifierQuotes)
-                        .orElse(null))
+                .on(
+                        Optional.ofNullable(ctx.on_clause())
+                                .map(c -> c.db_name.getText())
+                                .map(InfluxqlAstAdapter::trimIdentifierQuotes)
+                                .orElse(null))
                 .from(trimIdentifierQuotes(ctx.user_name.getText()))
                 .build();
     }
@@ -857,10 +1031,8 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
     public Measurement visitMeasurement_with_rp_and_database(
             InfluxqlParser.Measurement_with_rp_and_databaseContext ctx) {
         Measurement.Builder builder = new Measurement.Builder();
-        builder.withRetentionPolicy(trimIdentifierQuotes
-                (ctx.policy_name.getText()));
-        builder.withDatabase(trimIdentifierQuotes
-                (ctx.db_name.getText()));
+        builder.withRetentionPolicy(trimIdentifierQuotes(ctx.policy_name.getText()));
+        builder.withDatabase(trimIdentifierQuotes(ctx.db_name.getText()));
         setSimpleMeasurement(builder, ctx.simple_measurement_name());
         return builder.build();
     }
@@ -868,8 +1040,7 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
     @Override
     public Measurement visitMeasurment_with_rp(InfluxqlParser.Measurment_with_rpContext ctx) {
         Measurement.Builder builder = new Measurement.Builder();
-        builder.withRetentionPolicy(trimIdentifierQuotes
-                (ctx.policy_name.getText()));
+        builder.withRetentionPolicy(trimIdentifierQuotes(ctx.policy_name.getText()));
         setSimpleMeasurement(builder, ctx.simple_measurement_name());
         return builder.build();
     }
@@ -877,12 +1048,12 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
     private void setSimpleMeasurement(
             Measurement.Builder builder, InfluxqlParser.Simple_measurement_nameContext ctx) {
         if (ctx.IDENTIFIER() != null) {
-            builder.withName(trimIdentifierQuotes
-                    (ctx.IDENTIFIER().getText()));
+            builder.withName(trimIdentifierQuotes(ctx.IDENTIFIER().getText()));
         }
 
         if (ctx.REGULAR_EXPRESSION_LITERAL() != null) {
-            builder.withRegex(Pattern.compile(trimRegexChars(ctx.REGULAR_EXPRESSION_LITERAL().getText())));
+            builder.withRegex(
+                    Pattern.compile(trimRegexChars(ctx.REGULAR_EXPRESSION_LITERAL().getText())));
         }
     }
 
@@ -960,8 +1131,7 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
             builder.ascending(false);
         }
 
-        return builder.field(trimIdentifierQuotes
-                (ctx.field_key.getText())).build();
+        return builder.field(trimIdentifierQuotes(ctx.field_key.getText())).build();
     }
 
     @Override
@@ -1029,8 +1199,7 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
             return BinaryExpression.of(
                     visitExpression(ctx.expression(0)),
                     visitExpression(ctx.expression(1)),
-                    visitBinary_operator(ctx.binary_operator())
-            );
+                    visitBinary_operator(ctx.binary_operator()));
         }
 
         throw new IllegalStateException("Unsupported case. Grammar is not in sync with code");
@@ -1073,9 +1242,9 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
 
     @Override
     public TimezoneNode visitTimezone_clause(InfluxqlParser.Timezone_clauseContext ctx) {
-        return TimezoneNode.of(TimeZone.getTimeZone(trimStringQuotes(ctx.STRING_LITERAL().getText())));
+        return TimezoneNode.of(
+                TimeZone.getTimeZone(trimStringQuotes(ctx.STRING_LITERAL().getText())));
     }
-
 
     @Override
     public SortFields visitOrder_by_clause(InfluxqlParser.Order_by_clauseContext ctx) {
@@ -1094,7 +1263,8 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
         if (ctx.measurement() != null) {
             return visitMeasurement(ctx.measurement());
         } else if (ctx.REGULAR_EXPRESSION_LITERAL() != null) {
-            return Measurement.measurements(trimRegexChars(ctx.REGULAR_EXPRESSION_LITERAL().getText()));
+            return Measurement.measurements(
+                    trimRegexChars(ctx.REGULAR_EXPRESSION_LITERAL().getText()));
         }
 
         throw new IllegalStateException("Unsupported case. Grammar is not in sync with code");

@@ -18,7 +18,6 @@
 package io.github.willena.influxql.ast.token;
 
 import io.github.willena.influxql.ast.Node;
-
 import java.util.Arrays;
 
 /** InfluxQl well known Operators */

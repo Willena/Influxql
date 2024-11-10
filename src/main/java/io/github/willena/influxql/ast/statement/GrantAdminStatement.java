@@ -17,16 +17,13 @@
 
 package io.github.willena.influxql.ast.statement;
 
-import io.github.willena.influxql.ast.Buildable;
-import io.github.willena.influxql.ast.Statement;
-
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
-/**
- * @deprecated use {@link GrantStatement}
- * Redundant. Grammar does not define this statement.
- */
+import io.github.willena.influxql.ast.Buildable;
+import io.github.willena.influxql.ast.Statement;
+
+/** @deprecated use {@link GrantStatement} Redundant. Grammar does not define this statement. */
 @Deprecated(forRemoval = true)
 public class GrantAdminStatement implements Statement {
     private final String user;
@@ -41,15 +38,12 @@ public class GrantAdminStatement implements Statement {
         return "GRANT ALL PRIVILEGES TO " + quoteIdentifier(user);
     }
 
-    /**
-     * @deprecated use {@link GrantStatement.Builder}
-     */
+    /** @deprecated use {@link GrantStatement.Builder} */
     @Deprecated(forRemoval = true)
     public static final class Builder implements Buildable<GrantAdminStatement> {
         private String user;
 
-        public Builder() {
-        }
+        public Builder() {}
 
         public Builder to(String user) {
             this.user = user;
