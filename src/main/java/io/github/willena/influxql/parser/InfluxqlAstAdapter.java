@@ -41,6 +41,7 @@ import io.github.willena.influxql.ast.utils.TimezoneNode;
 import io.github.willena.influxql.ast.utils.Utils;
 import io.github.willena.influxql.parser.antlr.InfluxqlParser;
 import io.github.willena.influxql.parser.antlr.InfluxqlParserBaseVisitor;
+import java.time.Duration;
 import java.util.Optional;
 import java.util.TimeZone;
 import java.util.regex.Pattern;
@@ -320,6 +321,20 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
                                         .getText()));
             } else if (retentionPolicyOptionContext.DEFAULT() != null) {
                 builder.default_();
+            } else if (retentionPolicyOptionContext.retention_policy_future_limit() != null) {
+                builder.futureLimit(
+                        parseDuration(
+                                retentionPolicyOptionContext
+                                        .retention_policy_future_limit()
+                                        .DURATION_LITERAL()
+                                        .getText()));
+            } else if (retentionPolicyOptionContext.retention_policy_past_limit() != null) {
+                builder.pastLimit(
+                        parseDuration(
+                                retentionPolicyOptionContext
+                                        .retention_policy_past_limit()
+                                        .DURATION_LITERAL()
+                                        .getText()));
             }
         }
 
@@ -360,35 +375,52 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
                 new RetentionPolicy.Builder()
                         .retentionPolicyName(
                                 Optional.ofNullable(ctx.retention_policy_name())
-                                        .map(e -> e.IDENTIFIER().getText())
+                                        .map(
+                                                InfluxqlParser.Retention_policy_nameContext
+                                                        ::IDENTIFIER)
+                                        .map(ParseTree::getText)
                                         .map(InfluxqlAstAdapter::trimIdentifierQuotes)
                                         .orElse(null))
                         .duration(
                                 Optional.ofNullable(ctx.retention_policy_duration())
                                         .map(
-                                                e ->
-                                                        ctx.retention_policy_duration()
-                                                                .DURATION_LITERAL()
-                                                                .getText())
+                                                InfluxqlParser.Retention_policy_durationContext
+                                                        ::DURATION_LITERAL)
+                                        .map(ParseTree::getText)
                                         .map(Utils::parseDuration)
                                         .orElse(null))
                         .shardDuration(
                                 Optional.ofNullable(ctx.retention_policy_shard_group_duration())
                                         .map(
-                                                e ->
-                                                        ctx.retention_policy_shard_group_duration()
-                                                                .DURATION_LITERAL()
-                                                                .getText())
+                                                InfluxqlParser
+                                                                .Retention_policy_shard_group_durationContext
+                                                        ::DURATION_LITERAL)
+                                        .map(ParseTree::getText)
                                         .map(Utils::parseDuration)
                                         .orElse(null))
                         .replication(
                                 Optional.ofNullable(ctx.retention_policy_replication())
                                         .map(
-                                                e ->
-                                                        ctx.retention_policy_replication()
-                                                                .INTEGER_LITERAL()
-                                                                .getText())
+                                                InfluxqlParser.Retention_policy_replicationContext
+                                                        ::INTEGER_LITERAL)
+                                        .map(ParseTree::getText)
                                         .map(Integer::parseInt)
+                                        .orElse(null))
+                        .futureLimit(
+                                Optional.ofNullable(ctx.retention_policy_future_limit())
+                                        .map(
+                                                InfluxqlParser.Retention_policy_future_limitContext
+                                                        ::DURATION_LITERAL)
+                                        .map(ParseTree::getText)
+                                        .map(Utils::parseDuration)
+                                        .orElse(null))
+                        .pastLimit(
+                                Optional.ofNullable(ctx.retention_policy_past_limit())
+                                        .map(
+                                                InfluxqlParser.Retention_policy_past_limitContext
+                                                        ::DURATION_LITERAL)
+                                        .map(ParseTree::getText)
+                                        .map(Utils::parseDuration)
                                         .orElse(null))
                         .build();
 
@@ -401,18 +433,31 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
     @Override
     public CreateRetentionPolicyStatement visitCreate_retention_policy_stmt(
             InfluxqlParser.Create_retention_policy_stmtContext ctx) {
-        CreateRetentionPolicyStatement.Builder builder =
-                new CreateRetentionPolicyStatement.Builder();
 
-        if (ctx.retention_policy_shard_group_duration() != null) {
-            builder.shardDuration(
-                    parseDuration(
-                            ctx.retention_policy_shard_group_duration()
-                                    .DURATION_LITERAL()
-                                    .getText()));
-        }
+        Duration shardDuration =
+                Optional.ofNullable(ctx.retention_policy_shard_group_duration())
+                        .map(
+                                InfluxqlParser.Retention_policy_shard_group_durationContext
+                                        ::DURATION_LITERAL)
+                        .map(ParseTree::getText)
+                        .map(Utils::parseDuration)
+                        .orElse(null);
 
-        return builder.name(trimIdentifierQuotes(ctx.policy_name.getText()))
+        Duration futureLimit =
+                Optional.ofNullable(ctx.retention_policy_future_limit())
+                        .map(InfluxqlParser.Retention_policy_future_limitContext::DURATION_LITERAL)
+                        .map(ParseTree::getText)
+                        .map(Utils::parseDuration)
+                        .orElse(null);
+        Duration pastLimit =
+                Optional.ofNullable(ctx.retention_policy_past_limit())
+                        .map(InfluxqlParser.Retention_policy_past_limitContext::DURATION_LITERAL)
+                        .map(ParseTree::getText)
+                        .map(Utils::parseDuration)
+                        .orElse(null);
+
+        return new CreateRetentionPolicyStatement.Builder()
+                .name(trimIdentifierQuotes(ctx.policy_name.getText()))
                 .on(trimIdentifierQuotes(ctx.on_clause().db_name.getText()))
                 .duration(
                         parseDuration(ctx.retention_policy_duration().DURATION_LITERAL().getText()))
@@ -420,6 +465,9 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
                         Integer.parseInt(
                                 ctx.retention_policy_replication().INTEGER_LITERAL().getText()))
                 .withIsDefault(ctx.DEFAULT() != null)
+                .shardDuration(shardDuration)
+                .futureLimit(futureLimit)
+                .pastLimit(pastLimit)
                 .build();
     }
 

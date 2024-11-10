@@ -30,19 +30,25 @@ public class RetentionPolicy {
     private final Integer retentionPolicyReplication;
     private final String retentionPolicyName;
     private final Duration retentionPolicyShardGroupDuration;
+    private final Duration retentionPolicyFutureLimitDuration;
+    private final Duration retentionPolicyPastLimitDuration;
 
     private RetentionPolicy(Builder builder) {
         retentionPolicyDuration = builder.retentionPolicyDuration;
         retentionPolicyReplication = builder.retentionPolicyReplication;
         retentionPolicyName = builder.retentionPolicyName;
         retentionPolicyShardGroupDuration = builder.retentionPolicyShardGroupDuration;
+        retentionPolicyFutureLimitDuration = builder.retentionPolicyFutureLimitDuration;
+        retentionPolicyPastLimitDuration = builder.retentionPolicyPastLimitDuration;
     }
 
     public boolean isEmpty() {
         return retentionPolicyName == null
                 && retentionPolicyDuration == null
                 && retentionPolicyReplication == null
-                && retentionPolicyShardGroupDuration == null;
+                && retentionPolicyShardGroupDuration == null
+                && retentionPolicyFutureLimitDuration == null
+                && retentionPolicyPastLimitDuration == null;
     }
 
     @Override
@@ -54,7 +60,11 @@ public class RetentionPolicy {
                 && Objects.equals(retentionPolicyReplication, that.retentionPolicyReplication)
                 && Objects.equals(retentionPolicyName, that.retentionPolicyName)
                 && Objects.equals(
-                        retentionPolicyShardGroupDuration, that.retentionPolicyShardGroupDuration);
+                        retentionPolicyShardGroupDuration, that.retentionPolicyShardGroupDuration)
+                && Objects.equals(
+                        retentionPolicyFutureLimitDuration, that.retentionPolicyFutureLimitDuration)
+                && Objects.equals(
+                        retentionPolicyPastLimitDuration, that.retentionPolicyPastLimitDuration);
     }
 
     @Override
@@ -63,7 +73,27 @@ public class RetentionPolicy {
                 retentionPolicyDuration,
                 retentionPolicyReplication,
                 retentionPolicyName,
-                retentionPolicyShardGroupDuration);
+                retentionPolicyShardGroupDuration,
+                retentionPolicyFutureLimitDuration,
+                retentionPolicyPastLimitDuration);
+    }
+
+    /**
+     * Gets the future limit
+     *
+     * @return duration
+     */
+    public Duration getRetentionPolicyFutureLimitDuration() {
+        return retentionPolicyFutureLimitDuration;
+    }
+
+    /**
+     * Gets the past limit
+     *
+     * @return duration
+     */
+    public Duration getRetentionPolicyPastLimitDuration() {
+        return retentionPolicyPastLimitDuration;
     }
 
     /**
@@ -108,6 +138,8 @@ public class RetentionPolicy {
         private Integer retentionPolicyReplication;
         private String retentionPolicyName;
         private Duration retentionPolicyShardGroupDuration;
+        public Duration retentionPolicyFutureLimitDuration;
+        public Duration retentionPolicyPastLimitDuration;
 
         public Builder() {}
 
@@ -157,6 +189,28 @@ public class RetentionPolicy {
          */
         public Builder shardDuration(Duration retentionPolicyShardGroupDuration) {
             this.retentionPolicyShardGroupDuration = retentionPolicyShardGroupDuration;
+            return this;
+        }
+
+        /**
+         * Future limit builder.
+         *
+         * @param limit the limit
+         * @return the builder
+         */
+        public Builder futureLimit(Duration limit) {
+            this.retentionPolicyFutureLimitDuration = limit;
+            return this;
+        }
+
+        /**
+         * Past limit builder.
+         *
+         * @param limit the limit
+         * @return the builder
+         */
+        public Builder pastLimit(Duration limit) {
+            this.retentionPolicyPastLimitDuration = limit;
             return this;
         }
 

@@ -42,5 +42,20 @@ class CreateDatabaseStatementTest extends GenericStatementTest<CreateDatabaseSta
                                                             .build()))
                             .withExpectedSql(
                                     "CREATE DATABASE \"Datab'aseName\" WITH DURATION 1h REPLICATION 3 SHARD DURATION 2h")
+                            .build(),
+                    new TestBody.Builder<CreateDatabaseStatement>()
+                            .withStatement(
+                                    new CreateDatabaseStatement.Builder()
+                                            .name("myDb")
+                                            .withRetentionPolicy(
+                                                    new RetentionPolicy.Builder()
+                                                            .replication(3)
+                                                            .duration(Duration.ofHours(1))
+                                                            .shardDuration(Duration.ofHours(2))
+                                                            .futureLimit(Duration.ofHours(1))
+                                                            .pastLimit(Duration.ofHours(12))
+                                                            .build()))
+                            .withExpectedSql(
+                                    "CREATE DATABASE myDb WITH DURATION 1h REPLICATION 3 SHARD DURATION 2h FUTURE LIMIT 1h PAST LIMIT 12h")
                             .build());
 }

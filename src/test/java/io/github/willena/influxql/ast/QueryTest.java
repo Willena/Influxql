@@ -66,6 +66,9 @@ class QueryTest {
                             "ALTER RETENTION POLICY \"policy1\" ON \"somedb\" DURATION 1h REPLICATION 4",
                             "ALTER RETENTION POLICY policy1 ON somedb DURATION 1h REPLICATION 4"),
                     Map.entry(
+                            "ALTER RETENTION POLICY \"policy1\" ON testdb REPLICATION 1 FUTURE LIMIT 55s PAST LIMIT 52m",
+                            "ALTER RETENTION POLICY policy1 ON testdb REPLICATION 1 FUTURE LIMIT 55s PAST LIMIT 52m"),
+                    Map.entry(
                             "CREATE CONTINUOUS QUERY \"10m_event_count\" ON \"db_name\" BEGIN SELECT count(\"value\") INTO \"6_months\".\"events\" FROM \"events\" GROUP BY (10m) END",
                             "CREATE CONTINUOUS QUERY \"10m_event_count\" ON db_name BEGIN SELECT count(value) INTO \"6_months\".events FROM events GROUP BY (10m) END"),
                     Map.entry(
@@ -82,6 +85,9 @@ class QueryTest {
                             "CREATE DATABASE \"mydb\" WITH NAME \"myrp\"",
                             "CREATE DATABASE mydb WITH NAME myrp"),
                     Map.entry(
+                            "CREATE DATABASE testdb WITH REPLICATION 2 FUTURE LIMIT 1h PAST LIMIT 67ms",
+                            "CREATE DATABASE testdb WITH REPLICATION 2 FUTURE LIMIT 1h PAST LIMIT 67ms"),
+                    Map.entry(
                             "CREATE RETENTION POLICY \"10m.events\" ON \"somedb\" DURATION 60m REPLICATION 2",
                             "CREATE RETENTION POLICY \"10m.events\" ON somedb DURATION 1h REPLICATION 2" // 1h == 60m; This behaviour is expected. When duration is serialized it uses to bigger round unit possible.
                             ),
@@ -93,6 +99,9 @@ class QueryTest {
                             "CREATE RETENTION POLICY \"10m.events\" ON \"somedb\" DURATION 60m REPLICATION 2 SHARD DURATION 30m",
                             "CREATE RETENTION POLICY \"10m.events\" ON somedb DURATION 1h REPLICATION 2 SHARD DURATION 30m" // 1h == 60m; This behaviour is expected. When duration is serialized it uses to bigger round unit possible.
                             ),
+                    Map.entry(
+                            "CREATE RETENTION POLICY policy1 ON testdb DURATION 1h REPLICATION 2 SHARD DURATION 1s FUTURE LIMIT 12h PAST LIMIT 3s",
+                            "CREATE RETENTION POLICY policy1 ON testdb DURATION 1h REPLICATION 2 SHARD DURATION 1s FUTURE LIMIT 12h PAST LIMIT 3s"),
                     Map.entry(
                             "CREATE SUBSCRIPTION \"sub0\" ON \"mydb\".\"autogen\" DESTINATIONS ALL 'udp://example.com:9090'",
                             "CREATE SUBSCRIPTION sub0 ON mydb.autogen DESTINATIONS ALL 'udp://example.com:9090'"),

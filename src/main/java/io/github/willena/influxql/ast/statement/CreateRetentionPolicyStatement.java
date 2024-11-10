@@ -33,6 +33,8 @@ public class CreateRetentionPolicyStatement implements Statement {
     private final Integer replication;
     private final boolean isDefault;
     private final Duration shardGroupDuration;
+    private final Duration futureLimit;
+    private final Duration pastLimit;
 
     private CreateRetentionPolicyStatement(Builder builder) {
         name = builder.name;
@@ -41,6 +43,8 @@ public class CreateRetentionPolicyStatement implements Statement {
         replication = builder.replication;
         isDefault = builder.isDefault;
         shardGroupDuration = builder.shardGroupDuration;
+        futureLimit = builder.futureLimit;
+        pastLimit = builder.pastLimit;
 
         ensureDefined("name", name);
         ensureDefined("database", database);
@@ -66,6 +70,17 @@ public class CreateRetentionPolicyStatement implements Statement {
         if (isDefault) {
             buf.append(" DEFAULT");
         }
+
+        if (futureLimit != null && futureLimit.compareTo(Duration.ZERO) > 0) {
+            buf.append(" FUTURE LIMIT ");
+            buf.append(formatDuration(futureLimit));
+        }
+
+        if (pastLimit != null && pastLimit.compareTo(Duration.ZERO) > 0) {
+            buf.append(" PAST LIMIT ");
+            buf.append(formatDuration(pastLimit));
+        }
+
         return buf.toString();
     }
 
@@ -93,6 +108,14 @@ public class CreateRetentionPolicyStatement implements Statement {
         return shardGroupDuration;
     }
 
+    public Duration getFutureLimit() {
+        return futureLimit;
+    }
+
+    public Duration getPastLimit() {
+        return pastLimit;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -103,12 +126,22 @@ public class CreateRetentionPolicyStatement implements Statement {
                 && Objects.equals(database, that.database)
                 && Objects.equals(duration, that.duration)
                 && Objects.equals(replication, that.replication)
-                && Objects.equals(shardGroupDuration, that.shardGroupDuration);
+                && Objects.equals(shardGroupDuration, that.shardGroupDuration)
+                && Objects.equals(futureLimit, that.futureLimit)
+                && Objects.equals(pastLimit, that.pastLimit);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, database, duration, replication, isDefault, shardGroupDuration);
+        return Objects.hash(
+                name,
+                database,
+                duration,
+                replication,
+                isDefault,
+                shardGroupDuration,
+                futureLimit,
+                pastLimit);
     }
 
     public static CreateRetentionPolicyStatement parse(String sql) {
@@ -126,6 +159,8 @@ public class CreateRetentionPolicyStatement implements Statement {
         private Integer replication;
         private boolean isDefault;
         private Duration shardGroupDuration;
+        public Duration futureLimit;
+        public Duration pastLimit;
 
         public Builder() {}
 
@@ -197,6 +232,28 @@ public class CreateRetentionPolicyStatement implements Statement {
          */
         public Builder shardDuration(Duration shardGroupDuration) {
             this.shardGroupDuration = shardGroupDuration;
+            return this;
+        }
+
+        /**
+         * Future limit builder.
+         *
+         * @param duration the duration
+         * @return the builder
+         */
+        public Builder futureLimit(Duration duration) {
+            this.futureLimit = duration;
+            return this;
+        }
+
+        /**
+         * Past limit builder.
+         *
+         * @param duration the duration
+         * @return the builder
+         */
+        public Builder pastLimit(Duration duration) {
+            this.pastLimit = duration;
             return this;
         }
 

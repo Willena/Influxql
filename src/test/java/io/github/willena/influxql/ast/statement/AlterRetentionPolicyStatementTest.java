@@ -101,5 +101,19 @@ class AlterRetentionPolicyStatementTest
                                                     .replicationFactor(36))
                                     .withExpectedSql(
                                             "ALTER RETENTION POLICY \"PolicyName↔\" ON \"datab'ase\" DURATION 3h REPLICATION 36 SHARD DURATION 1h")
+                                    .build(),
+                            new GenericStatementTest.TestBody.Builder<
+                                            AlterRetentionPolicyStatement>()
+                                    .withStatement(
+                                            new AlterRetentionPolicyStatement.Builder()
+                                                    .policyName("policy")
+                                                    .on("dbName")
+                                                    .shardDuration(Duration.of(1, ChronoUnit.HOURS))
+                                                    .duration(Duration.of(3, ChronoUnit.HOURS))
+                                                    .replicationFactor(36)
+                                                    .futureLimit(Duration.ofHours(1))
+                                                    .pastLimit(Duration.ofHours(2)))
+                                    .withExpectedSql(
+                                            "ALTER RETENTION POLICY \"policy\" ON dbName DURATION 3h REPLICATION 36 SHARD DURATION 1h FUTURE LIMIT 1h PAST LIMIT 2h")
                                     .build());
 }

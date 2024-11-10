@@ -81,5 +81,18 @@ class CreateRetentionPolicyStatementTest
                                             .replication(36))
                             .withExpectedSql(
                                     "CREATE RETENTION POLICY PolicyName ON \"database\" DURATION 3h REPLICATION 36 SHARD DURATION 1h")
+                            .build(),
+                    new TestBody.Builder<CreateRetentionPolicyStatement>()
+                            .withStatement(
+                                    new CreateRetentionPolicyStatement.Builder()
+                                            .name("PolicyName")
+                                            .on("database")
+                                            .shardDuration(Duration.ofHours(1))
+                                            .duration(Duration.ofHours(3))
+                                            .replication(36)
+                                            .futureLimit(Duration.ofHours(1))
+                                            .pastLimit(Duration.ofHours(2)))
+                            .withExpectedSql(
+                                    "CREATE RETENTION POLICY PolicyName ON \"database\" DURATION 3h REPLICATION 36 SHARD DURATION 1h FUTURE LIMIT 1h PAST LIMIT 2h")
                             .build());
 }

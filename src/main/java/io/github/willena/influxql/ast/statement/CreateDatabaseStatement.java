@@ -60,6 +60,25 @@ public class CreateDatabaseStatement implements Statement {
                 buf.append(" SHARD DURATION ");
                 buf.append(formatDuration(retentionPolicy.getRetentionPolicyShardGroupDuration()));
             }
+
+            if (retentionPolicy.getRetentionPolicyFutureLimitDuration() != null
+                    && retentionPolicy
+                                    .getRetentionPolicyFutureLimitDuration()
+                                    .compareTo(Duration.ZERO)
+                            > 0) {
+                buf.append(" FUTURE LIMIT ");
+                buf.append(formatDuration(retentionPolicy.getRetentionPolicyFutureLimitDuration()));
+            }
+
+            if (retentionPolicy.getRetentionPolicyPastLimitDuration() != null
+                    && retentionPolicy
+                                    .getRetentionPolicyPastLimitDuration()
+                                    .compareTo(Duration.ZERO)
+                            > 0) {
+                buf.append(" PAST LIMIT ");
+                buf.append(formatDuration(retentionPolicy.getRetentionPolicyPastLimitDuration()));
+            }
+
             if (retentionPolicy.getRetentionPolicyName() != null
                     && !retentionPolicy.getRetentionPolicyName().isBlank()) {
                 buf.append(" NAME ");

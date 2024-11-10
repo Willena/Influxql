@@ -68,8 +68,8 @@ statement : alter_retention_policy_stmt |
 
 alter_retention_policy_stmt: ALTER RETENTION POLICY policy_name=IDENTIFIER on_clause retention_policy_option retention_policy_option? retention_policy_option? retention_policy_option?;
 create_continuous_query_stmt: CREATE CONTINUOUS QUERY query_name=IDENTIFIER on_clause ( RESAMPLE resample_opts )? BEGIN select_stmt END;
-create_database_stmt: CREATE DATABASE db_name=IDENTIFIER ( WITH retention_policy_duration? retention_policy_replication? retention_policy_shard_group_duration? retention_policy_name? )?;
-create_retention_policy_stmt : CREATE RETENTION POLICY policy_name=IDENTIFIER on_clause retention_policy_duration retention_policy_replication retention_policy_shard_group_duration? DEFAULT?;
+create_database_stmt: CREATE DATABASE db_name=IDENTIFIER ( WITH retention_policy_duration? retention_policy_replication? retention_policy_shard_group_duration? retention_policy_future_limit? retention_policy_past_limit? retention_policy_name? )?;
+create_retention_policy_stmt : CREATE RETENTION POLICY policy_name=IDENTIFIER on_clause retention_policy_duration retention_policy_replication retention_policy_shard_group_duration? retention_policy_future_limit? retention_policy_past_limit? DEFAULT?;
 create_subscription_stmt : CREATE SUBSCRIPTION subscription_name=IDENTIFIER ON db_name=IDENTIFIER DOT retention_policy=IDENTIFIER DESTINATIONS (ANY|ALL) host=STRING_LITERAL (COMMA host=STRING_LITERAL)*;
 create_user_stmt : CREATE USER user_name=IDENTIFIER WITH PASSWORD password=STRING_LITERAL (WITH ALL PRIVILEGES)?;
 delete_stmt : DELETE ( from_clause | where_clause | from_clause where_clause );
@@ -133,10 +133,12 @@ sources: source ( COMMA source )*;
 privilege: (ALL PRIVILEGES?) | READ | WRITE;
 sub_query: OPEN_PAR select_stmt CLOSE_PAR;
 
-retention_policy_option : retention_policy_duration | retention_policy_replication | retention_policy_shard_group_duration | DEFAULT;
+retention_policy_option : retention_policy_duration | retention_policy_replication | retention_policy_shard_group_duration |  retention_policy_future_limit | retention_policy_past_limit | DEFAULT;
 retention_policy_duration : DURATION DURATION_LITERAL;
 retention_policy_replication : REPLICATION INTEGER_LITERAL;
 retention_policy_shard_group_duration : SHARD DURATION DURATION_LITERAL;
+retention_policy_future_limit: FUTURE LIMIT DURATION_LITERAL;
+retention_policy_past_limit: PAST LIMIT DURATION_LITERAL;
 retention_policy_name : NAME IDENTIFIER;
 
 sort_field : field_key=IDENTIFIER ( ASC | DESC )?;
