@@ -1965,8 +1965,10 @@ public final class FunctionFactory {
          * @return the call
          */
         public static Call holtWinters(Call call, IntegerLiteral n, IntegerLiteral s) {
-            if (call.getArgs() != null
-                    && (call.getArgs().size() != 1 || !(call.getArgs().get(0) instanceof VarRef))) {
+            if (call == null
+                    || call.getArgs() == null
+                    || call.getArgs().size() != 1
+                    || !(call.getArgs().get(0) instanceof VarRef)) {
                 throw new IllegalArgumentException("First argument of function must be a field");
             }
             return new Call.Builder().function(HOLT_WINTERS_NAME).withArguments(call, n, s).build();
@@ -1981,8 +1983,10 @@ public final class FunctionFactory {
          * @return the call
          */
         public static Call holtWintersWithFit(Call call, IntegerLiteral n, IntegerLiteral s) {
-            if (call.getArgs() != null
-                    && (call.getArgs().size() != 1 || !(call.getArgs().get(0) instanceof VarRef))) {
+            if (call == null
+                    || call.getArgs() == null
+                    || call.getArgs().size() != 1
+                    || !(call.getArgs().get(0) instanceof VarRef)) {
                 throw new IllegalArgumentException("First argument of function must be a field");
             }
             return new Call.Builder()

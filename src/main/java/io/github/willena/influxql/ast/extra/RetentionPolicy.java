@@ -120,7 +120,7 @@ public class RetentionPolicy {
          * @param retentionPolicyName the {@code retentionPolicyName} to set
          * @return a reference to this Builder
          */
-        public Builder withRetentionPolicyName(String retentionPolicyName) {
+        public Builder retentionPolicyName(String retentionPolicyName) {
             this.retentionPolicyName = retentionPolicyName;
             return this;
         }

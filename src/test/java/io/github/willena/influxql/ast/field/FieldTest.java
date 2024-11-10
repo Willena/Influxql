@@ -27,6 +27,14 @@ class FieldTest {
     @Test
     void testField() {
         assertEquals("fieldName", Field.field("fieldName").toString());
+        assertEquals("fieldName", Field.field("fieldName").toString());
+        assertEquals(
+                "fieldName",
+                new Field.Builder()
+                        .withExpr(VarRef.of("fieldName"))
+                        .withAlias("")
+                        .build()
+                        .toString());
         assertEquals("fieldName::integer", Field.field("fieldName", DataType.INTEGER).toString());
     }
 

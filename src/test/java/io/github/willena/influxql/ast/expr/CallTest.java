@@ -44,5 +44,14 @@ class CallTest {
                                         List.of(VarRef.of("uuu"), StringLiteral.of("ddd"))))
                         .build()
                         .toString());
+
+        assertEquals(
+                "mean(uuu, 'ddd')",
+                new Call.Builder()
+                        .function("mean")
+                        .withArguments(new StringJoiningList<>(List.of(VarRef.of("uuu"))))
+                        .withArguments(StringLiteral.of("ddd"))
+                        .build()
+                        .toString());
     }
 }

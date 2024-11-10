@@ -17,7 +17,7 @@
 
 package io.github.willena.influxql.ast.extra;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.Duration;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,7 @@ class RetentionPolicyTest {
         RetentionPolicy rp =
                 new RetentionPolicy.Builder()
                         .duration(Duration.ofSeconds(1))
-                        .withRetentionPolicyName("test")
+                        .retentionPolicyName("test")
                         .shardDuration(Duration.ofHours(1))
                         .replication(10)
                         .build();
@@ -37,5 +37,14 @@ class RetentionPolicyTest {
         assertEquals(Duration.ofSeconds(1), rp.getRetentionPolicyDuration());
         assertEquals(Duration.ofHours(1), rp.getRetentionPolicyShardGroupDuration());
         assertEquals(10, rp.getRetentionPolicyReplication());
+    }
+
+    @Test
+    void isEmpty() {
+        assertTrue(new RetentionPolicy.Builder().build().isEmpty());
+        assertFalse(new RetentionPolicy.Builder().retentionPolicyName("nn").build().isEmpty());
+        assertFalse(new RetentionPolicy.Builder().duration(Duration.ZERO).build().isEmpty());
+        assertFalse(new RetentionPolicy.Builder().shardDuration(Duration.ZERO).build().isEmpty());
+        assertFalse(new RetentionPolicy.Builder().replication(2).build().isEmpty());
     }
 }

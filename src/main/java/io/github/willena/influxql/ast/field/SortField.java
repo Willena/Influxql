@@ -57,12 +57,9 @@ public class SortField implements Node {
     @Override
     public String toString() {
         var buf = new StringBuilder();
-        if (name != null && !name.isEmpty()) {
-            // TODO: not sure about that
-            // buf.append(name);
-            buf.append(quoteIdentifier(name));
-            buf.append(" ");
-        }
+        buf.append(quoteIdentifier(name));
+        buf.append(" ");
+
         if (ascending) {
             buf.append("ASC");
         } else {

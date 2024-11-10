@@ -15,22 +15,18 @@
  * limitations under the License.
  */
 
-package io.github.willena.influxql.ast.expr;
+package io.github.willena.influxql.ast.expr.literal;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-class VarRefTest {
+class NullLiteralTest {
 
     @Test
     void of() {
-        assertEquals("tutu", VarRef.of("tutu").toString());
-    }
-
-    @Test
-    void ofType() {
-        assertEquals("tutu::string", VarRef.of("tutu", DataType.STRING).toString());
-        assertEquals("tutu", VarRef.of("tutu", DataType.UNKNOWN).toString());
+        NullLiteral nullLiteral = NullLiteral.of();
+        assertEquals("null", nullLiteral.toString());
+        assertNull(nullLiteral.getValue());
     }
 }

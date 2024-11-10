@@ -32,7 +32,6 @@ public class Call implements Expression {
         name = builder.name;
         args = builder.args;
         ensureDefined("name", name);
-        ensureDefined("args", args);
     }
 
     /**

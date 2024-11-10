@@ -365,6 +365,15 @@ class FunctionFactoryTest {
                                         FunctionFactory.Selectors.sample(
                                                 VarRef.of("oo"), IntegerLiteral.of(1)))
                                 .toString());
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        FunctionFactory.Transformations.atan2(
+                                        FunctionFactory.Selectors.first(VarRef.of("oo")),
+                                        FunctionFactory.Selectors.sample(
+                                                VarRef.of("oo"), IntegerLiteral.of(1)))
+                                .toString());
     }
 
     @Test
@@ -473,6 +482,14 @@ class FunctionFactoryTest {
                                                 VarRef.of("oo"), IntegerLiteral.of(1)),
                                         DurationLiteral.of(Duration.ofHours(1)))
                                 .toString());
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        FunctionFactory.Transformations.derivative(
+                                        FunctionFactory.Selectors.sample(
+                                                VarRef.of("oo"), IntegerLiteral.of(1)))
+                                .toString());
     }
 
     @Test
@@ -544,6 +561,13 @@ class FunctionFactoryTest {
                                         FunctionFactory.Selectors.sample(
                                                 VarRef.of("oo"), IntegerLiteral.of(1)),
                                         DurationLiteral.of(Duration.ofHours(1)))
+                                .toString());
+        assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        FunctionFactory.Transformations.elapsed(
+                                        FunctionFactory.Selectors.sample(
+                                                VarRef.of("oo"), IntegerLiteral.of(1)))
                                 .toString());
     }
 
@@ -746,6 +770,13 @@ class FunctionFactoryTest {
                                                 VarRef.of("oo"), IntegerLiteral.of(1)),
                                         DurationLiteral.of(Duration.ofHours(1)))
                                 .toString());
+        assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        FunctionFactory.Transformations.nonNegativeDerivative(
+                                        FunctionFactory.Selectors.sample(
+                                                VarRef.of("oo"), IntegerLiteral.of(1)))
+                                .toString());
     }
 
     @Test
@@ -880,6 +911,28 @@ class FunctionFactoryTest {
                 () ->
                         FunctionFactory.Predictors.holtWinters(
                                 FunctionFactory.Aggregations.count(Wildcard.wildcard()),
+                                IntegerLiteral.of(1),
+                                IntegerLiteral.of(1)));
+        assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        FunctionFactory.Predictors.holtWinters(
+                                new Call.Builder().function("tutu").build(),
+                                IntegerLiteral.of(1),
+                                IntegerLiteral.of(1)));
+        assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        FunctionFactory.Predictors.holtWinters(
+                                null, IntegerLiteral.of(1), IntegerLiteral.of(1)));
+        assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        FunctionFactory.Predictors.holtWinters(
+                                new Call.Builder()
+                                        .function("tutu")
+                                        .withArguments(NumberLiteral.of(1), NumberLiteral.of(2))
+                                        .build(),
                                 IntegerLiteral.of(1),
                                 IntegerLiteral.of(1)));
         assertEquals(

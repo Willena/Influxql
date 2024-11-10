@@ -232,7 +232,8 @@ class QueryTest {
                     Map.entry(
                             "SHOW TAG VALUES EXACT CARDINALITY WITH KEY = \"myTagKey\"",
                             "SHOW TAG VALUES EXACT CARDINALITY WITH KEY = myTagKey"),
-                    Map.entry("SHOW USERS", "SHOW USERS"));
+                    Map.entry("SHOW USERS", "SHOW USERS"),
+                    Map.entry("SHOW SHARDS", "SHOW SHARDS"));
 
     /**
      * Test statements from <a

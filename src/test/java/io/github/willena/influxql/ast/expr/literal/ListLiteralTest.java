@@ -19,6 +19,7 @@ package io.github.willena.influxql.ast.expr.literal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.time.Duration;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
@@ -32,5 +33,23 @@ class ListLiteralTest {
         assertEquals(
                 List.of(StringLiteral.of("A"), StringLiteral.of("B")),
                 ListLiteral.of(List.of(StringLiteral.of("A"), StringLiteral.of("B"))).getValue());
+    }
+
+    @Test
+    void listOfDuration() {
+        assertEquals(
+                "(1d, 1h)", ListLiteral.of(Duration.ofDays(1), Duration.ofHours(1)).toString());
+    }
+
+    @Test
+    void listOfNumber() {
+        assertEquals("(1.0, 2.0)", ListLiteral.of(1, 2).toString());
+    }
+
+    @Test
+    void listOfLiteral() {
+        assertEquals(
+                "('A', 'B')",
+                ListLiteral.of(StringLiteral.of("A"), StringLiteral.of("B")).toString());
     }
 }

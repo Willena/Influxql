@@ -358,7 +358,7 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
 
         RetentionPolicy rp =
                 new RetentionPolicy.Builder()
-                        .withRetentionPolicyName(
+                        .retentionPolicyName(
                                 Optional.ofNullable(ctx.retention_policy_name())
                                         .map(e -> e.IDENTIFIER().getText())
                                         .map(InfluxqlAstAdapter::trimIdentifierQuotes)
@@ -972,16 +972,6 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
                                 .map(TimezoneNode::getTimeZone)
                                 .orElse(null))
                 .build();
-    }
-
-    @Override
-    public Node visitAlias(InfluxqlParser.AliasContext ctx) {
-        return null;
-    }
-
-    @Override
-    public Node visitBack_ref(InfluxqlParser.Back_refContext ctx) {
-        return null;
     }
 
     @Override
