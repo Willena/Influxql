@@ -18,7 +18,7 @@
 package io.github.willena.influxql.ast;
 
 import io.github.willena.influxql.parser.DefaultParser;
-import io.github.willena.influxql.parser.InfluxqlParser;
+import io.github.willena.influxql.parser.antlr.InfluxqlParser;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;

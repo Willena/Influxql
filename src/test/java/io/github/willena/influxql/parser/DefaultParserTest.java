@@ -19,6 +19,7 @@ package io.github.willena.influxql.parser;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import io.github.willena.influxql.parser.antlr.InfluxqlParser;
 import org.junit.jupiter.api.Test;
 
 class DefaultParserTest {

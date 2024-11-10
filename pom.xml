@@ -217,6 +217,7 @@
                 <version>3.11.1</version>
                 <configuration>
                     <sourcepath>src/main/java</sourcepath>
+                    <sourceFileIncludes>${project.build.outputDirectory}/generated-sources/antlr4/</sourceFileIncludes>
                     <additionalOptions>-Xdoclint:none</additionalOptions>
                     <additionalJOption>-Xdoclint:none</additionalJOption>
                 </configuration>

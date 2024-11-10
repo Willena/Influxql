@@ -39,6 +39,8 @@ import io.github.willena.influxql.ast.token.Privilege;
 import io.github.willena.influxql.ast.utils.StringJoiningList;
 import io.github.willena.influxql.ast.utils.TimezoneNode;
 import io.github.willena.influxql.ast.utils.Utils;
+import io.github.willena.influxql.parser.antlr.InfluxqlParser;
+import io.github.willena.influxql.parser.antlr.InfluxqlParserBaseVisitor;
 import java.util.Optional;
 import java.util.TimeZone;
 import java.util.regex.Pattern;

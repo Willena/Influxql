@@ -18,6 +18,8 @@
 package io.github.willena.influxql.parser;
 
 import io.github.willena.influxql.ast.Node;
+import io.github.willena.influxql.parser.antlr.InfluxqlLexer;
+import io.github.willena.influxql.parser.antlr.InfluxqlParser;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import org.antlr.v4.runtime.*;
