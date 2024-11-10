@@ -21,6 +21,7 @@ import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Source;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 /** An influxQL measurement in FROM clauses */
@@ -129,6 +130,23 @@ public class Measurement implements Source {
         }
 
         return buf.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Measurement that = (Measurement) o;
+        return Objects.equals(database, that.database)
+                && Objects.equals(retentionPolicy, that.retentionPolicy)
+                && Objects.equals(name, that.name)
+                && Objects.equals(regex, that.regex)
+                && Objects.equals(systemIterator, that.systemIterator);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(database, retentionPolicy, name, regex, systemIterator);
     }
 
     /** {@code Measurement} builder static inner class. */

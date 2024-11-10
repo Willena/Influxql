@@ -760,7 +760,7 @@ public class InfluxqlAstAdapter extends InfluxqlParserBaseVisitor<Node> {
     }
 
     @Override
-    public Node visitShow_tag_key_cardinality_stmt(
+    public ShowTagKeyCardinalityStatement visitShow_tag_key_cardinality_stmt(
             InfluxqlParser.Show_tag_key_cardinality_stmtContext ctx) {
         return new ShowTagKeyCardinalityStatement.Builder()
                 .on(

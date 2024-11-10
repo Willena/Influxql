@@ -26,6 +26,7 @@ import io.github.willena.influxql.ast.Node;
 import io.github.willena.influxql.ast.expr.DataType;
 import io.github.willena.influxql.ast.expr.VarRef;
 import io.github.willena.influxql.ast.expr.Wildcard;
+import java.util.Objects;
 
 /** Basic selection Field */
 public class Field implements Node {
@@ -36,6 +37,19 @@ public class Field implements Node {
         expression = builder.expression;
         alias = builder.alias;
         ensureDefined("expression", expression);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Field field = (Field) o;
+        return Objects.equals(expression, field.expression) && Objects.equals(alias, field.alias);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(expression, alias);
     }
 
     @Override

@@ -20,6 +20,7 @@ package io.github.willena.influxql.ast.expr;
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 
 import io.github.willena.influxql.ast.Expression;
+import java.util.Objects;
 
 /** Distinct expression */
 public class Distinct implements Expression {
@@ -33,6 +34,19 @@ public class Distinct implements Expression {
     public Distinct(String value) {
         this.value = value;
         ensureDefined("value", value);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Distinct distinct = (Distinct) o;
+        return Objects.equals(value, distinct.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(value);
     }
 
     /**

@@ -21,6 +21,9 @@ import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Statement;
+import io.github.willena.influxql.parser.DefaultParser;
+import io.github.willena.influxql.parser.antlr.InfluxqlParser;
+import java.util.Objects;
 import java.util.function.Function;
 
 public class ExplainStatement implements Statement {
@@ -47,6 +50,38 @@ public class ExplainStatement implements Statement {
         }
         buf.append(statement);
         return buf.toString();
+    }
+
+    public SelectStatement getStatement() {
+        return statement;
+    }
+
+    public boolean isAnalyze() {
+        return analyze;
+    }
+
+    public boolean isVerbose() {
+        return verbose;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ExplainStatement that = (ExplainStatement) o;
+        return analyze == that.analyze
+                && verbose == that.verbose
+                && Objects.equals(statement, that.statement);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(statement, analyze, verbose);
+    }
+
+    public static ExplainStatement parse(String sql) {
+        return DefaultParser.parseFrom(
+                InfluxqlParser::explain_stmt, (c, a) -> a.visitExplain_stmt(c), sql);
     }
 
     /** {@code ExplainStatement} builder static inner class. */

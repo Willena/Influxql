@@ -23,7 +23,10 @@ import io.github.willena.influxql.ast.Statement;
 import io.github.willena.influxql.ast.field.SortField;
 import io.github.willena.influxql.ast.field.SortFields;
 import io.github.willena.influxql.ast.source.Measurement;
+import io.github.willena.influxql.parser.DefaultParser;
+import io.github.willena.influxql.parser.antlr.InfluxqlParser;
 import java.util.List;
+import java.util.Objects;
 
 public class ShowMeasurementsStatement implements Statement {
     private final String database;
@@ -88,6 +91,61 @@ public class ShowMeasurementsStatement implements Statement {
             buf.append(offset);
         }
         return buf.toString();
+    }
+
+    public String getDatabase() {
+        return database;
+    }
+
+    public String getRetentionPolicy() {
+        return retentionPolicy;
+    }
+
+    public Measurement getSource() {
+        return source;
+    }
+
+    public Expression getCondition() {
+        return condition;
+    }
+
+    public SortFields getSortFields() {
+        return sortFields;
+    }
+
+    public int getLimit() {
+        return limit;
+    }
+
+    public int getOffset() {
+        return offset;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ShowMeasurementsStatement that = (ShowMeasurementsStatement) o;
+        return limit == that.limit
+                && offset == that.offset
+                && Objects.equals(database, that.database)
+                && Objects.equals(retentionPolicy, that.retentionPolicy)
+                && Objects.equals(source, that.source)
+                && Objects.equals(condition, that.condition)
+                && Objects.equals(sortFields, that.sortFields);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                database, retentionPolicy, source, condition, sortFields, limit, offset);
+    }
+
+    public static ShowMeasurementsStatement parse(String sql) {
+        return DefaultParser.parseFrom(
+                InfluxqlParser::show_measurements_stmt,
+                (c, a) -> a.visitShow_measurements_stmt(c),
+                sql);
     }
 
     /** {@code ShowMeasurementsStatement} builder static inner class. */

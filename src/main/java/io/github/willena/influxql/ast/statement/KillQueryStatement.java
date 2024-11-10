@@ -22,6 +22,9 @@ import static io.github.willena.influxql.ast.utils.Utils.quoteString;
 
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Statement;
+import io.github.willena.influxql.parser.DefaultParser;
+import io.github.willena.influxql.parser.antlr.InfluxqlParser;
+import java.util.Objects;
 
 public class KillQueryStatement implements Statement {
     private final Long queryId;
@@ -43,6 +46,34 @@ public class KillQueryStatement implements Statement {
             buf.append(quoteString(host));
         }
         return buf.toString();
+    }
+
+    public Long getQueryId() {
+        return queryId;
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        KillQueryStatement that = (KillQueryStatement) o;
+        return Objects.equals(queryId, that.queryId) && Objects.equals(host, that.host);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(queryId, host);
+    }
+
+    public static KillQueryStatement parse(String sql) {
+        return DefaultParser.parseFrom(
+                InfluxqlParser::kill_query_statement,
+                (c, a) -> a.visitKill_query_statement(c),
+                sql);
     }
 
     /** {@code KillQueryStatement} builder static inner class. */

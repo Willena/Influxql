@@ -21,6 +21,9 @@ import static io.github.willena.influxql.ast.utils.Utils.*;
 
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Statement;
+import io.github.willena.influxql.parser.DefaultParser;
+import io.github.willena.influxql.parser.antlr.InfluxqlParser;
+import java.util.Objects;
 
 public class CreateUserStatement implements Statement {
     private final String name;
@@ -47,6 +50,38 @@ public class CreateUserStatement implements Statement {
             buf.append(" WITH ALL PRIVILEGES");
         }
         return buf.toString();
+    }
+
+    public static CreateUserStatement parse(String sql) {
+        return DefaultParser.parseFrom(
+                InfluxqlParser::create_user_stmt, (c, a) -> a.visitCreate_user_stmt(c), sql);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CreateUserStatement that = (CreateUserStatement) o;
+        return admin == that.admin
+                && Objects.equals(name, that.name)
+                && Objects.equals(password, that.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, password, admin);
     }
 
     /** {@code CreateUserStatement} builder static inner class. */

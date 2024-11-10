@@ -24,8 +24,11 @@ import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Statement;
 import io.github.willena.influxql.ast.token.DestinationMode;
 import io.github.willena.influxql.ast.utils.Utils;
+import io.github.willena.influxql.parser.DefaultParser;
+import io.github.willena.influxql.parser.antlr.InfluxqlParser;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class CreateSubscriptionStatement implements Statement {
@@ -61,6 +64,50 @@ public class CreateSubscriptionStatement implements Statement {
                 + mode
                 + " "
                 + destinations.stream().map(Utils::quoteString).collect(Collectors.joining(", "));
+    }
+
+    public static CreateSubscriptionStatement parse(String sql) {
+        return DefaultParser.parseFrom(
+                InfluxqlParser::create_subscription_stmt,
+                (c, a) -> a.visitCreate_subscription_stmt(c),
+                sql);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDatabase() {
+        return database;
+    }
+
+    public String getRetentionPolicy() {
+        return retentionPolicy;
+    }
+
+    public List<String> getDestinations() {
+        return destinations;
+    }
+
+    public DestinationMode getMode() {
+        return mode;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CreateSubscriptionStatement that = (CreateSubscriptionStatement) o;
+        return Objects.equals(name, that.name)
+                && Objects.equals(database, that.database)
+                && Objects.equals(retentionPolicy, that.retentionPolicy)
+                && Objects.equals(destinations, that.destinations)
+                && mode == that.mode;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, database, retentionPolicy, destinations, mode);
     }
 
     /** {@code CreateSubscriptionStatement} builder static inner class. */

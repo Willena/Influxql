@@ -26,7 +26,10 @@ import io.github.willena.influxql.ast.expr.Dimensions;
 import io.github.willena.influxql.ast.expr.literal.StringLiteral;
 import io.github.willena.influxql.ast.source.Sources;
 import io.github.willena.influxql.ast.token.Operator;
+import io.github.willena.influxql.parser.DefaultParser;
+import io.github.willena.influxql.parser.antlr.InfluxqlParser;
 import java.util.List;
+import java.util.Objects;
 
 public class ShowTagValuesCardinalityStatement implements Statement {
     private final String database;
@@ -95,6 +98,71 @@ public class ShowTagValuesCardinalityStatement implements Statement {
             buf.append(offset);
         }
         return buf.toString();
+    }
+
+    public String getDatabase() {
+        return database;
+    }
+
+    public boolean isExact() {
+        return exact;
+    }
+
+    public Sources getSources() {
+        return sources;
+    }
+
+    public Operator getOp() {
+        return op;
+    }
+
+    public Literal<?> getTagKeyExpr() {
+        return tagKeyExpr;
+    }
+
+    public Expression getCondition() {
+        return condition;
+    }
+
+    public Dimensions getDimensions() {
+        return dimensions;
+    }
+
+    public int getLimit() {
+        return limit;
+    }
+
+    public int getOffset() {
+        return offset;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ShowTagValuesCardinalityStatement that = (ShowTagValuesCardinalityStatement) o;
+        return exact == that.exact
+                && limit == that.limit
+                && offset == that.offset
+                && Objects.equals(database, that.database)
+                && Objects.equals(sources, that.sources)
+                && op == that.op
+                && Objects.equals(tagKeyExpr, that.tagKeyExpr)
+                && Objects.equals(condition, that.condition)
+                && Objects.equals(dimensions, that.dimensions);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                database, exact, sources, op, tagKeyExpr, condition, dimensions, limit, offset);
+    }
+
+    public static ShowTagValuesCardinalityStatement parse(String sql) {
+        return DefaultParser.parseFrom(
+                InfluxqlParser::show_tag_values_cardinality_stmt,
+                (c, a) -> a.visitShow_tag_values_cardinality_stmt(c),
+                sql);
     }
 
     /** {@code ShowTagValuesCardinalityStatement} builder static inner class. */

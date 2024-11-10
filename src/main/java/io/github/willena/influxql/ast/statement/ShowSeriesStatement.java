@@ -26,7 +26,10 @@ import io.github.willena.influxql.ast.Statement;
 import io.github.willena.influxql.ast.field.SortField;
 import io.github.willena.influxql.ast.field.SortFields;
 import io.github.willena.influxql.ast.source.Sources;
+import io.github.willena.influxql.parser.DefaultParser;
+import io.github.willena.influxql.parser.antlr.InfluxqlParser;
 import java.util.List;
+import java.util.Objects;
 
 public class ShowSeriesStatement implements Statement {
     private final String database;
@@ -76,6 +79,53 @@ public class ShowSeriesStatement implements Statement {
             buf.append(offset);
         }
         return buf.toString();
+    }
+
+    public String getDatabase() {
+        return database;
+    }
+
+    public Sources getSources() {
+        return sources;
+    }
+
+    public Expression getConditions() {
+        return conditions;
+    }
+
+    public SortFields getSortFields() {
+        return sortFields;
+    }
+
+    public int getLimit() {
+        return limit;
+    }
+
+    public int getOffset() {
+        return offset;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ShowSeriesStatement that = (ShowSeriesStatement) o;
+        return limit == that.limit
+                && offset == that.offset
+                && Objects.equals(database, that.database)
+                && Objects.equals(sources, that.sources)
+                && Objects.equals(conditions, that.conditions)
+                && Objects.equals(sortFields, that.sortFields);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(database, sources, conditions, sortFields, limit, offset);
+    }
+
+    public static ShowSeriesStatement parse(String sql) {
+        return DefaultParser.parseFrom(
+                InfluxqlParser::show_series_stmt, (c, a) -> a.visitShow_series_stmt(c), sql);
     }
 
     /** {@code ShowSeriesStatement} builder static inner class. */

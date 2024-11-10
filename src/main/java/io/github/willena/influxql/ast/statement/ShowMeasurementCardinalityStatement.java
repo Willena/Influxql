@@ -26,7 +26,10 @@ import io.github.willena.influxql.ast.Statement;
 import io.github.willena.influxql.ast.expr.Dimension;
 import io.github.willena.influxql.ast.expr.Dimensions;
 import io.github.willena.influxql.ast.source.Sources;
+import io.github.willena.influxql.parser.DefaultParser;
+import io.github.willena.influxql.parser.antlr.InfluxqlParser;
 import java.util.List;
+import java.util.Objects;
 
 public class ShowMeasurementCardinalityStatement implements Statement {
     private final boolean exact;
@@ -82,6 +85,60 @@ public class ShowMeasurementCardinalityStatement implements Statement {
             buf.append(offset);
         }
         return buf.toString();
+    }
+
+    public boolean isExact() {
+        return exact;
+    }
+
+    public String getDatabase() {
+        return database;
+    }
+
+    public Sources getSources() {
+        return sources;
+    }
+
+    public Expression getCondition() {
+        return condition;
+    }
+
+    public Dimensions getDimensions() {
+        return dimensions;
+    }
+
+    public int getLimit() {
+        return limit;
+    }
+
+    public int getOffset() {
+        return offset;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ShowMeasurementCardinalityStatement that = (ShowMeasurementCardinalityStatement) o;
+        return exact == that.exact
+                && limit == that.limit
+                && offset == that.offset
+                && Objects.equals(database, that.database)
+                && Objects.equals(sources, that.sources)
+                && Objects.equals(condition, that.condition)
+                && Objects.equals(dimensions, that.dimensions);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(exact, database, sources, condition, dimensions, limit, offset);
+    }
+
+    public static ShowMeasurementCardinalityStatement parse(String sql) {
+        return DefaultParser.parseFrom(
+                InfluxqlParser::show_measurement_cardinality_stmt,
+                (c, a) -> a.visitShow_measurement_cardinality_stmt(c),
+                sql);
     }
 
     /** {@code ShowMeasurementCardinalityStatement} builder static inner class. */

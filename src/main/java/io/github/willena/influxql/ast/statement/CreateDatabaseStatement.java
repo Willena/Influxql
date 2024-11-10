@@ -22,7 +22,10 @@ import static io.github.willena.influxql.ast.utils.Utils.*;
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Statement;
 import io.github.willena.influxql.ast.extra.RetentionPolicy;
+import io.github.willena.influxql.parser.DefaultParser;
+import io.github.willena.influxql.parser.antlr.InfluxqlParser;
 import java.time.Duration;
+import java.util.Objects;
 
 public class CreateDatabaseStatement implements Statement {
     private final String name;
@@ -64,6 +67,35 @@ public class CreateDatabaseStatement implements Statement {
             }
         }
         return buf.toString();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public RetentionPolicy getRetentionPolicy() {
+        return retentionPolicy;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CreateDatabaseStatement that = (CreateDatabaseStatement) o;
+        return Objects.equals(name, that.name)
+                && Objects.equals(retentionPolicy, that.retentionPolicy);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, retentionPolicy);
+    }
+
+    public static CreateDatabaseStatement parse(String sql) {
+        return DefaultParser.parseFrom(
+                InfluxqlParser::create_database_stmt,
+                (c, a) -> a.visitCreate_database_stmt(c),
+                sql);
     }
 
     /** {@code CreateDatabaseStatement} builder static inner class. */

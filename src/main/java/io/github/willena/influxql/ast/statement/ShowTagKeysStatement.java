@@ -25,7 +25,10 @@ import io.github.willena.influxql.ast.field.SortField;
 import io.github.willena.influxql.ast.field.SortFields;
 import io.github.willena.influxql.ast.source.Sources;
 import io.github.willena.influxql.ast.token.Operator;
+import io.github.willena.influxql.parser.DefaultParser;
+import io.github.willena.influxql.parser.antlr.InfluxqlParser;
 import java.util.List;
+import java.util.Objects;
 
 public class ShowTagKeysStatement implements Statement {
     private final String database;
@@ -102,6 +105,83 @@ public class ShowTagKeysStatement implements Statement {
             buf.append(sOffset);
         }
         return buf.toString();
+    }
+
+    public String getDatabase() {
+        return database;
+    }
+
+    public Operator getOp() {
+        return op;
+    }
+
+    public Literal<?> getTagKeyExpr() {
+        return tagKeyExpr;
+    }
+
+    public Sources getSources() {
+        return sources;
+    }
+
+    public Expression getCondition() {
+        return condition;
+    }
+
+    public SortFields getSortFields() {
+        return sortFields;
+    }
+
+    public int getLimit() {
+        return limit;
+    }
+
+    public int getOffset() {
+        return offset;
+    }
+
+    public int getsLimit() {
+        return sLimit;
+    }
+
+    public int getsOffset() {
+        return sOffset;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ShowTagKeysStatement that = (ShowTagKeysStatement) o;
+        return limit == that.limit
+                && offset == that.offset
+                && sLimit == that.sLimit
+                && sOffset == that.sOffset
+                && Objects.equals(database, that.database)
+                && op == that.op
+                && Objects.equals(tagKeyExpr, that.tagKeyExpr)
+                && Objects.equals(sources, that.sources)
+                && Objects.equals(condition, that.condition)
+                && Objects.equals(sortFields, that.sortFields);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                database,
+                op,
+                tagKeyExpr,
+                sources,
+                condition,
+                sortFields,
+                limit,
+                offset,
+                sLimit,
+                sOffset);
+    }
+
+    public static ShowTagKeysStatement parse(String sql) {
+        return DefaultParser.parseFrom(
+                InfluxqlParser::show_tag_keys_stmt, (c, a) -> a.visitShow_tag_keys_stmt(c), sql);
     }
 
     /** {@code ShowTagKeysStatement} builder static inner class. */

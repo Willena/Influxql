@@ -20,10 +20,24 @@ package io.github.willena.influxql.ast.expr;
 import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
 import io.github.willena.influxql.ast.Expression;
+import java.util.Objects;
 
 /** Bound parameter expression */
 public class BoundParameter implements Expression {
     private final String name;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BoundParameter that = (BoundParameter) o;
+        return Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(name);
+    }
 
     /**
      * Create named bound parameter

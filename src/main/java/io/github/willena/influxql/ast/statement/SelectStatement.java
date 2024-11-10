@@ -29,8 +29,11 @@ import io.github.willena.influxql.ast.field.SortFields;
 import io.github.willena.influxql.ast.source.Sources;
 import io.github.willena.influxql.ast.source.Target;
 import io.github.willena.influxql.ast.token.FillOption;
+import io.github.willena.influxql.parser.DefaultParser;
+import io.github.willena.influxql.parser.antlr.InfluxqlParser;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.TimeZone;
 
 public class SelectStatement implements Statement {
@@ -113,6 +116,101 @@ public class SelectStatement implements Statement {
             buf.append(String.format(" TZ('%s')", location.getID()));
         }
         return buf.toString();
+    }
+
+    public Fields getFields() {
+        return fields;
+    }
+
+    public Target getTarget() {
+        return target;
+    }
+
+    public Dimensions getDimensions() {
+        return dimensions;
+    }
+
+    public Sources getSources() {
+        return sources;
+    }
+
+    public Expression getCondition() {
+        return condition;
+    }
+
+    public SortFields getSortFields() {
+        return sortFields;
+    }
+
+    public int getLimit() {
+        return limit;
+    }
+
+    public int getOffset() {
+        return offset;
+    }
+
+    public int getsLimit() {
+        return sLimit;
+    }
+
+    public int getsOffset() {
+        return sOffset;
+    }
+
+    public FillOption getFill() {
+        return fill;
+    }
+
+    public Literal<?> getFillValue() {
+        return fillValue;
+    }
+
+    public TimeZone getLocation() {
+        return location;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SelectStatement that = (SelectStatement) o;
+        return limit == that.limit
+                && offset == that.offset
+                && sLimit == that.sLimit
+                && sOffset == that.sOffset
+                && Objects.equals(fields, that.fields)
+                && Objects.equals(target, that.target)
+                && Objects.equals(dimensions, that.dimensions)
+                && Objects.equals(sources, that.sources)
+                && Objects.equals(condition, that.condition)
+                && Objects.equals(sortFields, that.sortFields)
+                && fill == that.fill
+                && Objects.equals(fillValue, that.fillValue)
+                && Objects.equals(location, that.location);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                fields,
+                target,
+                dimensions,
+                sources,
+                condition,
+                sortFields,
+                limit,
+                offset,
+                sLimit,
+                sOffset,
+                fill,
+                fillValue,
+                location);
+    }
+
+    public static SelectStatement parse(String sql) {
+        return DefaultParser.parseFrom(
+                InfluxqlParser::select_stmt, (c, a) -> a.visitSelect_stmt(c), sql);
     }
 
     /** {@code SelectStatement} builder static inner class. */

@@ -22,6 +22,7 @@ import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Node;
+import java.util.Objects;
 
 /** A Field used to sort the data. */
 public class SortField implements Node {
@@ -32,6 +33,19 @@ public class SortField implements Node {
         name = builder.name;
         ascending = builder.ascending;
         ensureDefined("name", name);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SortField sortField = (SortField) o;
+        return ascending == sortField.ascending && Objects.equals(name, sortField.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, ascending);
     }
 
     /**

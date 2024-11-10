@@ -18,12 +18,21 @@
 package io.github.willena.influxql.ast.statement;
 
 import io.github.willena.influxql.ast.Statement;
+import io.github.willena.influxql.parser.DefaultParser;
+import io.github.willena.influxql.parser.antlr.InfluxqlParser;
 
 public class ShowShardGroupsStatement implements Statement {
     public ShowShardGroupsStatement() {}
 
     public static ShowShardGroupsStatement showShardGroups() {
         return new ShowShardGroupsStatement();
+    }
+
+    public static ShowShardGroupsStatement parse(String sql) {
+        return DefaultParser.parseFrom(
+                InfluxqlParser::show_shard_groups_stmt,
+                (c, a) -> a.visitShow_shard_groups_stmt(c),
+                sql);
     }
 
     @Override

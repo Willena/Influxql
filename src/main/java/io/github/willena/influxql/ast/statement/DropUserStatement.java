@@ -22,6 +22,9 @@ import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Statement;
+import io.github.willena.influxql.parser.DefaultParser;
+import io.github.willena.influxql.parser.antlr.InfluxqlParser;
+import java.util.Objects;
 
 public class DropUserStatement implements Statement {
     private final String name;
@@ -34,6 +37,28 @@ public class DropUserStatement implements Statement {
     @Override
     public String toString() {
         return "DROP USER " + quoteIdentifier(name);
+    }
+
+    public static DropUserStatement parse(String sql) {
+        return DefaultParser.parseFrom(
+                InfluxqlParser::drop_user_stmt, (c, a) -> a.visitDrop_user_stmt(c), sql);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DropUserStatement that = (DropUserStatement) o;
+        return Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(name);
     }
 
     public static final class Builder implements Buildable<DropUserStatement> {

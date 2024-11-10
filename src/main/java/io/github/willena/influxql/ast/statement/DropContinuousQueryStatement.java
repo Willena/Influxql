@@ -22,6 +22,9 @@ import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Statement;
+import io.github.willena.influxql.parser.DefaultParser;
+import io.github.willena.influxql.parser.antlr.InfluxqlParser;
+import java.util.Objects;
 
 public class DropContinuousQueryStatement implements Statement {
 
@@ -41,6 +44,34 @@ public class DropContinuousQueryStatement implements Statement {
                 + quoteIdentifier(name)
                 + " ON "
                 + quoteIdentifier(database);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDatabase() {
+        return database;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DropContinuousQueryStatement that = (DropContinuousQueryStatement) o;
+        return Objects.equals(name, that.name) && Objects.equals(database, that.database);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, database);
+    }
+
+    public static DropContinuousQueryStatement parse(String sql) {
+        return DefaultParser.parseFrom(
+                InfluxqlParser::drop_continuous_query_stmt,
+                (c, a) -> a.visitDrop_continuous_query_stmt(c),
+                sql);
     }
 
     public static final class Builder implements Buildable<DropContinuousQueryStatement> {

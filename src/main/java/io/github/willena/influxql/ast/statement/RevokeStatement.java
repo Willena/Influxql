@@ -23,6 +23,9 @@ import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Statement;
 import io.github.willena.influxql.ast.token.Privilege;
+import io.github.willena.influxql.parser.DefaultParser;
+import io.github.willena.influxql.parser.antlr.InfluxqlParser;
+import java.util.Objects;
 
 public class RevokeStatement implements Statement {
     private final Privilege privilege;
@@ -52,6 +55,38 @@ public class RevokeStatement implements Statement {
         builder.append(" FROM ");
         builder.append(quoteIdentifier(username));
         return builder.toString();
+    }
+
+    public Privilege getPrivilege() {
+        return privilege;
+    }
+
+    public String getDatabase() {
+        return database;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RevokeStatement that = (RevokeStatement) o;
+        return privilege == that.privilege
+                && Objects.equals(database, that.database)
+                && Objects.equals(username, that.username);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(privilege, database, username);
+    }
+
+    public static RevokeStatement parse(String sql) {
+        return DefaultParser.parseFrom(
+                InfluxqlParser::revoke_stmt, (c, a) -> a.visitRevoke_stmt(c), sql);
     }
 
     public static final class Builder implements Buildable<RevokeStatement> {

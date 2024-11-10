@@ -21,6 +21,7 @@ import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 
 import io.github.willena.influxql.ast.Source;
 import io.github.willena.influxql.ast.statement.SelectStatement;
+import java.util.Objects;
 import java.util.function.Function;
 
 /** Define a subquery containing a single {@link SelectStatement} */
@@ -35,6 +36,19 @@ public class SubQuery implements Source {
     public SubQuery(SelectStatement statement) {
         this.statement = statement;
         ensureDefined("statement", statement);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SubQuery subQuery = (SubQuery) o;
+        return Objects.equals(statement, subQuery.statement);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(statement);
     }
 
     /**

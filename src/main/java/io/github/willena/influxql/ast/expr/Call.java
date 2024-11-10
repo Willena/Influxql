@@ -22,6 +22,7 @@ import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 import io.github.willena.influxql.ast.Expression;
 import io.github.willena.influxql.ast.utils.StringJoiningList;
 import java.util.List;
+import java.util.Objects;
 
 /** Function / Call expression */
 public class Call implements Expression {
@@ -32,6 +33,19 @@ public class Call implements Expression {
         name = builder.name;
         args = builder.args;
         ensureDefined("name", name);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Call call = (Call) o;
+        return Objects.equals(name, call.name) && Objects.equals(args, call.args);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, args);
     }
 
     /**

@@ -23,6 +23,7 @@ import io.github.willena.influxql.ast.Expression;
 import io.github.willena.influxql.ast.Node;
 import io.github.willena.influxql.ast.expr.literal.DurationLiteral;
 import java.time.Duration;
+import java.util.Objects;
 
 /** A grouping dimensions */
 public class Dimension implements Node {
@@ -36,6 +37,19 @@ public class Dimension implements Node {
     public Dimension(final Expression expression) {
         this.expression = expression;
         ensureDefined("expression", expression);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Dimension dimension = (Dimension) o;
+        return Objects.equals(expression, dimension.expression);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(expression);
     }
 
     /**

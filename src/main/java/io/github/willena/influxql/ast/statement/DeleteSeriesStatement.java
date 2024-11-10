@@ -22,7 +22,10 @@ import io.github.willena.influxql.ast.Expression;
 import io.github.willena.influxql.ast.Source;
 import io.github.willena.influxql.ast.Statement;
 import io.github.willena.influxql.ast.source.Sources;
+import io.github.willena.influxql.parser.DefaultParser;
+import io.github.willena.influxql.parser.antlr.InfluxqlParser;
 import java.util.List;
+import java.util.Objects;
 
 public class DeleteSeriesStatement implements Statement {
     private final Sources sources;
@@ -47,6 +50,32 @@ public class DeleteSeriesStatement implements Statement {
             buf.append(condition);
         }
         return buf.toString();
+    }
+
+    public static DeleteSeriesStatement parse(String sql) {
+        return DefaultParser.parseFrom(
+                InfluxqlParser::delete_stmt, (c, a) -> a.visitDelete_stmt(c), sql);
+    }
+
+    public Sources getSources() {
+        return sources;
+    }
+
+    public Expression getCondition() {
+        return condition;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DeleteSeriesStatement that = (DeleteSeriesStatement) o;
+        return Objects.equals(sources, that.sources) && Objects.equals(condition, that.condition);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(sources, condition);
     }
 
     /** {@code DeleteSeriesStatement} builder static inner class. */

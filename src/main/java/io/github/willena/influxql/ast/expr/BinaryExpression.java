@@ -21,12 +21,28 @@ import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 
 import io.github.willena.influxql.ast.Expression;
 import io.github.willena.influxql.ast.token.Operator;
+import java.util.Objects;
 
 /** Binary expression */
 public class BinaryExpression implements Expression {
     private final Expression left;
     private final Expression right;
     private final Operator op;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BinaryExpression that = (BinaryExpression) o;
+        return Objects.equals(left, that.left)
+                && Objects.equals(right, that.right)
+                && op == that.op;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(left, right, op);
+    }
 
     /**
      * Create a new Binary expression with LHS and RHS and operator

@@ -20,6 +20,7 @@ package io.github.willena.influxql.ast.source;
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 
 import io.github.willena.influxql.ast.Node;
+import java.util.Objects;
 
 /** Destination Measurement when using SELECT INTO statements */
 public class Target implements Node {
@@ -33,6 +34,19 @@ public class Target implements Node {
     public Target(Measurement measurement) {
         this.measurement = measurement;
         ensureDefined("measurement", measurement);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Target target = (Target) o;
+        return Objects.equals(measurement, target.measurement);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(measurement);
     }
 
     /**

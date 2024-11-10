@@ -21,7 +21,10 @@ import static io.github.willena.influxql.ast.utils.Utils.*;
 
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Statement;
+import io.github.willena.influxql.parser.DefaultParser;
+import io.github.willena.influxql.parser.antlr.InfluxqlParser;
 import java.time.Duration;
+import java.util.Objects;
 
 public class CreateRetentionPolicyStatement implements Statement {
     private final String name;
@@ -64,6 +67,55 @@ public class CreateRetentionPolicyStatement implements Statement {
             buf.append(" DEFAULT");
         }
         return buf.toString();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDatabase() {
+        return database;
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public Integer getReplication() {
+        return replication;
+    }
+
+    public boolean isDefault() {
+        return isDefault;
+    }
+
+    public Duration getShardGroupDuration() {
+        return shardGroupDuration;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CreateRetentionPolicyStatement that = (CreateRetentionPolicyStatement) o;
+        return isDefault == that.isDefault
+                && Objects.equals(name, that.name)
+                && Objects.equals(database, that.database)
+                && Objects.equals(duration, that.duration)
+                && Objects.equals(replication, that.replication)
+                && Objects.equals(shardGroupDuration, that.shardGroupDuration);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, database, duration, replication, isDefault, shardGroupDuration);
+    }
+
+    public static CreateRetentionPolicyStatement parse(String sql) {
+        return DefaultParser.parseFrom(
+                InfluxqlParser::create_retention_policy_stmt,
+                (c, a) -> a.visitCreate_retention_policy_stmt(c),
+                sql);
     }
 
     /** {@code CreateRetentionPolicyStatement} builder static inner class. */

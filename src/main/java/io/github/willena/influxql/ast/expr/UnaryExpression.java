@@ -21,6 +21,7 @@ import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 
 import io.github.willena.influxql.ast.Expression;
 import io.github.willena.influxql.ast.token.Operator;
+import java.util.Objects;
 import java.util.Set;
 
 public class UnaryExpression implements Expression {
@@ -41,6 +42,19 @@ public class UnaryExpression implements Expression {
                             + "; Allowed operators are: "
                             + ALLOWED_OPERATORS);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UnaryExpression that = (UnaryExpression) o;
+        return Objects.equals(expression, that.expression) && operator == that.operator;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(expression, operator);
     }
 
     @Override

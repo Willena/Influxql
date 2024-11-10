@@ -19,6 +19,7 @@ package io.github.willena.influxql.ast.extra;
 
 import io.github.willena.influxql.ast.Buildable;
 import java.time.Duration;
+import java.util.Objects;
 
 /**
  * Helper class to build retention policy object; This one is not in the original AST but allow
@@ -42,6 +43,27 @@ public class RetentionPolicy {
                 && retentionPolicyDuration == null
                 && retentionPolicyReplication == null
                 && retentionPolicyShardGroupDuration == null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RetentionPolicy that = (RetentionPolicy) o;
+        return Objects.equals(retentionPolicyDuration, that.retentionPolicyDuration)
+                && Objects.equals(retentionPolicyReplication, that.retentionPolicyReplication)
+                && Objects.equals(retentionPolicyName, that.retentionPolicyName)
+                && Objects.equals(
+                        retentionPolicyShardGroupDuration, that.retentionPolicyShardGroupDuration);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                retentionPolicyDuration,
+                retentionPolicyReplication,
+                retentionPolicyName,
+                retentionPolicyShardGroupDuration);
     }
 
     /**

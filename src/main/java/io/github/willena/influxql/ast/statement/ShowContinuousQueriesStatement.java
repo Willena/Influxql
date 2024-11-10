@@ -18,12 +18,21 @@
 package io.github.willena.influxql.ast.statement;
 
 import io.github.willena.influxql.ast.Statement;
+import io.github.willena.influxql.parser.DefaultParser;
+import io.github.willena.influxql.parser.antlr.InfluxqlParser;
 
 public class ShowContinuousQueriesStatement implements Statement {
     public ShowContinuousQueriesStatement() {}
 
     public static ShowContinuousQueriesStatement showContinuousQueries() {
         return new ShowContinuousQueriesStatement();
+    }
+
+    public static ShowContinuousQueriesStatement parse(String sql) {
+        return DefaultParser.parseFrom(
+                InfluxqlParser::show_continuous_queries_stmt,
+                (c, a) -> a.visitShow_continuous_queries_stmt(c),
+                sql);
     }
 
     @Override

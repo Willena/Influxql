@@ -18,12 +18,19 @@
 package io.github.willena.influxql.ast.statement;
 
 import io.github.willena.influxql.ast.Statement;
+import io.github.willena.influxql.parser.DefaultParser;
+import io.github.willena.influxql.parser.antlr.InfluxqlParser;
 
 public class ShowUsersStatement implements Statement {
     public ShowUsersStatement() {}
 
     public static ShowUsersStatement showUsers() {
         return new ShowUsersStatement();
+    }
+
+    public static ShowUsersStatement parse(String sql) {
+        return DefaultParser.parseFrom(
+                InfluxqlParser::show_users_stmt, (c, a) -> a.visitShow_users_stmt(c), sql);
     }
 
     @Override

@@ -22,6 +22,9 @@ import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Statement;
+import io.github.willena.influxql.parser.DefaultParser;
+import io.github.willena.influxql.parser.antlr.InfluxqlParser;
+import java.util.Objects;
 
 public class DropSubscriptionStatement implements Statement {
     private final String name;
@@ -38,6 +41,33 @@ public class DropSubscriptionStatement implements Statement {
         ensureDefined("retentionPolicy", retentionPolicy);
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public String getDatabase() {
+        return database;
+    }
+
+    public String getRetentionPolicy() {
+        return retentionPolicy;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DropSubscriptionStatement that = (DropSubscriptionStatement) o;
+        return Objects.equals(name, that.name)
+                && Objects.equals(database, that.database)
+                && Objects.equals(retentionPolicy, that.retentionPolicy);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, database, retentionPolicy);
+    }
+
     @Override
     public String toString() {
         return "DROP SUBSCRIPTION "
@@ -46,6 +76,13 @@ public class DropSubscriptionStatement implements Statement {
                 + quoteIdentifier(database)
                 + "."
                 + quoteIdentifier(retentionPolicy);
+    }
+
+    public static DropSubscriptionStatement parse(String sql) {
+        return DefaultParser.parseFrom(
+                InfluxqlParser::drop_subscription_stmt,
+                (c, a) -> a.visitDrop_subscription_stmt(c),
+                sql);
     }
 
     public static final class Builder implements Buildable<DropSubscriptionStatement> {

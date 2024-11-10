@@ -21,6 +21,7 @@ import static io.github.willena.influxql.ast.utils.Utils.*;
 
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Statement;
+import java.util.Objects;
 
 public class SetPasswordUserStatement implements Statement {
     private final String password;
@@ -51,6 +52,33 @@ public class SetPasswordUserStatement implements Statement {
             buf.append(quoteString(password));
         }
         return buf.toString();
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public boolean isRedacted() {
+        return redacted;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SetPasswordUserStatement that = (SetPasswordUserStatement) o;
+        return redacted == that.redacted
+                && Objects.equals(password, that.password)
+                && Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(password, name, redacted);
     }
 
     public static final class Builder implements Buildable<SetPasswordUserStatement> {

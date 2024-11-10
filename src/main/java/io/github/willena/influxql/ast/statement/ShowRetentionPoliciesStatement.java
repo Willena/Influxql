@@ -21,6 +21,9 @@ import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Statement;
+import io.github.willena.influxql.parser.DefaultParser;
+import io.github.willena.influxql.parser.antlr.InfluxqlParser;
+import java.util.Objects;
 
 public class ShowRetentionPoliciesStatement implements Statement {
     private final String database;
@@ -38,6 +41,30 @@ public class ShowRetentionPoliciesStatement implements Statement {
             buf.append(quoteIdentifier(database));
         }
         return buf.toString();
+    }
+
+    public static ShowRetentionPoliciesStatement parse(String sql) {
+        return DefaultParser.parseFrom(
+                InfluxqlParser::show_retention_policies_stmt,
+                (c, a) -> a.visitShow_retention_policies_stmt(c),
+                sql);
+    }
+
+    public String getDatabase() {
+        return database;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ShowRetentionPoliciesStatement that = (ShowRetentionPoliciesStatement) o;
+        return Objects.equals(database, that.database);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(database);
     }
 
     public static final class Builder implements Buildable<ShowRetentionPoliciesStatement> {

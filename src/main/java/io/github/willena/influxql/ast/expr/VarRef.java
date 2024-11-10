@@ -21,6 +21,7 @@ import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 import static io.github.willena.influxql.ast.utils.Utils.quoteIdentifier;
 
 import io.github.willena.influxql.ast.Expression;
+import java.util.Objects;
 
 /** Reference to variable of name of field / alias */
 public class VarRef implements Expression {
@@ -37,6 +38,19 @@ public class VarRef implements Expression {
         this.value = value;
         this.type = type;
         ensureDefined("value", value);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        VarRef varRef = (VarRef) o;
+        return Objects.equals(value, varRef.value) && type == varRef.type;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value, type);
     }
 
     /**

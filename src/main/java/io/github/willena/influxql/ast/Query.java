@@ -21,6 +21,7 @@ import io.github.willena.influxql.parser.DefaultParser;
 import io.github.willena.influxql.parser.antlr.InfluxqlParser;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /** Top level {@link Node} is a {@link Query} Each query can contain multiple statements */
@@ -38,6 +39,19 @@ public class Query implements Node {
 
     public List<Statement> getStatements() {
         return statements;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Query query = (Query) o;
+        return Objects.equals(statements, query.statements);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(statements);
     }
 
     /**

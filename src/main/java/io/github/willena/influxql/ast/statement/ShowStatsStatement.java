@@ -21,6 +21,9 @@ import static io.github.willena.influxql.ast.utils.Utils.quoteString;
 
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Statement;
+import io.github.willena.influxql.parser.DefaultParser;
+import io.github.willena.influxql.parser.antlr.InfluxqlParser;
+import java.util.Objects;
 
 public class ShowStatsStatement implements Statement {
     private final String module;
@@ -38,6 +41,28 @@ public class ShowStatsStatement implements Statement {
             buf.append(quoteString(module));
         }
         return buf.toString();
+    }
+
+    public String getModule() {
+        return module;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ShowStatsStatement that = (ShowStatsStatement) o;
+        return Objects.equals(module, that.module);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(module);
+    }
+
+    public static ShowStatsStatement parse(String sql) {
+        return DefaultParser.parseFrom(
+                InfluxqlParser::show_stats_stmt, (c, a) -> a.visitShow_stats_stmt(c), sql);
     }
 
     public static final class Builder implements Buildable<ShowStatsStatement> {

@@ -21,7 +21,10 @@ import static io.github.willena.influxql.ast.utils.Utils.*;
 
 import io.github.willena.influxql.ast.Buildable;
 import io.github.willena.influxql.ast.Statement;
+import io.github.willena.influxql.parser.DefaultParser;
+import io.github.willena.influxql.parser.antlr.InfluxqlParser;
 import java.time.Duration;
+import java.util.Objects;
 import java.util.function.Function;
 
 public class CreateContinuousQueryStatement implements Statement {
@@ -41,6 +44,43 @@ public class CreateContinuousQueryStatement implements Statement {
         ensureDefined("name", name);
         ensureDefined("database", database);
         ensureDefined("selectStatement", selectStatement);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDatabase() {
+        return database;
+    }
+
+    public SelectStatement getSelectStatement() {
+        return selectStatement;
+    }
+
+    public Duration getResampleEvery() {
+        return resampleEvery;
+    }
+
+    public Duration getResampleFor() {
+        return resampleFor;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CreateContinuousQueryStatement that = (CreateContinuousQueryStatement) o;
+        return Objects.equals(name, that.name)
+                && Objects.equals(database, that.database)
+                && Objects.equals(selectStatement, that.selectStatement)
+                && Objects.equals(resampleEvery, that.resampleEvery)
+                && Objects.equals(resampleFor, that.resampleFor);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, database, selectStatement, resampleEvery, resampleFor);
     }
 
     @Override
@@ -67,6 +107,13 @@ public class CreateContinuousQueryStatement implements Statement {
         }
         buf.append(String.format("BEGIN %s END", selectStatement.toString()));
         return buf.toString();
+    }
+
+    public static CreateContinuousQueryStatement parse(String sql) {
+        return DefaultParser.parseFrom(
+                InfluxqlParser::create_continuous_query_stmt,
+                (c, a) -> a.visitCreate_continuous_query_stmt(c),
+                sql);
     }
 
     /** {@code CreateContinuousQueryStatement} builder static inner class. */

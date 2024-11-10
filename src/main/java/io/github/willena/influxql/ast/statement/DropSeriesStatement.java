@@ -22,7 +22,10 @@ import io.github.willena.influxql.ast.Expression;
 import io.github.willena.influxql.ast.Source;
 import io.github.willena.influxql.ast.Statement;
 import io.github.willena.influxql.ast.source.Sources;
+import io.github.willena.influxql.parser.DefaultParser;
+import io.github.willena.influxql.parser.antlr.InfluxqlParser;
 import java.util.List;
+import java.util.Objects;
 
 public class DropSeriesStatement implements Statement {
     private final Sources sources;
@@ -48,6 +51,32 @@ public class DropSeriesStatement implements Statement {
         }
 
         return buf.toString();
+    }
+
+    public Sources getSources() {
+        return sources;
+    }
+
+    public Expression getCondition() {
+        return condition;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DropSeriesStatement that = (DropSeriesStatement) o;
+        return Objects.equals(sources, that.sources) && Objects.equals(condition, that.condition);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(sources, condition);
+    }
+
+    public static DropSeriesStatement parse(String sql) {
+        return DefaultParser.parseFrom(
+                InfluxqlParser::drop_series_stmt, (c, a) -> a.visitDrop_series_stmt(c), sql);
     }
 
     /** {@code DropSeriesStatement} builder static inner class. */

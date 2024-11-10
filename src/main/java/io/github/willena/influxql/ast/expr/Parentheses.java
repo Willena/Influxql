@@ -20,6 +20,7 @@ package io.github.willena.influxql.ast.expr;
 import static io.github.willena.influxql.ast.utils.Utils.ensureDefined;
 
 import io.github.willena.influxql.ast.Expression;
+import java.util.Objects;
 
 /** Parenthesis expression */
 public class Parentheses implements Expression {
@@ -33,6 +34,19 @@ public class Parentheses implements Expression {
     public Parentheses(Expression expression) {
         this.expression = expression;
         ensureDefined("expression", expression);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Parentheses that = (Parentheses) o;
+        return Objects.equals(expression, that.expression);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(expression);
     }
 
     /**

@@ -25,7 +25,10 @@ import io.github.willena.influxql.ast.Statement;
 import io.github.willena.influxql.ast.field.SortField;
 import io.github.willena.influxql.ast.field.SortFields;
 import io.github.willena.influxql.ast.source.Sources;
+import io.github.willena.influxql.parser.DefaultParser;
+import io.github.willena.influxql.parser.antlr.InfluxqlParser;
 import java.util.List;
+import java.util.Objects;
 
 public class ShowFieldKeysStatement implements Statement {
     private final String database;
@@ -68,6 +71,50 @@ public class ShowFieldKeysStatement implements Statement {
             buf.append(offset);
         }
         return buf.toString();
+    }
+
+    public static ShowFieldKeysStatement parse(String sql) {
+        return DefaultParser.parseFrom(
+                InfluxqlParser::show_field_keys_stmt,
+                (c, a) -> a.visitShow_field_keys_stmt(c),
+                sql);
+    }
+
+    public String getDatabase() {
+        return database;
+    }
+
+    public Sources getSources() {
+        return sources;
+    }
+
+    public SortFields getSortFields() {
+        return sortFields;
+    }
+
+    public int getLimit() {
+        return limit;
+    }
+
+    public int getOffset() {
+        return offset;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ShowFieldKeysStatement that = (ShowFieldKeysStatement) o;
+        return limit == that.limit
+                && offset == that.offset
+                && Objects.equals(database, that.database)
+                && Objects.equals(sources, that.sources)
+                && Objects.equals(sortFields, that.sortFields);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(database, sources, sortFields, limit, offset);
     }
 
     /** {@code ShowFieldKeysStatement} builder static inner class. */

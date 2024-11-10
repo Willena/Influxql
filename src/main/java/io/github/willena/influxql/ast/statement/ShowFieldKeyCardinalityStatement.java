@@ -26,7 +26,10 @@ import io.github.willena.influxql.ast.Statement;
 import io.github.willena.influxql.ast.expr.Dimension;
 import io.github.willena.influxql.ast.expr.Dimensions;
 import io.github.willena.influxql.ast.source.Sources;
+import io.github.willena.influxql.parser.DefaultParser;
+import io.github.willena.influxql.parser.antlr.InfluxqlParser;
 import java.util.List;
+import java.util.Objects;
 
 public class ShowFieldKeyCardinalityStatement implements Statement {
     private final String database;
@@ -81,6 +84,60 @@ public class ShowFieldKeyCardinalityStatement implements Statement {
             buf.append(offset);
         }
         return buf.toString();
+    }
+
+    public String getDatabase() {
+        return database;
+    }
+
+    public boolean isExact() {
+        return exact;
+    }
+
+    public Sources getSources() {
+        return sources;
+    }
+
+    public Expression getCondition() {
+        return condition;
+    }
+
+    public Dimensions getDimensions() {
+        return dimensions;
+    }
+
+    public int getLimit() {
+        return limit;
+    }
+
+    public int getOffset() {
+        return offset;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ShowFieldKeyCardinalityStatement that = (ShowFieldKeyCardinalityStatement) o;
+        return exact == that.exact
+                && limit == that.limit
+                && offset == that.offset
+                && Objects.equals(database, that.database)
+                && Objects.equals(sources, that.sources)
+                && Objects.equals(condition, that.condition)
+                && Objects.equals(dimensions, that.dimensions);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(database, exact, sources, condition, dimensions, limit, offset);
+    }
+
+    public static ShowFieldKeyCardinalityStatement parse(String sql) {
+        return DefaultParser.parseFrom(
+                InfluxqlParser::show_field_key_cardinality_stmt,
+                (c, a) -> a.visitShow_field_key_cardinality_stmt(c),
+                sql);
     }
 
     /** {@code ShowFieldKeyCardinalityStatement} builder static inner class. */
