@@ -23,7 +23,7 @@
 
     <groupId>io.github.willena</groupId>
     <artifactId>influxql</artifactId>
-    <version>1.2.1</version>
+    <version>1.2.2-SNAPSHOT</version>
 
     <name>InfluxQL</name>
     <description>InfluxQL query builder and parser</description>
